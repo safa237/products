@@ -1,0 +1,15 @@
+.grey-container{
+    border-top-left-radius: 150px;
+    border-top-right-radius: 150px;
+    background-color: rgb(207, 198, 198);
+    height: 100%;
+}
+.flexReview{
+    display: flex;
+    flex-direction: row;
+    margin-top: 1em;
+}
+.flexReview p{
+    text-align: start;
+    color: #337429cc;
+}

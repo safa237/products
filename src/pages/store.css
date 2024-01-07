@@ -1,0 +1,91 @@
+.store-flex{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
+.store-flex .storeside{
+    width: 20%;
+    margin-left: 5em;
+}
+
+
+.store-flex .card-store {
+    width: 80%;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  
+  .card-store {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  
+  .card-store .cards {
+    width: calc(33.33% - 10px); /* Adjusting for margin or padding */
+    margin-bottom: 20px; /* Adding margin between cards */
+    position: relative;
+    background-color: white;
+    border-radius: 15px;
+  }
+  
+  .card-store .cards:last-child {
+    margin-right: 0; /* Remove right margin for the last card in each row */
+  }
+  .vertical-line {
+    width: 1px;
+    height: 100px;
+    background-color: #cccccc00; 
+    margin-left: 10px;
+  }
+  .rateFilter{
+    border-top-right-radius: 30%;
+    border-bottom-right-radius: 30%;
+    background-color: white;
+    
+  }
+  .rateFilter p{
+    color: #3A7E89;
+  }
+  .number-slider {
+    display: flex;
+    overflow: hidden;
+    width: 300px;
+    margin: 20px;
+    position: relative;
+  }
+  
+  .number-box {
+    flex: 0 0 auto;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+  }
+  
+  .arrow-left {
+    left: 0;
+  }
+  
+  .arrow-right {
+    right: 0;
+  }
+  .marks span{
+    font-size: small;
+  }

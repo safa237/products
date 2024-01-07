@@ -1,0 +1,15 @@
+#slider {
+    margin-top: 50px;
+  }
+.height-300 {
+    height: 200px;
+    background-size: cover;
+}
+#slider .carousel-inner .carousel-item {
+  height: 400px;
+}
+#slider .carousel-inner .carousel-item img {
+  height: 100%;
+  background: lightgray 50% / cover no-repeat;
+
+}

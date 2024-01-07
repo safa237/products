@@ -1,0 +1,116 @@
+
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Add a semi-transparent background */
+   
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .popup-content {
+    width: 80%;
+    height: 100%;
+    background-color: #fff; 
+   
+    border-radius: 10px; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Add a box shadow for depth */
+  }
+  .green-container {
+    border-top-left-radius: 150px;
+    border-top-right-radius: 150px;
+    background: linear-gradient(to right, #3EBF87, #52B443CC);
+    width: 100%; /* Set the width to 100% */
+    /* Set the height to 100% */
+    overflow: hidden;
+}
+  
+  .details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .info-details {
+    margin-right: 20px;
+  }
+  
+  .img-details {
+    height: 50%;
+    width: 50%;
+    overflow: hidden; /* Ensure overflow is hidden */
+  }
+  
+  .productImg {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* Ensure the image fits within the container */
+  }
+  .article-details{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+  }
+  .article-details , 
+  .article-info{
+    width: 50%;
+  }
+  .article-details .article-img{
+    width: 400px;
+    height: 400px;
+    object-fit: contain;
+  }
+  .article-info p{
+    color: #3A7E89;;
+  }
+  .bigarticle{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+  }
+  .bigarticle .articleInfo{
+    width: 50%;
+  }
+  .articleInfo p{
+    font-size: 15px;
+  }
+
+  .relatedPro{
+    margin-top: 1em;
+    margin-bottom: 3em;
+}
+.relatedPro p{
+    text-align: start;
+}
+.relatedPro img{
+    width: 250px;
+    height: 250px;
+    border-bottom-right-radius: none;
+    border-top-left-radius: none;
+}
+.card2{
+    width: 25%;
+    text-align: center;
+    background-color: white;
+    
+}
+.card2 img{
+    width: 100%;
+    height: 250px;
+}
+.card2 p{
+    margin-top: 5px;
+    font-size: 15px;
+    color: #3A7E89;
+}
+.line-with-shadow {
+    margin-top: 15px;
+    margin-left: 20em;
+    height: 2px; 
+    background-color: #00000044; 
+    width: 350px;
+}
+

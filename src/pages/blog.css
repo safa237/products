@@ -1,0 +1,113 @@
+.blog-container{
+    position: relative;
+    margin-right: 100px;
+    overflow-y: hidden;
+}
+.blog-flex{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.blogimg{
+    width: 40%;
+    background-color: white;
+    border-top-right-radius: 80%;
+    border-bottom-right-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adjust shadow as needed */
+}
+.blogimg img{
+    width: 400px;
+    height: 400px;
+    object-fit: contain;
+}
+.infoblog{
+    width: 50%;
+    margin-top: 3em;
+}
+.like-share{
+    display: flex;
+    justify-content: space-between;
+}
+.like{
+    width: 100px;
+    height: 30px;
+    border-radius: 10px;
+    background-color: white;
+    margin-bottom: 2em;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    margin-left: 3em;
+}
+.share{
+    text-align: end;
+}
+.icon{
+    color: #3A7E89;
+    font-size: 20px;
+    margin-left: 10px;
+}
+p{
+    font-size: large;
+    color: white;
+    font-style: nprmal;
+}
+.card-blog{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 3em;
+}
+.card1{
+    width: 30%;
+    text-align: center;
+}
+.card1 img{
+    width: 250px;
+    height: 250px;
+    border-bottom-right-radius: 30%;
+    border-top-left-radius: 30%;
+}
+.card1 p{
+    margin-top: 5px;
+    font-size: 15px;
+}
+.buttons{
+    display: flex;
+    flex-direction: row;
+    height: 250px;
+}
+button{
+    border: none;
+    color: #3A7E89;
+    margin-left: auto;
+}
+.read{
+    margin-left: 15px;
+}
+.publicBlogs{
+    margin-top: 1em;
+    margin-bottom: 3em;
+}
+.publicBlogs p{
+    text-align: start;
+}
+.publicBlogs img{
+    width: 250px;
+    height: 250px;
+    border-bottom-right-radius: none;
+    border-top-left-radius: none;
+}
+.card2{
+    width: 25%;
+    text-align: center;
+    background-color: white;
+    
+}
+.card2 img{
+    width: 100%;
+    height: 250px;
+}
+.card2 p{
+    margin-top: 5px;
+    font-size: 15px;
+    color: #3A7E89;
+}
