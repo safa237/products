@@ -1,24 +1,27 @@
+
 .blog-container{
-    position: relative;
     margin-right: 100px;
-    overflow-y: hidden;
+    overflow-y: hidden;   
+    min-height: 1000px;
 }
+
 .blog-flex{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+ 
 }
 .blogimg{
     width: 40%;
-    background-color: white;
-    border-top-right-radius: 80%;
-    border-bottom-right-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adjust shadow as needed */
+    background-color: transparent;
+    margin-left: 5em;
+    margin-top: 3em;
 }
 .blogimg img{
     width: 400px;
     height: 400px;
-    object-fit: contain;
+    border-top-right-radius: 150px;
+    border-bottom-left-radius: 150px;
 }
 .infoblog{
     width: 50%;
@@ -27,18 +30,29 @@
 .like-share{
     display: flex;
     justify-content: space-between;
+   
 }
 .like{
     width: 100px;
     height: 30px;
     border-radius: 10px;
-    background-color: white;
+    background-color: transparent;
     margin-bottom: 2em;
+}
+.readArticle{
+    width: 120px;
+    height: 30px;
+    border-radius: 10px;
+    background-color: white;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-    margin-left: 3em;
+    margin-left: 7em;
+}
+.readArticle button{
+    background-color: transparent;
 }
 .share{
     text-align: end;
+    margin-top: -50px;
 }
 .icon{
     color: #3A7E89;
@@ -56,19 +70,24 @@ p{
     justify-content: space-between;
     margin-top: 3em;
 }
+
 .card1{
     width: 30%;
     text-align: center;
+    margin-top: 3em;
+    height: 600px;
+    overflow-y: hidden;
 }
-.card1 img{
+.card1blog img{
     width: 250px;
     height: 250px;
+    margin-top: 3em;
     border-bottom-right-radius: 30%;
     border-top-left-radius: 30%;
 }
 .card1 p{
     margin-top: 5px;
-    font-size: 15px;
+    font-size: 20px;
 }
 .buttons{
     display: flex;
@@ -84,8 +103,8 @@ button{
     margin-left: 15px;
 }
 .publicBlogs{
-    margin-top: 1em;
-    margin-bottom: 3em;
+    
+    color: #3A7E89;
 }
 .publicBlogs p{
     text-align: start;
@@ -93,8 +112,9 @@ button{
 .publicBlogs img{
     width: 250px;
     height: 250px;
-    border-bottom-right-radius: none;
-    border-top-left-radius: none;
+
+    border-top-right-radius: 150px;
+    border-bottom-left-radius: 150px;
 }
 .card2{
     width: 25%;
@@ -107,7 +127,43 @@ button{
     height: 250px;
 }
 .card2 p{
-    margin-top: 5px;
+   
     font-size: 15px;
     color: #3A7E89;
 }
+.blogfooter{
+    padding-bottom: 2em;
+}
+.infoblog h6{
+        color: white;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        text-align: justify;
+        line-height: 1.5;
+        margin-bottom: 20px;
+        font-size: large;
+        margin-top: 2em;
+}
+.infoblog h5{
+        color: #3A7E89;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        text-align: justify;
+        line-height: 1.5;
+        font-size: xx-large;
+}
+.loading-spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  

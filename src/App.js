@@ -26,6 +26,11 @@ import Blog from "./pages/Blog";
 import Contact from "./pages/Contact";
 import Cart from "./pages/products/Cart";
 import WishList from "./pages/WishList";
+import ConfirmOrder from "./pages/products/ConfirmOrder";
+import BlogAdmin from "./pages/Admin/Blogs";
+import AddBlog from "./pages/Admin/Actions/blogAction/AddBlog";
+import DetailsBlog from "./pages/Admin/Actions/blogAction/DetailsBlog";
+import EditBlog from "./pages/Admin/Actions/blogAction/EditBlog";
 
 function App() {
   return (
@@ -40,6 +45,7 @@ function App() {
       <Route path="/contact" element={<Contact />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/wishlist" element={<WishList />} />
+      <Route path="/order/confirm" element={<ConfirmOrder/>} />
       <Route
           path="/home/product/:productId"
           element={<ProductDetails /> }  />
@@ -149,6 +155,38 @@ function App() {
           element={
             <Sidebar>
               <DetailsProduct />
+            </Sidebar>
+          }
+        />
+        <Route
+          path="/admin/blog"
+          element={
+            <Sidebar>
+              <BlogAdmin />
+            </Sidebar>
+          }
+        />
+        <Route
+          path="/blog/add"
+          element={
+            <Sidebar>
+              <AddBlog />
+            </Sidebar>
+          }
+        />
+        <Route
+          path="/blog/details/:blogId"
+          element={
+            <Sidebar>
+              <DetailsBlog />
+            </Sidebar>
+          }
+        />
+        <Route
+          path="/blog/edit/:blogId"
+          element={
+            <Sidebar>
+              <EditBlog />
             </Sidebar>
           }
         />

@@ -4,31 +4,48 @@ import { FaMinus  , FaPlus} from 'react-icons/fa';
 import { useState } from 'react';
 import { addToCart } from "../../rtk/slices/Cart-slice";
 import { useDispatch } from 'react-redux';
+import { useParams } from "react-router-dom";
 import './detailsDialog.css';
 
 const DetailsDialog = ({ isOpen, onCancel, product , rating}) => {
   const dispatch = useDispatch();
-  const [count, setCount] = useState(0);
-
-  const handleIncrement = () => {
-    setCount(count + 1);
-  };
-
-  const handleDecrement = () => {
-    if (count > 0) {
-      setCount(count - 1);
-    }
-  };
+  
 
   const handleOverlayClick = (e) => {
     if (e.target.classList.contains('popup')) {
       onCancel();
     }
   };
-  const handleAddToCart = (productId, product) => {
 
-    dispatch(addToCart(product));
+  const [quantity, setQuantity] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
+
+
+  const handleIncrement = () => {
+    setQuantity(quantity + 1);
   };
+
+  const handleDecrement = () => {
+    if (quantity > 0) {
+      setQuantity(quantity - 1);
+    }
+  };
+
+const handleAddToCart = () => {
+  const cartItem = {
+    productId: product.id,
+    poster : product.poster ,
+    title: product.title,
+    quantity: quantity,
+    price: product.price,
+  };
+
+  dispatch(addToCart(cartItem));
+  setQuantity(0);
+    setTotalPrice(0);
+};
+
+
    
     return (
       <>
@@ -59,14 +76,27 @@ heal,” says Dr. Hadley King, a board-certified
 
                     </p>
 
-                    <h2 className="my-4">{product.price}$</h2>
+                    
                     <div className='rate'>
                          <StarRating rating={rating} />
                     </div>
-                    <div>
-                   
-                
-      </div>
+
+                    <div className='counter-flex'>
+                  <h1>{product.price * quantity} $</h1>
+               
+                <div className="counter">
+                  <button onClick={handleDecrement}>
+                    <FaMinus />
+                  </button>
+                  <span>{quantity}</span>
+                  <button onClick={handleIncrement}>
+                    <FaPlus />
+                  </button>
+                </div>
+                <div className="review">
+                <button onClick={handleAddToCart}>Add to Cart</button>
+              </div>
+                </div>
             </div>
            </div>
 

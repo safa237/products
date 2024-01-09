@@ -21,18 +21,36 @@ function ProductDetails({rating}) {
       .then((product) => setProduct(product));
   }, []);
 
+  const [totalPrice, setTotalPrice] = useState(0);
 
-  const [count, setCount] = useState(0);
+  const [quantity, setQuantity] = useState(0);
 
   const handleIncrement = () => {
-    setCount(count + 1);
+    setQuantity(quantity + 1);
   };
 
   const handleDecrement = () => {
-    if (count > 0) {
-      setCount(count - 1);
+    if (quantity > 0) {
+      setQuantity(quantity - 1);
     }
   };
+  const dispatch = useDispatch();
+
+const handleAddToCart = () => {
+  const cartItem = {
+    productId: product.id,
+    poster : product.poster ,
+    title: product.title,
+    quantity: quantity,
+    price: product.price,
+  };
+
+  dispatch(addToCart(cartItem));
+  setQuantity(0);
+    setTotalPrice(0);
+};
+
+
   const handleDetailsClick = (selectedProduct) => {
         
     setDetailsOpen(true);
@@ -43,12 +61,6 @@ function ProductDetails({rating}) {
   };
 const [detailsOpen, setDetailsOpen] = useState(false);
 
-const dispatch = useDispatch();
-
-const handleAddToCart = (productId, product) => {
- 
-  dispatch(addToCart(product));
-};
 
   return (
     <div className="detailsPage">
@@ -56,15 +68,10 @@ const handleAddToCart = (productId, product) => {
           {/* Header */}
           <header className="myheader">
             <div className="left-section">
-              {/* Search */}
-              <div  className="search-container">
-                  <input type="text" style={{background: 'white'}} placeholder="Search" className="search-input" />
-                  <FaSearch className="search-icon" />
-                </div>
+            <img src={logo} alt="Logo" />
             </div>
             <div className="center-section">
-              {/* Logo */}
-              <img src={logo} alt="Logo" />
+              
             </div>
             <div className="right-section">
                 
@@ -124,13 +131,13 @@ Cornell University in New York.
               <div className="middlefooter">
                 <StarRating rating={rating} />
                 <div style={{ marginLeft: "20px" }}>
-                  <h1>{product.price * count} $</h1>
+                  <h1>{product.price * quantity} $</h1>
                 </div>
                 <div className="counter">
                   <button onClick={handleDecrement}>
                     <FaMinus />
                   </button>
-                  <span>{count}</span>
+                  <span>{quantity}</span>
                   <button onClick={handleIncrement}>
                     <FaPlus />
                   </button>

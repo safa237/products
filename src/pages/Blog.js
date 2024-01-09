@@ -1,232 +1,207 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './stylehome.css';
 import './blog.css';
 import { Link } from 'react-router-dom';
 import { FaSearch } from 'react-icons/fa';
-import logo from '../images/Vita Logo2.png' ;
-import lotion from '.././images/lotion.png';
-import lotion2 from '.././images/lotion2.png';
-import blog from '.././images/blog.png';
 import { FaHeart } from 'react-icons/fa';
-import { AiOutlineDislike } from "react-icons/ai";
-import { IoMdShare } from "react-icons/io";
-import { setLanguage , selectLanguage , selectTranslations } from '../rtk/slices/Translate-slice';
-import { useSelector , useDispatch } from 'react-redux';
-import { useEffect } from 'react';
-import { useState } from 'react';
+import { AiOutlineDislike } from 'react-icons/ai';
+import { IoMdShare } from 'react-icons/io';
+import logo from '../images/Vita Logo2.png';
+import lotion2 from '../images/lotion2.png';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
 import DialogBlog from './DialogBlog';
+import { setLanguage , selectLanguage , selectTranslations } from '../rtk/slices/Translate-slice';
+import { useDispatch } from 'react-redux';
 
 function Blog() {
-    const handleDetailsClick = (selectedProduct) => {
-        
-        setDetailsOpen(true);
-      };
-    
-      const handleCancelDetails = () => {
-        setDetailsOpen(false);
-      };
-    const [detailsOpen, setDetailsOpen] = useState(false);
+  const dispatch = useDispatch();
+  const [blogs, setBlogs] = useState([]);
+  const [selectedBlog, setSelectedBlog] = useState(null);
+  const [dialogBlogContent, setDialogBlogContent] = useState(null); 
 
-    const language = useSelector(selectLanguage);
-    const translations = useSelector(selectTranslations);
-    const dispatch = useDispatch();
+  const [detailsOpen, setDetailsOpen] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
+  const pageLinkRef = useRef(null);
+  const [loading, setLoading] = useState(true);
 
+  const language = useSelector(selectLanguage);
+  const translations = useSelector(selectTranslations);
 
-    useEffect(() => {
-      }, [language]);
-    
-    
-      const handleLanguageChange = (e) => {
-        const selectedLanguage = e.target.value;
-        dispatch(setLanguage(selectedLanguage));
-      };
+  const handleLanguageChange = (e) => {
+    const selectedLanguage = e.target.value;
+    dispatch(setLanguage(selectedLanguage));
+  };
 
 
-    return (
-        <div className="page-container">
-        {/* Header Container */}
-        <div   className="header-container">
-          {/* Header */}
-          <header className="myheader">
-            <div className="left-section">
-              {/* Search */}
-              <div  className="search-container">
-                  <input type="text" style={{background: 'white'}} placeholder="Search" className="search-input" />
-                  <FaSearch className="search-icon" />
-                </div>
-            </div>
-            <div className="center-section">
-              {/* Logo */}
-              <img src={logo} alt="Logo" />
-            </div>
-            <div className="right-section">
-                
-            <select value="english" >
-          <option value="english">English</option>
-          <option value="french">French</option>
-          <option value="arabic">Arabic</option>
-             </select>
-             
-        
-            </div>
-    
-          </header>
-    
-          {/* Line with Text */}
-          <div className="text-line">
-          <Link to="/home">home</Link>
-        <Link to="/store">store</Link>
-        <Link to="/about">about</Link>
-        <Link to="/brand">brand</Link>
-        <Link to="/blog">blog</Link>
-        <Link to="/contact">contact</Link>
+  const handleDetailsClick = () => {
+    setDetailsOpen(true);
+  };
+
+  const handleCancelDetails = () => {
+    setDetailsOpen(false);
+  };
+
+  const handleCopyLink = () => {
+    pageLinkRef.current.select();
+    document.execCommand('copy');
+    window.getSelection().removeAllRanges();
+    setIsCopied(true);
+
+    setTimeout(() => {
+      setIsCopied(false);
+    }, 1000);
+  };
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const response = await axios.get('https://mostafaben.bsite.net/api/Blogs');
+        setBlogs(response.data);
+      } catch (error) {
+        console.error('Error fetching blogs:', error);
+      }
+    };
+
+    fetchBlogs();
+  }, []);
+
+  
+  const handleBlogClick = async (clickedBlog) => {
+    try {
+      const response = await axios.get(`https://mostafaben.bsite.net/api/Blogs/${clickedBlog.id}`);
+      setDetailsOpen(true);
+      setDialogBlogContent(response.data);
+    } catch (error) {
+      console.error('Error fetching blog details:', error);
+    }
+    finally {
+      setLoading(false); 
+    }
+  };
+
+  return (
+    <div className="page-container">
+      <div className="header-container">
+      <header className="myheader">
+          <div className="left-section">
+          <img src={logo} alt="Logo" />
           </div>
+          <div className="center-section">
+            
+          </div>
+          <div className="right-section">
+            
+          </div>
+        </header>
+        <div className="text-line">
+        <Link to="/home">{translations[language]?.home}</Link>
+      <Link to="/store">{translations[language]?.store}</Link>
+      <Link to="/about">{translations[language]?.about}</Link>
+      <Link to="/brand">{translations[language]?.brand}</Link>
+      <Link to="/blog">{translations[language]?.blog}</Link>
+      <Link to="/contact">{translations[language]?.contact}</Link>
         </div>
-    
-        {/* Green Container */}
-        <div className="green-containerr">
-          <div className='blog-container '>
-            <div className='blog-flex '>
+      </div>
+      <div className="green-containerr">
+        <div className='blog-container'>
+          {blogs.length > 0 && (
+            <div >
+              <div className='blogContent'>
+              <div className='blog-flex'>
                 <div className='blogimg'>
-                <img src={lotion} alt="lotion" />
-                
+                  <img
+                    src={`data:image/png;base64,${selectedBlog ? selectedBlog.poster : blogs[0].poster}`}
+                    alt="Blog poster"
+                  />
                 </div>
                 <div className='infoblog'>
-                    <div className='like-share'>
-                    <div className='like'>
-                        <FaHeart className='icon' />
-                         <AiOutlineDislike className='icon' />
-                    </div>
-                    <div className='share'>
-                        <IoMdShare style={{fontSize: '40px'}} className='icon'/>
-                       
-                    </div>
-                    </div>
-                    <p>
-                    Dealing with dry skin is enough to leave anyone 
-frustrated, frazzled and, well, flaky. Even worse,
-chronic dryness is associated with a disrupted 
-skin barrier. “Without an optimal barrier function 
-your skin becomes more vulnerable to minor 
-trauma and infections, and it will take longer to
-heal,” says Dr. Hadley King, a board-certified 
-dermatologist and clinical instructor of 
-dermatology at the Weill Medical College of 
-Cornell University in New York. The best remedy
-to restore your skin’s barrier—and keep your 
-complexion smooth and supple—is, without a 
-doubt, a moisturizer made to nourish dry skin 
-types.
-                    </p>
-                    <div className='like read'>
-                        <button onClick={() => handleDetailsClick()} className='read'> read article</button>
-                    </div>
+                  <h5>{selectedBlog ? selectedBlog.title : blogs[0].title}</h5>
+                  <div className='share'>
+                    <input
+                      ref={pageLinkRef}
+                      type="text"
+                      readOnly
+                      value={window.location.href}
+                      style={{ position: 'absolute', left: '-9999px' }}
+                    />
+                    <IoMdShare
+                      style={{ fontSize: '40px', cursor: 'pointer' }}
+                      className='icon'
+                      onClick={handleCopyLink}
+                    />
+                    {isCopied && <span style={{ marginLeft: '5px', color: '#3A7E89' }}>Link copied!</span>}
+                  </div>
+                  <h6>{selectedBlog ? selectedBlog.descreption : blogs[0].descreption.substring(0, 525)}...</h6>
+                  <div className='readArticle'>
+                       <button onClick={() => handleBlogClick(blogs[0])} className='read'> read article </button>
+                 </div>
                 </div>
-            </div>
-          </div>  
-          <div className='card-blog header-container'>
-                <div className='card1'>
-                <img src={blog} alt="lotion" />
-                <p>
-                6 Ways the Holidays Can Wreak Havoc on Your Skin And What You Can Do About It
-                </p>
-                <div className='buttons'>
-                <div className='like'>
-                        <FaHeart className='icon' />
-                         <AiOutlineDislike className='icon' />
-                    </div>
-                    <div className='like read'>
-                        <button className='read'> read article</button>
-                    </div>
-                </div>
-                </div>
-
-                <div className='card1'>
-                <img src={blog} alt="lotion" />
-                <p>
-                6 Ways the Holidays Can Wreak Havoc on Your Skin And What You Can Do About It
-                </p>
-                <div className='buttons'>
-                <div className='like'>
-                        <FaHeart className='icon' />
-                         <AiOutlineDislike className='icon' />
-                    </div>
-                    <div className='like read'>
-                        <button className='read'> read article</button>
-                    </div>
-                </div>
-                </div>
-
-                <div className='card1'>
-                <img src={blog} alt="lotion" />
-                <p>
-                6 Ways the Holidays Can Wreak Havoc on Your Skin And What You Can Do About It
-                </p>
-                <div className='buttons'>
-                <div className='like'>
-                        <FaHeart className='icon' />
-                         <AiOutlineDislike className='icon' />
-                    </div>
-                    <div className='like read'>
-                        <button className='read'> read article</button>
-                    </div>
-                </div>
-                </div>   
-            </div>
-            
-           <div className='header-container publicBlogs'> <p>Blogues les plus populaires</p> </div>
-          <div className='publicBlogs header-container card-blog'>
-            <div className='card2'>
-                <img src={lotion2} alt="lotion" />
-                <p>
-                6 Ways the Holidays Can Wreak Havoc on Your Skin And What You Can Do About It
-                </p>
-                </div>
-
-                <div className='card2'>
-                <img src={lotion2} alt="lotion" />
-                <p>
-                6 Ways the Holidays Can Wreak Havoc on Your Skin And What You Can Do About It
-                </p>
+              </div>
+              </div>
+              <div className='card-blog header-container'>
                 
-                </div>
+                {blogs.slice(1).map((blog) => (
+                  <div className='card1 card1blog' key={blog.id}>
+                    <img 
+                      src={`data:image/png;base64,${blog.poster}`}
+                      alt="Blog poster"
+                    />
+                    <p>{blog.descreption.substring(0, 125)}...</p>
+                    
+                    <div className='buttons'>
+                      
+                      <div className='readArticle'>
+                          <button onClick={() => handleBlogClick(blog)} className='read'> read article </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
 
-                <div className='card2'>
-                <img src={lotion2} alt="lotion2" />
-                <p>
-                6 Ways the Holidays Can Wreak Havoc on Your Skin And What You Can Do About It
-                </p>
-                
-                </div>
-          </div>
-
-          <div className='footerr'>
-          <div className=' header-container flex-footer'>
-            <div className='footer-info'>
-              <p>{translations[language]?.links}</p>
-              <p>{translations[language]?.shipping} </p>
             </div>
-            <div className='footer-info'>
-              <p>{translations[language]?.private} </p>
-              <p>{translations[language]?.cookies} </p>
-  
-            </div>
-            <div className='footer-info'>
-              <p>{translations[language]?.info}</p>
-              <p>{translations[language]?.contactP}</p>
-            </div>
-            <div className='footer-info'>
-              <p>{translations[language]?.subscribe}</p>
-            </div>
-          </div>
-        </div>
+          ) }
         </div>
 
-        <DialogBlog
-          isOpen={detailsOpen}
-          onCancel={handleCancelDetails}
-       />
+       {/* <div className='header-container publicBlogs'> <p className='publicBlogs'>Blogues les plus populaires</p> </div>
+      <div className='publicBlogs header-container card-blog'>
+        <div className='card2'>
+          <img src={lotion2} alt="lotion" />
+          <p>6 Ways the Holidays Can Wreak Havoc on Your Skin And What You Can Do About It</p>
+        </div>
+        <div className='card2'>
+          <img src={lotion2} alt="lotion" />
+          <p>6 Ways the Holidays Can Wreak Havoc on Your Skin And What You Can Do About It</p>
+        </div>
+        <div className='card2'>
+          <img src={lotion2} alt="lotion2" />
+          <p>6 Ways the Holidays Can Wreak Havoc on Your Skin And What You Can Do About It</p>
+        </div>
+      </div>*/}
+      <div className='footerr blogfooter'>
+        <div className=' header-container flex-footer'>
+          <div className='footer-info'>
+            <Link to={translations[language]?.links} className="footer-link">{translations[language]?.links}</Link>
+            <Link to={translations[language]?.shipping} className="footer-link">{translations[language]?.shipping}</Link>
+          </div>
+          <div className='footer-info'>
+            <Link to={translations[language]?.private} className="footer-link">{translations[language]?.private}</Link>
+            <Link to={translations[language]?.cookies} className="footer-link">{translations[language]?.cookies}</Link>
+          </div>
+          <div className='footer-info'>
+            <Link to={translations[language]?.info} className="footer-link">{translations[language]?.info}</Link>
+            <Link to={translations[language]?.contactP} className="footer-link">{translations[language]?.contactP}</Link>
+          </div>
+          <div className='footer-info'>
+            <Link to={translations[language]?.subscribe} className="footer-link">{translations[language]?.subscribe}</Link>
+          </div>
+        </div>
       </div>
-      );
+      <DialogBlog isOpen={detailsOpen} onCancel={handleCancelDetails} blogContent={dialogBlogContent} />
+    </div>
+      </div>
+  
+  );
 }
+
 export default Blog;

@@ -29,6 +29,11 @@ const Sidebar = ({children}) => {
             name:"Product",
             icon:<FaShoppingBag/>
         },
+        {
+            path:"/admin/blog",
+            name:"blog",
+            icon:<FaShoppingBag/>
+        },
         
     ]
     return (

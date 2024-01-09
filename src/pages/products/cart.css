@@ -1,0 +1,97 @@
+.cartGreen{
+   min-height: 600px;
+}
+
+.flexcart{
+    display: flex;
+    flex-direction: column;
+}
+.productcart{
+    height: 120px;
+    background-color: white;
+    width: 40%;
+    margin-top: 1em;
+    border-radius: 25px;
+    overflow-y: hidden; 
+    padding-bottom: 2em;
+}
+.flexOnecart{
+    display: flex;
+    flex-direction: row;
+   
+    padding-top: 5px;
+}
+.imgcart{
+    width: 30%;
+    margin-right: 15px;
+   
+}
+.infocartone{
+    width: 40%;
+}
+.infocarttwo{
+    width: 20%;
+   
+    text-align: end;
+}
+    
+.imgcart img{
+    border-radius: 50%;
+    margin-left: 2px;
+}
+.deletecart{
+    margin-left: 15em;
+}
+h4 , h6{
+    color: #3ebf87;   
+}
+.infocartone , .infocarttwo{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+.flexContainerCart{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    margin-top: 3em;
+}
+.flexcart{
+    width: 100%;
+}
+.total{
+    width: 30%;
+    height: 250px;
+    margin-top: 5em;
+    background-color: white;
+    border-top-right-radius: 80px;
+    border-bottom-left-radius: 80px;
+    width: 350px;
+    text-align: center;
+    padding-top: 2em;
+    position: relative;
+}
+.total input{
+    border-radius: 50px;
+    background-color: #3ebf87 ;
+    border-style: none;
+    height: 30px;
+    color: white;
+    padding-left: 5px;
+}
+.total input:focus {
+    border: none;
+    outline: none;
+}
+.confirmbtn{
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 1em;
+    background-color: #3ebf87;
+    color: white;
+    width: 80px;
+    height: 30px;
+    border-radius: 50px;
+    border-style: none;
+}

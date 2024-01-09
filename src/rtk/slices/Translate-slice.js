@@ -27,6 +27,7 @@ const translationSlice = createSlice({
         "newhere" : "New Here ?",
         "welcome" : "Welcome, we are glad you visited our website",
         "oneofus" : "One Of Us",
+        "interested" : "You may also be interested in ",
       },
       "french": {
         "home" : "Maison",
@@ -50,6 +51,7 @@ const translationSlice = createSlice({
         "newhere" : "Nouveau ici ?",
         "welcome" : "Bienvenue, nous sommes heureux que vous ayez visité notre site Web",
         "oneofus" : "Un de nous",
+        "interested" : "Vous pourriez également être intéressé par",
     },
       "arabic": {
         "home" : "المتجر",
@@ -73,6 +75,7 @@ const translationSlice = createSlice({
         "newhere" : "جديد هنا ؟",
         "welcome" : "مرحباً بك، نحن سعداء بزيارتك لموقعنا",
         "oneofus" : "واحد منا",
+        "interested" : "قد تكون أيضا مهتما ب",
       }
     },
   },

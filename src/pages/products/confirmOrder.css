@@ -1,0 +1,37 @@
+
+
+.formOrder{
+    background-color: white;
+    padding-top: 1em;
+    border-radius: 15px;
+    margin-bottom: 15px;
+    width: 70%;
+}
+.flexInput{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
+.name{
+    margin-right: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+.note{
+    height: 150px;
+}
+.flexContainerCart .total{
+    width: 500px;
+}
+.total p{
+    color: red;
+    font-size: medium;
+    margin-top: 5em;
+}
+.total p input{
+   
+    width: 15px;
+    height: 15px;
+}
+

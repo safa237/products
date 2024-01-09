@@ -15,10 +15,31 @@
     width: 80%;
     height: 100%;
     background-color: #fff; 
-   
     border-radius: 10px; 
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Add a box shadow for depth */
   }
+  .popup-content p {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    text-align: justify;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    font-size: larger;
+  }
+  .bigarticle{
+    margin-right: 5em;
+    margin-left: 5em;
+  }
+  .bigarticle h6{
+    color: white;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    text-align: justify;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    font-size: large;
+  }
+  
   .green-container {
     border-top-left-radius: 150px;
     border-top-right-radius: 150px;
@@ -41,7 +62,7 @@
   .img-details {
     height: 50%;
     width: 50%;
-    overflow: hidden; /* Ensure overflow is hidden */
+    overflow: hidden; 
   }
   
   .productImg {
@@ -63,17 +84,8 @@
     height: 400px;
     object-fit: contain;
   }
-  .article-info p{
-    color: #3A7E89;;
-  }
-  .bigarticle{
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row;
-  }
-  .bigarticle .articleInfo{
-    width: 50%;
-  }
+  
+
   .articleInfo p{
     font-size: 15px;
   }
@@ -113,4 +125,21 @@
     background-color: #00000044; 
     width: 350px;
 }
-
+.products-related-text , 
+.publicBlogsDialog{
+  margin-left: 3em;
+  margin-top: 5em;
+  color: #3A7E89;
+}
+.footer-link {
+  display: block; /* Each link in a separate line */
+  text-decoration: none; /* Remove default underline */
+  border-bottom: 1px solid transparent; /* Hide line under link */
+  color: inherit; /* Inherit color from parent */
+}
+.share{
+  margin-left: 25em;
+}
+.dialogContainer{
+  margin-bottom: 5em;
+}

@@ -19,6 +19,7 @@ import { selectWishlist } from '../rtk/slices/Wishlist-slice';
 import DetailsDialog from './products/DetailsDialog';
 import { addToCart } from '../rtk/slices/Cart-slice';
 import { CiStar } from "react-icons/ci";
+import Button from 'react-bootstrap/Button';
 
 import './store.css';
 
@@ -38,6 +39,8 @@ function Store  ()  {
 
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
+  
+  const [searchTerm, setSearchTerm] = useState('');
 
   
   
@@ -156,6 +159,23 @@ function Store  ()  {
   };
   
   
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleCategoryFilter = (categoryId) => {
+    setSelectedCategoryId(categoryId);
+  };
+
+  const filteredProducts = products.filter((product) => {
+    const matchesSearch = product.title.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategoryId ? product.categoryId === selectedCategoryId : true;
+
+    return matchesSearch && matchesCategory;
+  });
+
 
   
     return (
@@ -167,7 +187,10 @@ function Store  ()  {
           <div className="left-section">
             {/* Search */}
             <div  className="search-container">
-                <input type="text" style={{background: 'white'}} placeholder="Search" className="search-input" />
+                <input type="text" style={{background: 'white'}} placeholder="Search" className="search-input" 
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
                 <FaSearch className="search-icon" />
               </div>
           </div>
@@ -177,11 +200,7 @@ function Store  ()  {
           </div>
           <div className="right-section">
               
-          <select value={language} onChange={handleLanguageChange}>
-        <option value="english">English</option>
-        <option value="french">French</option>
-        <option value="arabic">Arabic</option>
-      </select>
+          
             
              <Link to="/cart" className="cart-link"> 
              {isLoggedIn && 
@@ -217,7 +236,7 @@ function Store  ()  {
 
          <div className='store-flex'>
           <div className="card-store">
-        {products.map((product) => (
+        {filteredProducts.map((product) => (
           <div className="cards" key={product.id}>
             <div className="card-body">
             <div className="card-icons">
@@ -237,7 +256,7 @@ function Store  ()  {
                               
 
               </div>
-              <div className="card-img">
+              <div className="card-imgstore" >
               <img
         src={`data:image/png;base64,${product.poster}`}
         alt="Product poster"
@@ -272,23 +291,46 @@ function Store  ()  {
           </div>
            <div className="vertical-line" ></div>
           <div className='storeside'>
-            <p>filter by rating</p>
+            <p>filter by category</p>
           <div>
           <div className='rateFilter'>
-            <div ><CiStar /> Five Only</div>
-            <div > <CiStar />four Only</div>
-            <div> <CiStar />three Only</div>
-            <div><CiStar /> two Only</div>
-            <div><CiStar /> one Only</div>
+                 <button
+                    color="primary"
+                    onClick={() => handleCategoryFilter(null)}
+                    className='filterbycat'
+                  >
+                    All Products
+                  </button>
+                  <button
+                    color="primary"
+                    onClick={() => handleCategoryFilter(1)}
+                    className='filterbycat'
+                  >
+                    category 1
+                  </button>
+                  <button
+                    color="primary"
+                    onClick={() => handleCategoryFilter(2)}
+                    className='filterbycat'
+                  >
+                    category 2
+                  </button>
+                  <button
+                    color="primary"
+                    onClick={() => handleCategoryFilter(4)}
+                    className='filterbycat'
+                  >
+                    category 4
+                  </button>
           </div>
-          <p style={{marginTop:'5em'}}>filter by category</p>
+          {/*<p style={{marginTop:'5em'}}>filter by category</p>
           <div className='rateFilter'>
             <div ><CiStar /> Five Only</div>
             <div > <CiStar />four Only</div>
             <div> <CiStar />three Only</div>
             <div><CiStar /> two Only</div>
             <div><CiStar /> one Only</div>
-          </div>
+          </div>*/}
           
           
           </div>
@@ -321,24 +363,25 @@ function Store  ()  {
   
         </div>
         
-        <div className='footerr'>
+        <div className='footerr blogfooter'>
           <div className=' header-container flex-footer'>
-            <div className='footer-info'>
-              <p>{translations[language]?.links}</p>
-              <p>{translations[language]?.shipping} </p>
-            </div>
-            <div className='footer-info'>
-              <p>{translations[language]?.private} </p>
-              <p>{translations[language]?.cookies} </p>
-  
-            </div>
-            <div className='footer-info'>
-              <p>{translations[language]?.info}</p>
-              <p>{translations[language]?.contactP}</p>
-            </div>
-            <div className='footer-info'>
-              <p>{translations[language]?.subscribe}</p>
-            </div>
+        
+          <div className='footer-info'>
+  <Link to={translations[language]?.links} className="footer-link">{translations[language]?.links}</Link>
+  <Link to={translations[language]?.shipping} className="footer-link">{translations[language]?.shipping}</Link>
+</div>
+<div className='footer-info'>
+  <Link to={translations[language]?.private} className="footer-link">{translations[language]?.private}</Link>
+  <Link to={translations[language]?.cookies} className="footer-link">{translations[language]?.cookies}</Link>
+</div>
+<div className='footer-info'>
+  <Link to={translations[language]?.info} className="footer-link">{translations[language]?.info}</Link>
+  <Link to={translations[language]?.contactP} className="footer-link">{translations[language]?.contactP}</Link>
+</div>
+<div className='footer-info'>
+  <Link to={translations[language]?.subscribe} className="footer-link">{translations[language]?.subscribe}</Link>
+</div>
+
           </div>
         </div>
       </div>

@@ -17,10 +17,11 @@ import { fetchProducts } from '../rtk/slices/Product-slice';
 import { addToWishlist , removeFromWishlist  } from '../rtk/slices/Wishlist-slice';
 import { selectWishlist } from '../rtk/slices/Wishlist-slice';
 import DetailsDialog from './products/DetailsDialog';
-import { addToCart } from '../rtk/slices/Cart-slice';
+import { addToCart , deleteFromCart } from '../rtk/slices/Cart-slice';
 import { clearWishlist } from '../rtk/slices/Wishlist-slice';
 import { clearCart } from '../rtk/slices/Cart-slice';
 import { logoutAction } from '../rtk/slices/Wishlist-slice';
+
 
 function Home  ()  {
   const dispatch = useDispatch();
@@ -29,6 +30,7 @@ function Home  ()  {
   const products = useSelector((state) => state.products);
   const wishlist = useSelector(selectWishlist);
   const cart = useSelector(state => state.cart);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const navigate = useNavigate();
   /*const [products, setProducts] = useState([]);*/
@@ -38,6 +40,7 @@ function Home  ()  {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
   
+  const [isInCart, setIsInCart] = useState(false);
 
   const handleDetailsClick = (selectedProduct) => {
     if (!isLoggedIn) {
@@ -112,14 +115,56 @@ function Home  ()  {
     }
   };
 
+  const [quantity, setQuantity] = useState(0);
+
+
+  /*const handleAddToCart = (productId, product) => {
+    if (!isLoggedIn) {
+      // Display a message indicating that the user needs to sign in
+      alert('Please sign in to add to cart.');
+      return;
+    }
+
+    const cartItem = {
+      productId: product.id,
+      poster : product.poster ,
+      title: product.title,
+      quantity: quantity,
+      price: product.price,
+    };
+    
+      dispatch(addToCart(cartItem));
+    
+  };*/
+
   const handleAddToCart = (productId, product) => {
     if (!isLoggedIn) {
       // Display a message indicating that the user needs to sign in
       alert('Please sign in to add to cart.');
       return;
     }
-    dispatch(addToCart(product));
+
+    const cartItem = {
+      productId: product.id,
+      poster: product.poster,
+      title: product.title,
+      quantity: quantity,
+      price: product.price,
+    };
+
+    // Check if the product is already in the cart
+    const isInCart = cart.some((item) => item.productId === cartItem.productId);
+
+    if (isInCart) {
+      // If the product is already in the cart, remove it
+      dispatch(deleteFromCart(cartItem));
+    } else {
+      // If the product is not in the cart, add it
+      dispatch(addToCart(cartItem));
+    }
   };
+
+
 
   const handleAddToFavorites = (productId) => {
     if (!isLoggedIn) {
@@ -151,6 +196,11 @@ function Home  ()  {
     setIsDropdownOpen(!isDropdownOpen);
   };
   
+  const filteredProducts = products.filter((product) =>
+  product.title && product.title.toLowerCase().includes(searchTerm.toLowerCase())
+);
+
+
    
   
     return (
@@ -162,7 +212,10 @@ function Home  ()  {
           <div className="left-section">
             {/* Search */}
             <div  className="search-container">
-                <input type="text" style={{background: 'white'}} placeholder="Search" className="search-input" />
+                <input type="text" style={{background: 'white'}} placeholder="Search" className="search-input"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                />
                 <FaSearch className="search-icon" />
               </div>
           </div>
@@ -225,7 +278,7 @@ function Home  ()  {
           <Slider />
          
           <div className="card-container">
-        {products.map((product) => (
+        {filteredProducts.map((product) => (
           <div className="card" key={product.id}>
             <div className="card-body">
             <div className="card-icons">
@@ -235,7 +288,7 @@ function Home  ()  {
                       onClick={() => handleAddToFavorites(product.id)}
                     /> }
            {isLoggedIn && <FaShoppingCart
-                  className="cart-iconPro"
+                  className={`cart-iconPro ${cart.some((item) => item.productId === product.id) ? 'cart-iconPro-active' : ''}`}
                   onClick={() => handleAddToCart(product.id, product)}
                 /> }
 
@@ -391,24 +444,25 @@ function Home  ()  {
   
         </div>
         
-        <div className='footerr'>
+        <div className='footerr blogfooter'>
           <div className=' header-container flex-footer'>
-            <div className='footer-info'>
-              <p>{translations[language]?.links}</p>
-              <p>{translations[language]?.shipping} </p>
-            </div>
-            <div className='footer-info'>
-              <p>{translations[language]?.private} </p>
-              <p>{translations[language]?.cookies} </p>
-  
-            </div>
-            <div className='footer-info'>
-              <p>{translations[language]?.info}</p>
-              <p>{translations[language]?.contactP}</p>
-            </div>
-            <div className='footer-info'>
-              <p>{translations[language]?.subscribe}</p>
-            </div>
+        
+          <div className='footer-info'>
+  <Link to={translations[language]?.links} className="footer-link">{translations[language]?.links}</Link>
+  <Link to={translations[language]?.shipping} className="footer-link">{translations[language]?.shipping}</Link>
+</div>
+<div className='footer-info'>
+  <Link to={translations[language]?.private} className="footer-link">{translations[language]?.private}</Link>
+  <Link to={translations[language]?.cookies} className="footer-link">{translations[language]?.cookies}</Link>
+</div>
+<div className='footer-info'>
+  <Link to={translations[language]?.info} className="footer-link">{translations[language]?.info}</Link>
+  <Link to={translations[language]?.contactP} className="footer-link">{translations[language]?.contactP}</Link>
+</div>
+<div className='footer-info'>
+  <Link to={translations[language]?.subscribe} className="footer-link">{translations[language]?.subscribe}</Link>
+</div>
+
           </div>
         </div>
       </div>

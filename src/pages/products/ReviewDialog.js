@@ -40,15 +40,10 @@ const ReviewDialog = ({ isOpen, onCancel}) => {
           {/* Header */}
           <header className="myheader">
             <div className="left-section">
-              {/* Search */}
-              <div  className="search-container">
-                  <input type="text" style={{background: 'white'}} placeholder="Search" className="search-input" />
-                  <FaSearch className="search-icon" />
-                </div>
+            <img src={logo} alt="Logo" />
             </div>
             <div className="center-section">
-              {/* Logo */}
-              <img src={logo} alt="Logo" />
+
             </div>
             <div className="right-section">
                 
