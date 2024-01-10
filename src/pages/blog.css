@@ -1,4 +1,7 @@
 
+.testtt{
+    min-height: 1000px;
+}
 .blog-container{
     margin-right: 100px;
     overflow-y: hidden;   
@@ -160,6 +163,7 @@ button{
     height: 20px;
     animation: spin 1s linear infinite;
     margin: 0 auto;
+    margin-top: 15em;
   }
   
   @keyframes spin {

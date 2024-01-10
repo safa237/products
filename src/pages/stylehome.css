@@ -263,12 +263,6 @@ body{
 .marks span{
   font-size: small;
 }
-
-
-
-
-
-
 .card-icons {
   display: flex;
   justify-content: space-between;
@@ -291,3 +285,16 @@ body{
   color: white; /* Text color when the product is in the cart */
 }
 
+
+
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

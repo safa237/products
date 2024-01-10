@@ -117,9 +117,6 @@ skin barrier. “Without an optimal barrier function
 your skin becomes more vulnerable to minor 
 trauma and infections, and it will take longer to
 heal,” says Dr. Hadley King, a board-certified 
-dermatologist and clinical instructor of 
-dermatology at the Weill Medical College of 
-Cornell University in New York.
               </p>
             </div>
           </div>

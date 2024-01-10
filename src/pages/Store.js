@@ -36,6 +36,7 @@ function Store  ()  {
   /*const [products, setProducts] = useState([]);*/
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Track user login status
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
@@ -61,11 +62,17 @@ function Store  ()  {
 
   
 
-
-
   useEffect(() => {
-    dispatch(fetchProducts());
-    checkLoggedInStatus(); 
+    const fetchData = async () => {
+      try {
+        await dispatch(fetchProducts());
+        checkLoggedInStatus();
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, [language]);
 
 
@@ -235,6 +242,12 @@ function Store  ()  {
         <div className='home-containerr'>
 
          <div className='store-flex'>
+         {loading && (
+      <div className="loading-spinner" style={{width: '50px' , height: '50px' , marginTop: '10px'}}>
+      
+      </div>
+    )}
+     {!loading && (
           <div className="card-store">
         {filteredProducts.map((product) => (
           <div className="cards" key={product.id}>
@@ -289,6 +302,7 @@ function Store  ()  {
           </div>
         ))}
           </div>
+     )}
            <div className="vertical-line" ></div>
           <div className='storeside'>
             <p>filter by category</p>

@@ -92,6 +92,7 @@ const Products = () => {
                 <th>Price</th>
                 <th>Rate</th>
                 <th>CategoryId</th>
+                <th>description</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -118,6 +119,8 @@ const Products = () => {
                     <td>{product.price}</td>
                     <td>{product.rate}</td>
                     <td>{product.categoryId}</td>
+                    <td>{product.storeline}</td>
+
                     <td>
                       <button className="action-button edit-button">
                         <Link to={`/product/details/${product.id}`}>

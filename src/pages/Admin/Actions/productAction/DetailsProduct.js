@@ -46,9 +46,9 @@ function DetailsProduct() {
     <div className="product-info">
     <h2>{product.title}</h2>
       <h2>price : {product.price} $</h2>
-      <p>{product.storeline}</p>
-      <p>category : {product.categoryId}</p>
-      <p>rate : {product.rate}</p>
+      <h2>{product.description}</h2>
+      <h2>category : {product.categoryId}</h2>
+      <h2>rate : {product.rate}</h2>
     </div>
   </div>
  )

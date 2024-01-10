@@ -6,7 +6,7 @@ const AddProduct = () => {
   const navigate = useNavigate();
   const [product, setProduct] = useState({
     Title: '',
-    Descreption: '',
+    Descreption: '', // Change to match the backend DTO
     Price: '',
     Rate: '',
     Poster: null,
@@ -16,7 +16,7 @@ const AddProduct = () => {
   const saveProduct = () => {
     const formData = new FormData();
     formData.append('Title', product.Title);
-    formData.append('Descreption', product.Descreption);
+    formData.append('Storyline', product.Descreption); // Change to match the backend model
     formData.append('Price', product.Price);
     formData.append('Rate', product.Rate);
     formData.append('Poster', product.Poster);
@@ -32,18 +32,18 @@ const AddProduct = () => {
         navigate('/product');
         setProduct({
           Title: '',
-          Descreption: '',
+          Descreption: '', // Change to match the backend DTO
           Price: '',
           Rate: '',
           Poster: null,
           CategoryId: '',
         });
-        
       })
       .catch((error) => {
         console.error('Error saving product:', error);
       });
   };
+
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -80,7 +80,7 @@ const AddProduct = () => {
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="Descreption">Description</label>
+            <label htmlFor="Descreption">Descreption</label>
             <input
               id="Descreption"
               type="text"
@@ -89,6 +89,7 @@ const AddProduct = () => {
               onChange={(e) => setProduct({ ...product, Descreption: e.target.value })}
             />
           </div>
+
           <div className="mb-3">
             <label htmlFor="Price">Price</label>
             <input

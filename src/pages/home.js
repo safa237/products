@@ -31,6 +31,7 @@ function Home  ()  {
   const wishlist = useSelector(selectWishlist);
   const cart = useSelector(state => state.cart);
   const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
   /*const [products, setProducts] = useState([]);*/
@@ -61,8 +62,16 @@ function Home  ()  {
 
 
   useEffect(() => {
-    dispatch(fetchProducts());
-    checkLoggedInStatus(); 
+    const fetchData = async () => {
+      try {
+        await dispatch(fetchProducts());
+        checkLoggedInStatus();
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, [language]);
 
 
@@ -276,7 +285,12 @@ function Home  ()  {
        
         <div className='home-containerr'>
           <Slider />
-         
+          {loading && (
+      <div className="loading-spinner" style={{width: '50px' , height: '50px' , marginTop: '10px'}}>
+      
+      </div>
+    )}
+          {!loading && (
           <div className="card-container">
         {filteredProducts.map((product) => (
           <div className="card" key={product.id}>
@@ -329,8 +343,8 @@ function Home  ()  {
              
             </div>
           </div>
-        ))}
-      </div>
+        ))}  
+      </div> )}
   
         <div className='popular'>
           <h3>{translations[language]?.new}</h3>

@@ -60,6 +60,8 @@ function Blog() {
         setBlogs(response.data);
       } catch (error) {
         console.error('Error fetching blogs:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -104,6 +106,12 @@ function Blog() {
         </div>
       </div>
       <div className="green-containerr">
+        <div className='testtt'>
+      {loading && (
+      <div className="loading-spinner" style={{width: '50px' , height: '50px' , marginTop: '10em'}}>
+      </div>
+    )}
+     {!loading && (
         <div className='blog-container'>
           {blogs.length > 0 && (
             <div >
@@ -162,6 +170,8 @@ function Blog() {
             </div>
           ) }
         </div>
+     )}
+     </div>
 
        {/* <div className='header-container publicBlogs'> <p className='publicBlogs'>Blogues les plus populaires</p> </div>
       <div className='publicBlogs header-container card-blog'>
