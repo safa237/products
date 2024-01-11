@@ -1,5 +1,5 @@
 .cartGreen{
-   min-height: 600px;
+   min-height: 900px;
 }
 
 .flexcart{
@@ -71,6 +71,7 @@ h4 , h6{
     text-align: center;
     padding-top: 2em;
     position: relative;
+    margin-right: 15px;
 }
 .total input{
     border-radius: 50px;
@@ -94,4 +95,34 @@ h4 , h6{
     height: 30px;
     border-radius: 50px;
     border-style: none;
+}
+
+@media only screen and (max-width: 767px) {
+    .flexContainerCart{
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+        margin-top: 3em;
+    }
+    .flexcart{
+        width: 100%;
+    }
+    .productcart {
+        width: 80%;
+        margin-left: 2.5em;
+    }
+    .total{
+        width: 80%;
+        margin-right: 50px;
+    }
+    .flexContainerCart .total {
+         width: 320px; 
+         margin-left: 1.5em;
+         margin-bottom: 2em;
+    }
+}
+@media only screen and (max-width: 1199px) and (min-width: 768px) {
+    .productcart{
+        width: 90%;
+    }
 }

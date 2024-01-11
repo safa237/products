@@ -26,9 +26,11 @@ const wishlistSlice = createSlice({
     addToWishlist: (state, action) => {
       const productId = action.payload;
       if (!state.includes(productId)) {
-        state.push(productId);
-        saveWishlistToStorage(state);
+  
+        saveWishlistToStorage([...state, productId]);
+        return [...state, productId];
       }
+      return state;
     },
     removeFromWishlist: (state, action) => {
       const productId = action.payload;
@@ -37,10 +39,10 @@ const wishlistSlice = createSlice({
       return updatedWishlist;
     },
   },
-
   extraReducers: (builder) => {
-    builder.addCase(clearWishlist, (state) => {
-      return initialState; // Reset wishlist to initial state
+    builder.addCase(clearWishlist, () => {
+      saveWishlistToStorage([]); 
+      return []; 
     });
   },
 });

@@ -24,6 +24,7 @@ import About from "./pages/About";
 import Brand from "./pages/brand";
 import Blog from "./pages/Blog";
 import Contact from "./pages/Contact";
+import Profile from "./pages/Profile";
 import Cart from "./pages/products/Cart";
 import WishList from "./pages/WishList";
 import ConfirmOrder from "./pages/products/ConfirmOrder";
@@ -31,6 +32,7 @@ import BlogAdmin from "./pages/Admin/Blogs";
 import AddBlog from "./pages/Admin/Actions/blogAction/AddBlog";
 import DetailsBlog from "./pages/Admin/Actions/blogAction/DetailsBlog";
 import EditBlog from "./pages/Admin/Actions/blogAction/EditBlog";
+
 
 function App() {
   return (
@@ -43,6 +45,7 @@ function App() {
       <Route path="/brand" element={<Brand />} />
       <Route path="/blog" element={<Blog />} />
       <Route path="/contact" element={<Contact />} />
+      <Route path="/profile" element={<Profile />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/wishlist" element={<WishList />} />
       <Route path="/order/confirm" element={<ConfirmOrder/>} />

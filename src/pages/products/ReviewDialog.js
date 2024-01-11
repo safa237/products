@@ -36,39 +36,7 @@ const ReviewDialog = ({ isOpen, onCancel}) => {
         {isOpen && (
           <div className="popup" onClick={handleOverlayClick}>
             <div className="popup-content">
-            <div   className="header-container">
-          {/* Header */}
-          <header className="myheader">
-            <div className="left-section">
-            <img src={logo} alt="Logo" />
-            </div>
-            <div className="center-section">
-
-            </div>
-            <div className="right-section">
-                
-            <select value="english" >
-          <option value="english">English</option>
-          <option value="french">French</option>
-          <option value="arabic">Arabic</option>
-             </select>
-             
-        
-            </div>
-    
-          </header>
-    
-          {/* Line with Text */}
-          <div className="text-line">
-          <Link to="/home">home</Link>
-        <Link to="/store">store</Link>
-        <Link to="/about">about</Link>
-        <Link to="/brand">brand</Link>
-        <Link to="/blog">blog</Link>
-        <Link to="/contact">contact</Link>
-          </div>
-            </div>
-
+           
             <div  className="grey-container">
           <div className='header-container  '>
             <div>

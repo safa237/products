@@ -21,6 +21,12 @@ import { addToCart , deleteFromCart } from '../rtk/slices/Cart-slice';
 import { clearWishlist } from '../rtk/slices/Wishlist-slice';
 import { clearCart } from '../rtk/slices/Cart-slice';
 import { logoutAction } from '../rtk/slices/Wishlist-slice';
+import NavHeader from '../components/NavHeader';
+
+import Navbar from 'react-bootstrap/Navbar';
+import Container from 'react-bootstrap/Container';
+import Nav from 'react-bootstrap/Nav';
+import { jwtDecode } from 'jwt-decode';
 
 
 function Home  ()  {
@@ -37,6 +43,7 @@ function Home  ()  {
   /*const [products, setProducts] = useState([]);*/
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Track user login status
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isLoggedInState, setIsLoggedInState] = useState(isLoggedIn);
 
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
@@ -57,8 +64,6 @@ function Home  ()  {
     setDetailsOpen(false);
   };
 
-  
-
 
 
   useEffect(() => {
@@ -72,37 +77,40 @@ function Home  ()  {
     };
 
     fetchData();
-  }, [language]);
+    
+  }, [language ]);
 
+
+  useEffect(() => {
+    checkLoggedInStatus();
+  }, []);
 
   const handleLanguageChange = (e) => {
     const selectedLanguage = e.target.value;
     dispatch(setLanguage(selectedLanguage));
   };
 
+ 
 
   const checkLoggedInStatus = () => {
     const userToken = localStorage.getItem('token');
-    setIsLoggedIn(!!userToken);
+    const newIsLoggedIn = !!userToken;
+    setIsLoggedIn(newIsLoggedIn);
 
-    // Load wishlist from localStorage
-    if (userToken) {
+    if (newIsLoggedIn) {
       const storedWishlist = localStorage.getItem('wishlist');
       const parsedWishlist = storedWishlist ? JSON.parse(storedWishlist) : [];
-      // Dispatch the addToWishlist action to update the store
       parsedWishlist.forEach((productId) => {
         dispatch(addToWishlist(productId));
       });
     }
   };
 
-  
   const handleLogout = () => {
-    localStorage.removeItem('token'); // Clear the token from local storage
-   
-    setIsLoggedIn(false); // Update the login status
-    setIsDropdownOpen(false); // Close the dropdown after logout
-    alert('You have been logged out.');
+    localStorage.removeItem('token');
+    setIsLoggedIn(false);
+    setIsLoggedInState(false);
+    setIsDropdownOpen(false);
   };
 
   const rating = product.rate;
@@ -204,87 +212,104 @@ function Home  ()  {
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
+
+  const handleDropdownOptionClick = (option) => {
+    if (option === 'profile') {
+      navigate('/profile'); 
+    } else if (option === 'logout') {
+      handleLogout();
+    }
+  
+    // Close the dropdown after handling the option
+    setIsDropdownOpen(false);
+  };
   
   const filteredProducts = products.filter((product) =>
   product.title && product.title.toLowerCase().includes(searchTerm.toLowerCase())
 );
 
 
-   
-  
     return (
       <div className="page-container">
       {/* Header Container */}
-      <div className="header-container">
-        {/* Header */}
-        <header className="myheader">
-          <div className="left-section">
-            {/* Search */}
-            <div  className="search-container">
+      <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
+  <Container>
+    <Navbar.Brand>
+      <img src={logo} alt="Logo" />
+    </Navbar.Brand>
+    <div className="left-section">
+      {/* Search */}
+
+    </div>
+    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+    <Navbar.Collapse id="responsive-navbar-nav">
+      <Nav className="me-auto"></Nav>
+      <Nav>
+        
+        <div className="text-line">
+          <Link to="/home">{translations[language]?.home}</Link>
+          <Link to="/store">{translations[language]?.store}</Link>
+          <Link to="/about">{translations[language]?.about}</Link>
+          <Link to="/blog">{translations[language]?.blog}</Link>
+        </div>
+        <Link to="/wishlist" className="cart-link">
+          {isLoggedIn && <FaHeart className="cart-icon" />}
+        </Link>
+        <Link to="/cart" className="cart-link">
+          {isLoggedIn && (
+            <div>
+              <FaShoppingCart className="cart-icon" />
+              <span>{cart.length}</span>
+            </div>
+          )}
+        </Link>
+        
+        <div className="dropdown" onClick={toggleDropdown}>
+          <FaUser className="user-icon" title={isLoggedIn ? 'Logout' : 'Login'} />
+          {isDropdownOpen && (
+            <div className="dropdown-content">
+              {isLoggedIn ? (
+                <span onClick={handleLogout}>Logout</span>
+              ) : (
+                <Link to="/authentication">Login</Link>
+              )}
+            </div>
+          )}
+        </div>
+        <select className='selectLang' value={language} onChange={handleLanguageChange}>
+          <option value="english">English</option>
+          <option value="french">French</option>
+          <option value="arabic">Arabic</option>
+        </select>
+        <div className='text-line'>
+        {isLoggedIn ? (
+              <Link onClick={handleLogout}>logout</Link>
+            ) : (
+              <Link to="/authentication">login</Link>
+            )}
+            </div>
+      </Nav>
+    </Navbar.Collapse>
+  </Container>
+</Navbar>
+
+  
+      {/* Green Container */}
+      <div className="green-containerr">
+
+      
+        <div className='home-containerr'>
+          <Slider />
+
+
+          <div  className="search-container">
                 <input type="text" style={{background: 'white'}} placeholder="Search" className="search-input"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 />
                 <FaSearch className="search-icon" />
               </div>
-          </div>
-          <div className="center-section">
-            {/* Logo */}
-            <img src={logo} alt="Logo" />
-          </div>
-          <div className="right-section">
-              
-          <select value={language} onChange={handleLanguageChange}>
-        <option value="english">English</option>
-        <option value="french">French</option>
-        <option value="arabic">Arabic</option>
-      </select>
-             <Link to="/wishlist" className="cart-link"> 
-             {isLoggedIn && <FaHeart className="cart-icon" />}
-             </Link>
-             <Link to="/cart" className="cart-link"> 
-             {isLoggedIn && 
-                 <div>
-                  <FaShoppingCart className="cart-icon" />
-                  <span>{cart.length}</span> 
-                  </div>}
-             </Link>
-              
-              <div className="dropdown" onClick={toggleDropdown}>
-            <FaUser className="user-icon" title={isLoggedIn ? 'Logout' : 'Login'} />
-            {isDropdownOpen && (
-              <div className="dropdown-content">
-                {isLoggedIn ? (
-                  <span onClick={handleLogout}>Logout</span>
-                ) : (
-                  <Link to="/authentication">Login</Link>
-                )}
-              </div>
-            )}
-          </div>
-           
-      
 
-          </div>
-  
-        </header>
-  
-        {/* Line with Text */}
-        <div className="text-line">
-        <Link to="/home">{translations[language]?.home}</Link>
-      <Link to="/store">{translations[language]?.store}</Link>
-      <Link to="/about">{translations[language]?.about}</Link>
-      <Link to="/brand">{translations[language]?.brand}</Link>
-      <Link to="/blog">{translations[language]?.blog}</Link>
-      <Link to="/contact">{translations[language]?.contact}</Link>
-        </div>
-      </div>
-  
-      {/* Green Container */}
-      <div className="green-containerr">
-       
-        <div className='home-containerr'>
-          <Slider />
           {loading && (
       <div className="loading-spinner" style={{width: '50px' , height: '50px' , marginTop: '10px'}}>
       
@@ -433,8 +458,8 @@ function Home  ()  {
   
           </div>
   
-          <div className='marks'>
-           <p style={{textAlign: 'start'}}>{translations[language]?.brand}</p> 
+           <div className='marks'>
+           {/** <p style={{textAlign: 'start'}}>{translations[language]?.brand}</p> 
            <div className='flex-marks'>
            <div className='inner-marks'>
            <img src={product} alt="product" />
@@ -453,7 +478,7 @@ function Home  ()  {
            <img src={product} alt="product" />
            <span>{translations[language]?.brand}</span>
            </div>
-           </div>
+           </div> */}
           </div>
   
         </div>

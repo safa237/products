@@ -6,6 +6,7 @@ import logo from '.././images/Vita Logo2.png';
 import lotion2 from '.././images/lotion2.png';
 import { FaSearch } from 'react-icons/fa';
 import { IoMdShare } from 'react-icons/io';
+import NavHeader from '../components/NavHeader';
 import './dialogblog.css';
 
 const DialogBlog = ({ isOpen, onCancel, blogContent  }) => {
@@ -41,42 +42,12 @@ const DialogBlog = ({ isOpen, onCancel, blogContent  }) => {
       {isOpen && blogContent  && (
         <div className="popup" onClick={handleOverlayClick}>
           <div className="popup-content">
-            <div className="header-container">
-            <header className="myheader">
-            <div className="left-section">
-              {/* Search */}
-              <div  className="search-container">
-                  <input type="text" style={{background: 'white'}} placeholder="Search" className="search-input" />
-                  <FaSearch className="search-icon" />
-                </div>
-            </div>
-            <div className="center-section">
-              {/* Logo */}
-              <img src={logo} alt="Logo" />
-            </div>
-            <div className="right-section">
-                
-             
-        
-            </div>
-    
-          </header>
-    
-          {/* Line with Text */}
-          <div className="text-line">
-          <Link to="/home">home</Link>
-        <Link to="/store">store</Link>
-        <Link to="/about">about</Link>
-        <Link to="/brand">brand</Link>
-        <Link to="/blog">blog</Link>
-        <Link to="/contact">contact</Link>
-          </div>
-            </div>
+          
 
             <div className="green-container">
               <div className="blog-container dialogContainer ">
-                <div className="blog-flex ">
-                  <div className="blogimg">
+                <div className="blog-flexDialog ">
+                  <div className="blogimg ">
                     {blogContent .poster && (
                       <img src={`data:image/png;base64,${blogContent .poster}`} alt="Blog poster" />
                     )}

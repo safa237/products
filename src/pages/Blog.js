@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux';
 import DialogBlog from './DialogBlog';
 import { setLanguage , selectLanguage , selectTranslations } from '../rtk/slices/Translate-slice';
 import { useDispatch } from 'react-redux';
+import NavHeader from '../components/NavHeader';
 
 function Blog() {
   const dispatch = useDispatch();
@@ -84,27 +85,8 @@ function Blog() {
 
   return (
     <div className="page-container">
-      <div className="header-container">
-      <header className="myheader">
-          <div className="left-section">
-          <img src={logo} alt="Logo" />
-          </div>
-          <div className="center-section">
-            
-          </div>
-          <div className="right-section">
-            
-          </div>
-        </header>
-        <div className="text-line">
-        <Link to="/home">{translations[language]?.home}</Link>
-      <Link to="/store">{translations[language]?.store}</Link>
-      <Link to="/about">{translations[language]?.about}</Link>
-      <Link to="/brand">{translations[language]?.brand}</Link>
-      <Link to="/blog">{translations[language]?.blog}</Link>
-      <Link to="/contact">{translations[language]?.contact}</Link>
-        </div>
-      </div>
+      <NavHeader />
+
       <div className="green-containerr">
         <div className='testtt'>
       {loading && (

@@ -171,3 +171,97 @@ button{
     100% { transform: rotate(360deg); }
   }
   
+  @media only screen and (max-width: 767px) {
+    .blog-flex{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        margin-bottom: 5em;
+    }
+    .blogimg{
+        width: 100%;
+        background-color: transparent;
+        margin-left: 5em;
+        margin-top: 5em;
+    }
+    .blogimg img{
+        width: 250px;
+        height: 250px;
+        border-top-right-radius: 15px;
+        border-bottom-left-radius: 15px;
+    }
+    .infoblog{
+        width: 100%;
+        margin-top: 3em;
+        margin-left: 1px;
+    }
+    .blog-container{
+        margin-right: 15px;
+    }
+    /*.share{
+        margin-left: 1px; 
+    }*/
+    .infoblog h5{
+        color: #3A7E89;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        text-align: justify;
+        line-height: 1.5;
+        font-size: xx-large;
+    }
+    .infoblog h6 {
+        color: white;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        text-align: justify;
+        line-height: 1.5;
+        margin-bottom: 20px;
+        font-size: 1em; /* Adjust font size for better readability */
+        margin-top: 2em;
+    }
+    .card1 {
+        width: 100%; /* Full width for small screens */
+        margin-top: 0.5em;
+    }
+    .card-blog{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        margin-top: 0px;
+    }
+    .card1blog img{
+        margin-top: 3px;
+    }
+    .green-containerr {
+        border-top-left-radius: 50px;
+        border-top-right-radius: 50px;
+    }
+
+  }
+
+  @media only screen and (min-width: 768px) and (max-width: 991px) {
+    .card1 {
+        width: calc(50% - 10px); 
+        margin-top: 1em; 
+    }
+    .blogimg{
+        margin-left: 2em;
+    }
+    .card1 {
+        width: calc(33.33% - 10px); 
+        margin-top: 1em; 
+    }
+    .header-container {
+        margin-left: 1em;
+        margin-right: 0px;
+    }
+    .readArticle {
+        margin-left: 3em;
+    }
+    .blogimg{
+        width:80% ;
+    }
+    .infoblog{
+        margin-left: 2px;
+    }
+}

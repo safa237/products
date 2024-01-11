@@ -19,7 +19,11 @@ import { selectWishlist } from '../rtk/slices/Wishlist-slice';
 import DetailsDialog from './products/DetailsDialog';
 import { addToCart } from '../rtk/slices/Cart-slice';
 import { CiStar } from "react-icons/ci";
-import Button from 'react-bootstrap/Button';
+import NavHeader from '../components/NavHeader';
+
+import Navbar from 'react-bootstrap/Navbar';
+import Container from 'react-bootstrap/Container';
+import Nav from 'react-bootstrap/Nav';
 
 import './store.css';
 
@@ -103,7 +107,7 @@ function Store  ()  {
    
     setIsLoggedIn(false); // Update the login status
     setIsDropdownOpen(false); // Close the dropdown after logout
-    alert('You have been logged out.');
+   
   };
 
   const rating = product.rate;
@@ -188,58 +192,78 @@ function Store  ()  {
     return (
       <div className="page-container">
       {/* Header Container */}
-      <div className="header-container">
-        {/* Header */}
-        <header className="myheader">
-          <div className="left-section">
-            {/* Search */}
-            <div  className="search-container">
-                <input type="text" style={{background: 'white'}} placeholder="Search" className="search-input" 
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-                <FaSearch className="search-icon" />
-              </div>
-          </div>
-          <div className="center-section">
-            {/* Logo */}
-            <img src={logo} alt="Logo" />
-          </div>
-          <div className="right-section">
-              
-          
-            
-             <Link to="/cart" className="cart-link"> 
-             {isLoggedIn && 
-                 <div>
-                  <FaShoppingCart className="cart-icon" />
-                  <span>{cart.length}</span> 
-                  </div>}
-             </Link>
-              
-             
-           
-      
+      <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
+  <Container>
+    <Navbar.Brand>
+      <img src={logo} alt="Logo" />
+    </Navbar.Brand>
+    <div className="left-section">
+      {/* Search */}
 
-          </div>
-  
-        </header>
-  
-        {/* Line with Text */}
+    </div>
+    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+    <Navbar.Collapse id="responsive-navbar-nav">
+      <Nav className="me-auto"></Nav>
+      <Nav>
+        
         <div className="text-line">
-        <Link to="/home">{translations[language]?.home}</Link>
-      <Link to="/store">{translations[language]?.store}</Link>
-      <Link to="/about">{translations[language]?.about}</Link>
-      <Link to="/brand">{translations[language]?.brand}</Link>
-      <Link to="/blog">{translations[language]?.blog}</Link>
-      <Link to="/contact">{translations[language]?.contact}</Link>
+          <Link to="/home">{translations[language]?.home}</Link>
+          <Link to="/store">{translations[language]?.store}</Link>
+          <Link to="/about">{translations[language]?.about}</Link>
+          <Link to="/blog">{translations[language]?.blog}</Link>
         </div>
-      </div>
+        <Link to="/wishlist" className="cart-link">
+          {isLoggedIn && <FaHeart className="cart-icon" />}
+        </Link>
+        <Link to="/cart" className="cart-link">
+          {isLoggedIn && (
+            <div>
+              <FaShoppingCart className="cart-icon" />
+              <span>{cart.length}</span>
+            </div>
+          )}
+        </Link>
+        
+        <div className="dropdown" onClick={toggleDropdown}>
+          <FaUser className="user-icon" title={isLoggedIn ? 'Logout' : 'Login'} />
+          {isDropdownOpen && (
+            <div className="dropdown-content">
+              {isLoggedIn ? (
+                <span onClick={handleLogout}>Logout</span>
+              ) : (
+                <Link to="/authentication">Login</Link>
+              )}
+            </div>
+          )}
+        </div>
+        <select className='selectLang' value={language} onChange={handleLanguageChange}>
+          <option value="english">English</option>
+          <option value="french">French</option>
+          <option value="arabic">Arabic</option>
+        </select>
+        <div className='text-line'>
+        {isLoggedIn ? (
+              <Link onClick={handleLogout}>logout</Link>
+            ) : (
+              <Link to="/authentication">login</Link>
+            )}
+            </div>
+      </Nav>
+    </Navbar.Collapse>
+  </Container>
+</Navbar>
   
       {/* Green Container */}
       <div className="green-containerr">
        
         <div className='home-containerr'>
+        <div  className="search-container searchStore">
+                <input type="text" style={{background: 'white'}} placeholder="Search" className="search-input"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <FaSearch className="search-icon" />
+              </div>
 
          <div className='store-flex'>
          {loading && (
@@ -247,10 +271,10 @@ function Store  ()  {
       
       </div>
     )}
-     {!loading && (
+    {!loading && (
           <div className="card-store">
         {filteredProducts.map((product) => (
-          <div className="cards" key={product.id}>
+          <div className="cards " key={product.id}>
             <div className="card-body">
             <div className="card-icons">
            
@@ -275,7 +299,7 @@ function Store  ()  {
         alt="Product poster"
       />
               </div>
-              <div className='card-info'>
+              <div className='card-info card-infoStore'>
                 <h2>{product.title}</h2>
                 <div className='rate'>
   
@@ -303,9 +327,9 @@ function Store  ()  {
         ))}
           </div>
      )}
-           <div className="vertical-line" ></div>
+           
           <div className='storeside'>
-            <p>filter by category</p>
+            <p></p>
           <div>
           <div className='rateFilter'>
                  <button
@@ -313,7 +337,7 @@ function Store  ()  {
                     onClick={() => handleCategoryFilter(null)}
                     className='filterbycat'
                   >
-                    All Products
+                    All Categoryies
                   </button>
                   <button
                     color="primary"
@@ -353,26 +377,7 @@ function Store  ()  {
       </div>
   
           <div className='marks'>
-           <p style={{textAlign: 'start'}}>{translations[language]?.brand}</p> 
-           <div className='flex-marks'>
-           <div className='inner-marks'>
-           <img src={product} alt="product" />
-           <span>{translations[language]?.brand}</span>
-           </div>
-           <div className='inner-marks'>
-           <img src={product} alt="product" />
-           <span>{translations[language]?.brand}</span>
-           </div>
-           <div className='inner-marks'>
-           <img src={product} alt="product" />
-           <span>{translations[language]?.brand}</span>
-           </div>
            
-           <div className='inner-marks'>
-           <img src={product} alt="product" />
-           <span>{translations[language]?.brand}</span>
-           </div>
-           </div>
           </div>
   
         </div>

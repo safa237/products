@@ -13,3 +13,13 @@
   background: lightgray 50% / cover no-repeat;
 
 }
+
+@media only screen and (max-width: 767px) {
+  #slider .carousel-inner .carousel-item {
+    height: 250px; /* Adjust the height for small screens */
+  }
+
+  #slider .carousel-inner .carousel-item img {
+    object-fit: cover; /* Maintain the aspect ratio of the image on small screens */
+  }
+}

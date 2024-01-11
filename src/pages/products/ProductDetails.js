@@ -8,6 +8,7 @@ import StarRating from "../rate/StarRating";
 import ReviewDialog from "./ReviewDialog";
 import { addToCart } from "../../rtk/slices/Cart-slice";
 import { useDispatch } from "react-redux";
+import NavHeader from "../../components/NavHeader";
 import './ProductDetails.css';
 
 function ProductDetails({rating}) {
@@ -64,38 +65,7 @@ const [detailsOpen, setDetailsOpen] = useState(false);
 
   return (
     <div className="detailsPage">
-        <div   className="header-container">
-          {/* Header */}
-          <header className="myheader">
-            <div className="left-section">
-            <img src={logo} alt="Logo" />
-            </div>
-            <div className="center-section">
-              
-            </div>
-            <div className="right-section">
-                
-            <select value="english" >
-          <option value="english">English</option>
-          <option value="french">French</option>
-          <option value="arabic">Arabic</option>
-             </select>
-             
-        
-            </div>
-    
-          </header>
-    
-          {/* Line with Text */}
-          <div className="text-line">
-          <Link to="/home">home</Link>
-        <Link to="/store">store</Link>
-        <Link to="/about">about</Link>
-        <Link to="/brand">brand</Link>
-        <Link to="/blog">blog</Link>
-        <Link to="/contact">contact</Link>
-          </div>
-        </div>
+        <NavHeader />
 
         <div className="green-containerr">
           
@@ -140,7 +110,7 @@ heal,” says Dr. Hadley King, a board-certified
                   </button>
                 </div>
               </div>
-              <div className="review">
+              <div className="review cart">
                 <button onClick={handleAddToCart}>Add to Cart</button>
               </div>
             </div>

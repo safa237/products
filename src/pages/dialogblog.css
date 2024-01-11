@@ -48,7 +48,12 @@
     /* Set the height to 100% */
     overflow: hidden;
 }
-  
+.blog-flexDialog{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 5em;
+}
   .details {
     display: flex;
     flex-direction: column;
@@ -137,9 +142,88 @@
   border-bottom: 1px solid transparent; /* Hide line under link */
   color: inherit; /* Inherit color from parent */
 }
-.share{
-  margin-left: 25em;
-}
+
 .dialogContainer{
   margin-bottom: 5em;
+}
+
+
+@media only screen and (max-width: 767px) {
+  .popup-content p {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    text-align: justify;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    
+  }
+  .green-container {
+    border-top-left-radius: 50px;
+    border-top-right-radius: 50px;
+}
+}
+@media (max-width: 1070px) {
+  .blog-flexDialog{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-bottom: 5em;
+}
+.blog-flexDialog .blogimg{
+    width: 100%;
+    background-color: transparent;
+    margin-left: 20px;
+    margin-top: 5em;
+}
+ .blogimg img{
+    width: 250px;
+    height: 250px;
+    border-top-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+.blog-flexDialog .infoblog{
+    width: 100%;
+    margin-top: 3em;
+    margin-left: 5px;
+}
+.blog-flexDialog .blog-container{
+    margin-right: 15px;
+}
+
+.blog-flexDialog .infoblog h5{
+    color: #3A7E89;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    text-align: justify;
+    line-height: 1.5;
+    font-size: xx-large;
+}
+.blog-flexDialog .infoblog h6 {
+    color: white;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    text-align: justify;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    font-size: 1em; /* Adjust font size for better readability */
+    margin-top: 2em;
+}
+.blog-flexDialog .card1 {
+    width: 100%; /* Full width for small screens */
+    margin-top: 0.5em;
+}
+.blog-flexDialog .card-blog{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    margin-top: 0px;
+}
+.blog-flexDialog .card1blog img{
+    margin-top: 3px;
+}
+.blog-flexDialog .green-containerr {
+    border-top-left-radius: 50px;
+    border-top-right-radius: 50px;
+}
+
 }
