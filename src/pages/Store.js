@@ -224,7 +224,7 @@ function Store  ()  {
           )}
         </Link>
         
-        <div className="dropdown" onClick={toggleDropdown}>
+        {/*<div className="dropdown" onClick={toggleDropdown}>
           <FaUser className="user-icon" title={isLoggedIn ? 'Logout' : 'Login'} />
           {isDropdownOpen && (
             <div className="dropdown-content">
@@ -235,7 +235,8 @@ function Store  ()  {
               )}
             </div>
           )}
-        </div>
+        </div> */}
+
         <select className='selectLang' value={language} onChange={handleLanguageChange}>
           <option value="english">English</option>
           <option value="french">French</option>

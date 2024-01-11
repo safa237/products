@@ -54,8 +54,8 @@ const translationSlice = createSlice({
         "interested" : "Vous pourriez également être intéressé par",
     },
       "arabic": {
-        "home" : "المتجر",
-        "store" : "المخزن",
+        "home" : "الرئيسيه",
+        "store" : "المتجر",
         "about" : "معلومات عنا",
         "brand" : "ماركات عالمية",
         "blog" : "المدونه",

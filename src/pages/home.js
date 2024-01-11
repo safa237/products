@@ -27,7 +27,8 @@ import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import { jwtDecode } from 'jwt-decode';
-
+import { loadWishlistFromStorage } from '../rtk/slices/Wishlist-slice';
+import { saveWishlistToStorage } from '../rtk/slices/Wishlist-slice';
 
 function Home  ()  {
   const dispatch = useDispatch();
@@ -94,24 +95,49 @@ function Home  ()  {
 
   const checkLoggedInStatus = () => {
     const userToken = localStorage.getItem('token');
+    const storedUserId = localStorage.getItem('userId'); // Retrieve userId from local storage
+  
     const newIsLoggedIn = !!userToken;
     setIsLoggedIn(newIsLoggedIn);
-
+  
     if (newIsLoggedIn) {
-      const storedWishlist = localStorage.getItem('wishlist');
-      const parsedWishlist = storedWishlist ? JSON.parse(storedWishlist) : [];
-      parsedWishlist.forEach((productId) => {
-        dispatch(addToWishlist(productId));
-      });
+      try {
+        const decodedToken = jwtDecode(userToken);
+        const userId = decodedToken.userId;
+  
+        if (userId === storedUserId) {
+          const storedWishlist = loadWishlistFromStorage(userId);
+          storedWishlist.forEach((productId) => {
+            dispatch(addToWishlist({ userId, productId }));
+          });
+        } else {
+          // Clear the wishlist if userId doesn't match
+          dispatch(clearWishlist());
+          saveWishlistToStorage(userId, []); // Also clear from local storage
+        }
+      } catch (error) {
+        // Handle invalid token
+        console.error('Invalid token:', error.message);
+        // Clear the wishlist and userId if the token is not valid
+        dispatch(clearWishlist());
+        localStorage.removeItem('userId');
+      }
     }
   };
+  
+  
+  
+  
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('userId'); // Clear userId on logout
+    dispatch(clearWishlist()); // Clear wishlist in Redux state
     setIsLoggedIn(false);
     setIsLoggedInState(false);
     setIsDropdownOpen(false);
   };
+  
 
   const rating = product.rate;
 
@@ -188,18 +214,28 @@ function Home  ()  {
       alert('Please sign in to add to favorites.');
       return;
     }
-
+  
     // Check if the product is already in the wishlist
     const isProductInWishlist = wishlist.includes(productId);
-
+  
+    console.log('Product ID:', productId);
+    console.log('Is Product in Wishlist:', isProductInWishlist);
+    const userId = localStorage.getItem('userId');
     if (isProductInWishlist) {
       // Remove the product from the wishlist
-      dispatch(removeFromWishlist(productId));
+      console.log('Removing from Wishlist');
+      dispatch(removeFromWishlist({ userId, productId }));
     } else {
       // Add the product to the wishlist
-      dispatch(addToWishlist(productId));
+      console.log('Adding to Wishlist');
+      dispatch(addToWishlist({ userId, productId }));
     }
+  
+    // Log the updated wishlist state
+    console.log('Updated Wishlist:', wishlist);
   };
+  
+  
 
   const detailsBtn = () => {
     if (!isLoggedIn) {
@@ -264,7 +300,7 @@ function Home  ()  {
           )}
         </Link>
         
-        <div className="dropdown" onClick={toggleDropdown}>
+       {/**  <div className="dropdown" onClick={toggleDropdown}>
           <FaUser className="user-icon" title={isLoggedIn ? 'Logout' : 'Login'} />
           {isDropdownOpen && (
             <div className="dropdown-content">
@@ -275,7 +311,8 @@ function Home  ()  {
               )}
             </div>
           )}
-        </div>
+        </div> */}
+
         <select className='selectLang' value={language} onChange={handleLanguageChange}>
           <option value="english">English</option>
           <option value="french">French</option>

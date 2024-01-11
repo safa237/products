@@ -126,18 +126,7 @@ function NavHeader() {
               )}
             </Link>
             
-            <div className="dropdown" onClick={toggleDropdown}>
-              <FaUser className="user-icon" title={isLoggedIn ? 'Logout' : 'Login'} />
-              {isDropdownOpen && (
-                <div className="dropdown-content">
-                  {isLoggedIn ? (
-                    <span onClick={handleLogout}>Logout</span>
-                  ) : (
-                    <Link to="/authentication">Login</Link>
-                  )}
-                </div>
-              )}
-            </div>
+           
             <select className='selectLang' value={language} onChange={handleLanguageChange}>
               <option value="english">English</option>
               <option value="french">French</option>

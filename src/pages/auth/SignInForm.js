@@ -10,6 +10,11 @@ import { useDispatch , useSelector } from 'react-redux';
 import { setLanguage , selectLanguage , selectTranslations } from '../../rtk/slices/Translate-slice';
 import './sign.css';
 
+import { jwtDecode } from 'jwt-decode';
+import { loadWishlistFromStorage } from '../../rtk/slices/Wishlist-slice';
+import { addToWishlist } from '../../rtk/slices/Wishlist-slice';
+
+
 const SignInForm = () => {
   const dispatch = useDispatch();
   const language = useSelector(selectLanguage);
@@ -58,6 +63,9 @@ const SignInForm = () => {
         setErrors({ general: 'Invalid email or password' });
       });
   };
+  
+  
+  
 
   const handleAdminLogin = () => {
     console.log('Admin Login Payload:', formData); // Log the payload
