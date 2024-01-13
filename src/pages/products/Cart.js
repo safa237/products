@@ -4,73 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteFromCart } from "../../rtk/slices/Cart-slice";
 import { useEffect } from "react";
 import NavHeader from "../../components/NavHeader";
-
-/*function Cart() {
-  const cart = useSelector((state) => state.cart);
-  const dispatch = useDispatch();
-
-  const totalprice = cart.reduce((acc, product) => {
-    acc += product.price * product.quantity;
-    return acc;
-  }, 0);
-
-  useEffect(() => {
-    console.log("Cart:", cart);
-  }, [cart]);
-
-  
-
-  const handleDeleteFromCart = (productId) => {
-    dispatch(deleteFromCart({ id: productId }));
-  };
-  
-  
-  return (
-    <Container>
-      <h1 className="py-5"></h1>
-      <h5>Total Price: {totalprice.toFixed(2)}</h5>
-      <Table striped bordered hover size="sm">
-        <thead>
-          <tr>
-            <th>Image</th>
-            <th>Title</th>
-            <th>Quantity</th>
-            <th>Price</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {cart.map((product) => (
-            <tr key={`${product.id}-${product.productId}`}>
-              <td>
-                <Image
-                  src={`data:image/png;base64,${product.poster}`}
-                  alt="Product poster"
-                  style={{ width: "100px", height: "100px" }}
-                />
-              </td>
-              <td>{product.title}</td>
-              <td>{product.quantity}</td>
-              <td>{product.price * product.quantity}</td>
-              <td>
-              <Button variant="danger" 
-              onClick={() => {
-                console.log('Deleting product:', product);
-                dispatch(deleteFromCart(product));
-              }}
-              >delete</Button>
-
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-    </Container>
-  );
-}
-
-export default Cart;*/
-
 import {  useState} from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
@@ -78,15 +11,32 @@ import { setLanguage , selectLanguage , selectTranslations } from "../../rtk/sli
 import { FaHeart, FaShoppingCart , FaSearch } from 'react-icons/fa';
 import logo from '../../images/Vita Logo2.png' ;
 import { FaTrash } from "react-icons/fa";
+import { setSearchTerm } from "../../rtk/slices/Search-slice";
 import './cart.css';
 
 function Cart() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const language = useSelector(selectLanguage);
   const translations = useSelector(selectTranslations);
-  const products = useSelector((state) => state.products);
   const cart = useSelector(state => state.cart);
 
+  const [searchTerm, setSearchTerm] = useState('');
+  const allProducts = useSelector((state) => state.products);
+  const cartProducts = useSelector((state) => state.cart);
+
+  const handleSearchChange = (e) => {
+    const term = e.target.value;
+    setSearchTerm(term.toLowerCase());
+  };
+
+  const filteredProducts = allProducts.filter((product) =>
+    product.title.toLowerCase().includes(searchTerm)
+  );
+
+  const handleProductClick = (productId) => {
+    navigate(`/home/product/${productId}`);
+  };
 
   useEffect(() => {
   }, [language]);
@@ -113,15 +63,19 @@ function Cart() {
     dispatch(deleteFromCart({ id: productId }));
   };
   
-  const navigate = useNavigate();
 
   const handleConfirmClick = () => {
     navigate('/order/confirm');
   };
-
+ 
   return(
     <div>
-      <NavHeader />
+       <NavHeader
+        searchTerm={searchTerm}
+        handleSearchChange={handleSearchChange}
+        filteredProducts={filteredProducts}
+        handleProductClick={handleProductClick}
+      />
 
       <div className="green-containerr cartGreen ">
         <div className="header-container">

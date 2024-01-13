@@ -1,5 +1,6 @@
-
-
+.form{
+    margin-top: 15px;
+}
 .formOrder{
     background-color: white;
     padding-top: 1em;
@@ -30,7 +31,7 @@
     font-size: medium;
     margin-top: 5em;
 }
-.confirmtotal p input{
+.confirmtotal p input {
     width: 15px;
     height: 15px;
 }

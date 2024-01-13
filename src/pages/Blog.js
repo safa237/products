@@ -14,8 +14,10 @@ import DialogBlog from './DialogBlog';
 import { setLanguage , selectLanguage , selectTranslations } from '../rtk/slices/Translate-slice';
 import { useDispatch } from 'react-redux';
 import NavHeader from '../components/NavHeader';
+import { useNavigate } from 'react-router-dom';
 
 function Blog() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [blogs, setBlogs] = useState([]);
   const [selectedBlog, setSelectedBlog] = useState(null);
@@ -83,9 +85,31 @@ function Blog() {
     }
   };
 
+  const allProducts = useSelector((state) => state.products);
+
+  const [searchTerm, setSearchTerm] = useState('');
+  const handleSearchChange = (e) => {
+    const term = e.target.value;
+    setSearchTerm(term.toLowerCase());
+  };
+
+  const filteredProducts = allProducts.filter((product) =>
+    product.title.toLowerCase().includes(searchTerm)
+  );
+  const handleProductClick = (productId) => {
+    navigate(`/home/product/${productId}`);
+  };
+
+
   return (
-    <div className="page-container">
-      <NavHeader />
+   
+     <div className="page-container">
+       <NavHeader
+        searchTerm={searchTerm}
+        handleSearchChange={handleSearchChange}
+        filteredProducts={filteredProducts}
+        handleProductClick={handleProductClick}
+      />
 
       <div className="green-containerr">
         <div className='testtt'>

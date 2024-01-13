@@ -8,23 +8,42 @@ import StarRating from "../rate/StarRating";
 import ReviewDialog from "./ReviewDialog";
 import { addToCart } from "../../rtk/slices/Cart-slice";
 import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import NavHeader from "../../components/NavHeader";
+import { useNavigate } from "react-router-dom";
 import './ProductDetails.css';
 
 function ProductDetails({rating}) {
+  const navigate = useNavigate();
   const api_url = "https://mostafaben.bsite.net/api/Products";
   const [product, setProduct] = useState({});
   const params = useParams();
   console.log(params);
+  const handleProductClick = (productId) => {
+    navigate(`/home/product/${productId}`);
+  };
   useEffect(() => {
     fetch(`${api_url}/${params.productId}`)
       .then((res) => res.json())
       .then((product) => setProduct(product));
-  }, []);
+  }, [handleProductClick]);
+ 
 
   const [totalPrice, setTotalPrice] = useState(0);
 
   const [quantity, setQuantity] = useState(0);
+  const allProducts = useSelector((state) => state.products);
+
+  const [searchTerm, setSearchTerm] = useState('');
+  const handleSearchChange = (e) => {
+    const term = e.target.value;
+    setSearchTerm(term.toLowerCase());
+  };
+
+  // Filter the products based on the search term entered in the Cart page
+  const filteredProducts = allProducts.filter((product) =>
+    product.title.toLowerCase().includes(searchTerm)
+  );
 
   const handleIncrement = () => {
     setQuantity(quantity + 1);
@@ -63,13 +82,21 @@ const handleAddToCart = () => {
 const [detailsOpen, setDetailsOpen] = useState(false);
 
 
+
+
   return (
     <div className="detailsPage">
-        <NavHeader />
+      <NavHeader
+        searchTerm={searchTerm}
+        handleSearchChange={handleSearchChange}
+        filteredProducts={filteredProducts}
+        handleProductClick={handleProductClick}
+      />
 
         <div className="green-containerr">
           
           <div className="header-container flexContent">
+         
             <div className="detailsIMG">
             {product.poster && (
              <img className="productImg"

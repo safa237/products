@@ -1,0 +1,117 @@
+.search-dropdown {
+    position: fixed;
+    top: 65px; 
+    left: 380px;
+    transform: translateX(-50%);
+    width: 280px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    overflow-y: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .product-dropdown-item {
+    padding: 10px;
+    cursor: pointer;
+    color: #3a7e89;
+    width: 100%;
+    box-sizing: border-box;
+    border-bottom: 1px solid #ccc;
+    &:last-child {
+      border-bottom: none;
+    }
+    &:hover {
+      background-color: #f2f2f2;
+    }
+  }
+
+
+  @media (max-width: 992px) {
+    .search-dropdown {
+      top: 65px;
+      left: 54%;
+      transform: translateX(-50%);
+      width: 300px;
+    }
+    .search{
+        width: 300px;
+    }
+  }
+  
+  /* Responsive styles for small screens */
+  @media (max-width: 576px) {
+    .search-dropdown {
+      top: 60px;
+      left: 55%;
+      transform: translateX(-50%);
+      width: 40%;
+    }
+    .search{
+        width: 200px;
+    }
+  }
+  .autocom-box{
+    position: fixed;
+    top: 65px; 
+    left: 380px;
+    transform: translateX(-50%);
+    width: 280px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    overflow-y: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .wrapper input{
+    border: 1px solid #3a7e89;
+    width: 250px;
+    margin-left: 30px;
+    margin-top: 25px;
+    border-radius: 5px;
+    padding-left: 5px;
+  }
+  
+
+
+
+  /* YourComponent.css */
+
+.user-container {
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-container {
+  position: relative;
+  cursor: pointer;
+}
+
+.icon {
+  font-size: 24px;
+  margin-right: 10px;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 30px; /* Adjust as needed */
+  right: 0;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  z-index: 100;
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: 8px 0;
+  color: #333;
+  text-decoration: none;
+}
+
+.login-link {
+  color: #333;
+  text-decoration: none;
+}

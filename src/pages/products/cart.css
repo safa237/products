@@ -126,3 +126,59 @@ h4 , h6{
         width: 90%;
     }
 }
+
+/* Add this CSS to style the dropdown */
+.cartGreen {
+    position: relative;
+  }
+  
+  .cart-products-dropdown {
+    position: absolute;
+    top: 100%; /* Position the dropdown below the search input */
+    left: 0;
+    width: 300px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+  
+  .product-dropdown-item {
+    padding: 10px;
+    cursor: pointer;
+    color: #3a7e89;
+    width: auto;
+    display: inline-block;
+    box-sizing: border-box;
+    border-bottom: 1px solid #ccc;
+    &:last-child {
+      border-bottom: none;
+    }
+    &:hover {
+      background-color: #f2f2f2;
+    }
+  }
+  
+  .flexContainerCart {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; /* Align items to the start */
+  }
+  
+  .flexcart {
+    width: 70%; /* Adjust the width of the cart items */
+  }
+  
+  .total {
+    width: 30%; /* Adjust the width of the total section */
+  }
+  
+  .confirmbtn {
+    margin-top: 10px; /* Add margin to the Confirm button */
+  }
+  
+  /* Add padding to the content to make room for the absolute positioned dropdown */
+  .content {
+    padding-top: 60px; /* Adjust the padding top value to match the dropdown top position */
+  }
+  

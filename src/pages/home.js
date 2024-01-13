@@ -29,6 +29,7 @@ import Nav from 'react-bootstrap/Nav';
 import { jwtDecode } from 'jwt-decode';
 import { loadWishlistFromStorage } from '../rtk/slices/Wishlist-slice';
 import { saveWishlistToStorage } from '../rtk/slices/Wishlist-slice';
+import { setSearchTerm } from '../rtk/slices/Search-slice';
 
 function Home  ()  {
   const dispatch = useDispatch();
@@ -37,19 +38,26 @@ function Home  ()  {
   const products = useSelector((state) => state.products);
   const wishlist = useSelector(selectWishlist);
   const cart = useSelector(state => state.cart);
-  const [searchTerm, setSearchTerm] = useState('');
+  /*const [searchTerm, setSearchTerm] = useState('');*/
   const [loading, setLoading] = useState(true);
+  const searchTerm = useSelector((state) => state.search.searchTerm);
 
   const navigate = useNavigate();
   /*const [products, setProducts] = useState([]);*/
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Track user login status
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLoggedInState, setIsLoggedInState] = useState(isLoggedIn);
+  const [isUserLoggedInState, setIsUserLoggedInState] = useState(isLoggedIn);
 
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
   
   const [isInCart, setIsInCart] = useState(false);
+
+  const handleSearchChange = (e) => {
+    const term = e.target.value;
+    dispatch(setSearchTerm(term));
+  };
 
   const handleDetailsClick = (selectedProduct) => {
     if (!isLoggedIn) {
@@ -133,9 +141,11 @@ function Home  ()  {
     localStorage.removeItem('token');
     localStorage.removeItem('userId'); // Clear userId on logout
     dispatch(clearWishlist()); // Clear wishlist in Redux state
+    dispatch(clearCart()); 
     setIsLoggedIn(false);
     setIsLoggedInState(false);
     setIsDropdownOpen(false);
+    setIsUserLoggedInState(false);
   };
   
 
@@ -214,8 +224,7 @@ function Home  ()  {
       alert('Please sign in to add to favorites.');
       return;
     }
-  
-    // Check if the product is already in the wishlist
+
     const isProductInWishlist = wishlist.includes(productId);
   
     console.log('Product ID:', productId);
@@ -264,88 +273,36 @@ function Home  ()  {
   product.title && product.title.toLowerCase().includes(searchTerm.toLowerCase())
 );
 
-
+const handleProductClick = (productId) => {
+  navigate(`/home/product/${productId}`);
+};
     return (
       <div className="page-container">
       {/* Header Container */}
-      <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
-  <Container>
-    <Navbar.Brand>
-      <img src={logo} alt="Logo" />
-    </Navbar.Brand>
-    <div className="left-section">
-      {/* Search */}
+      <NavHeader
+        searchTerm={searchTerm}
+        handleSearchChange={handleSearchChange}
+        filteredProducts={filteredProducts}
+        handleProductClick={handleProductClick}
+      />
 
-    </div>
-    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-    <Navbar.Collapse id="responsive-navbar-nav">
-      <Nav className="me-auto"></Nav>
-      <Nav>
-        
-        <div className="text-line">
-          <Link to="/home">{translations[language]?.home}</Link>
-          <Link to="/store">{translations[language]?.store}</Link>
-          <Link to="/about">{translations[language]?.about}</Link>
-          <Link to="/blog">{translations[language]?.blog}</Link>
-        </div>
-        <Link to="/wishlist" className="cart-link">
-          {isLoggedIn && <FaHeart className="cart-icon" />}
-        </Link>
-        <Link to="/cart" className="cart-link">
-          {isLoggedIn && (
-            <div>
-              <FaShoppingCart className="cart-icon" />
-              <span>{cart.length}</span>
-            </div>
-          )}
-        </Link>
-        
-       {/**  <div className="dropdown" onClick={toggleDropdown}>
-          <FaUser className="user-icon" title={isLoggedIn ? 'Logout' : 'Login'} />
-          {isDropdownOpen && (
-            <div className="dropdown-content">
-              {isLoggedIn ? (
-                <span onClick={handleLogout}>Logout</span>
-              ) : (
-                <Link to="/authentication">Login</Link>
-              )}
-            </div>
-          )}
-        </div> */}
-
-        <select className='selectLang' value={language} onChange={handleLanguageChange}>
-          <option value="english">English</option>
-          <option value="french">French</option>
-          <option value="arabic">Arabic</option>
-        </select>
-        <div className='text-line'>
-        {isLoggedIn ? (
-              <Link onClick={handleLogout}>logout</Link>
-            ) : (
-              <Link to="/authentication">login</Link>
-            )}
-            </div>
-      </Nav>
-    </Navbar.Collapse>
-  </Container>
-</Navbar>
 
   
       {/* Green Container */}
       <div className="green-containerr">
 
       
-        <div className='home-containerr'>
+        <div className='home-containerr testtt'>
           <Slider />
 
 
-          <div  className="search-container">
+         {/** <div  className="search-container">
                 <input type="text" style={{background: 'white'}} placeholder="Search" className="search-input"
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleSearchChange}
                 />
                 <FaSearch className="search-icon" />
-              </div>
+              </div>  */}
 
           {loading && (
       <div className="loading-spinner" style={{width: '50px' , height: '50px' , marginTop: '10px'}}>
@@ -359,19 +316,20 @@ function Home  ()  {
             <div className="card-body">
             <div className="card-icons">
            
-            {isLoggedIn && <FaHeart
+              <FaHeart
                       className={`favorite-icon ${wishlist.includes(product.id) ? 'favorite-icon-active' : ''}`}
                       onClick={() => handleAddToFavorites(product.id)}
-                    /> }
-           {isLoggedIn && <FaShoppingCart
+                    /> 
+            <FaShoppingCart
                   className={`cart-iconPro ${cart.some((item) => item.productId === product.id) ? 'cart-iconPro-active' : ''}`}
                   onClick={() => handleAddToCart(product.id, product)}
-                /> }
+                /> 
 
            {isLoggedIn && <FaEye className="cart-iconPro"
                  onClick={() => handleDetailsClick(product)}
                /> }
-                              
+
+           
 
               </div>
               <div className="card-img">
@@ -386,12 +344,12 @@ function Home  ()  {
   
   
                 
-                {isLoggedIn && <StarRating rating={rating} /> }
+                <StarRating rating={rating} /> 
   
                 </div>
                 <div className='price'>{`$${product.price}`}</div>
               </div>
-             {isLoggedIn && <button
+              <button
                      className='proBtn'
                      onClick={() => detailsBtn()}
                >
@@ -401,7 +359,7 @@ function Home  ()  {
                    >
                     {translations[language]?.detailsbtn}
                   </Link>
-              </button> }
+              </button> 
              
             </div>
           </div>

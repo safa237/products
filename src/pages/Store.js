@@ -187,84 +187,47 @@ function Store  ()  {
     return matchesSearch && matchesCategory;
   });
 
+  const handleProductClick = (productId) => {
+    navigate(`/home/product/${productId}`);
+  };
 
+  const [categories, setCategories] = useState([]);
+  
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        // Adjust the API endpoint and data structure based on your actual API
+        const response = await axios.get('https://mostafaben.bsite.net/api/Categories');
+        setCategories(response.data);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
   
     return (
       <div className="page-container">
       {/* Header Container */}
-      <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
-  <Container>
-    <Navbar.Brand>
-      <img src={logo} alt="Logo" />
-    </Navbar.Brand>
-    <div className="left-section">
-      {/* Search */}
-
-    </div>
-    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-    <Navbar.Collapse id="responsive-navbar-nav">
-      <Nav className="me-auto"></Nav>
-      <Nav>
-        
-        <div className="text-line">
-          <Link to="/home">{translations[language]?.home}</Link>
-          <Link to="/store">{translations[language]?.store}</Link>
-          <Link to="/about">{translations[language]?.about}</Link>
-          <Link to="/blog">{translations[language]?.blog}</Link>
-        </div>
-        <Link to="/wishlist" className="cart-link">
-          {isLoggedIn && <FaHeart className="cart-icon" />}
-        </Link>
-        <Link to="/cart" className="cart-link">
-          {isLoggedIn && (
-            <div>
-              <FaShoppingCart className="cart-icon" />
-              <span>{cart.length}</span>
-            </div>
-          )}
-        </Link>
-        
-        {/*<div className="dropdown" onClick={toggleDropdown}>
-          <FaUser className="user-icon" title={isLoggedIn ? 'Logout' : 'Login'} />
-          {isDropdownOpen && (
-            <div className="dropdown-content">
-              {isLoggedIn ? (
-                <span onClick={handleLogout}>Logout</span>
-              ) : (
-                <Link to="/authentication">Login</Link>
-              )}
-            </div>
-          )}
-        </div> */}
-
-        <select className='selectLang' value={language} onChange={handleLanguageChange}>
-          <option value="english">English</option>
-          <option value="french">French</option>
-          <option value="arabic">Arabic</option>
-        </select>
-        <div className='text-line'>
-        {isLoggedIn ? (
-              <Link onClick={handleLogout}>logout</Link>
-            ) : (
-              <Link to="/authentication">login</Link>
-            )}
-            </div>
-      </Nav>
-    </Navbar.Collapse>
-  </Container>
-</Navbar>
+      <NavHeader
+        searchTerm={searchTerm}
+        handleSearchChange={handleSearchChange}
+        filteredProducts={filteredProducts}
+        handleProductClick={handleProductClick}
+      />
   
       {/* Green Container */}
       <div className="green-containerr">
        
-        <div className='home-containerr'>
-        <div  className="search-container searchStore">
+        <div className='home-containerr testtt'>
+       {/**  <div  className="search-container searchStore">
                 <input type="text" style={{background: 'white'}} placeholder="Search" className="search-input"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 />
                 <FaSearch className="search-icon" />
-              </div>
+              </div> */}
 
          <div className='store-flex'>
          {loading && (
@@ -333,35 +296,24 @@ function Store  ()  {
             <p></p>
           <div>
           <div className='rateFilter'>
-                 <button
+          <button
                     color="primary"
                     onClick={() => handleCategoryFilter(null)}
                     className='filterbycat'
                   >
                     All Categoryies
                   </button>
-                  <button
-                    color="primary"
-                    onClick={() => handleCategoryFilter(1)}
-                    className='filterbycat'
-                  >
-                    category 1
-                  </button>
-                  <button
-                    color="primary"
-                    onClick={() => handleCategoryFilter(2)}
-                    className='filterbycat'
-                  >
-                    category 2
-                  </button>
-                  <button
-                    color="primary"
-                    onClick={() => handleCategoryFilter(4)}
-                    className='filterbycat'
-                  >
-                    category 4
-                  </button>
-          </div>
+  {categories.map(category => (
+    <button
+      key={category.id}
+      color="primary"
+      onClick={() => handleCategoryFilter(category.id)}
+      className='filterbycat'
+    >
+      {category.name}
+    </button>
+  ))}
+</div>
           {/*<p style={{marginTop:'5em'}}>filter by category</p>
           <div className='rateFilter'>
             <div ><CiStar /> Five Only</div>

@@ -32,6 +32,7 @@ import BlogAdmin from "./pages/Admin/Blogs";
 import AddBlog from "./pages/Admin/Actions/blogAction/AddBlog";
 import DetailsBlog from "./pages/Admin/Actions/blogAction/DetailsBlog";
 import EditBlog from "./pages/Admin/Actions/blogAction/EditBlog";
+import MyOrders from "./pages/MyOrders";
 
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
       <Route path="/store" element={<Store />} />
       <Route path="/brand" element={<Brand />} />
       <Route path="/blog" element={<Blog />} />
+      <Route path="/order" element={<MyOrders />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/cart" element={<Cart />} />
