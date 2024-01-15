@@ -280,7 +280,7 @@ const handleProductClick = (productId) => {
       <div className="page-container">
       {/* Header Container */}
       <NavHeader
-        searchTerm={searchTerm}
+        searchTermm={searchTerm}
         handleSearchChange={handleSearchChange}
         filteredProducts={filteredProducts}
         handleProductClick={handleProductClick}

@@ -213,7 +213,7 @@ function Store  ()  {
       <NavHeader
         searchTerm={searchTerm}
         handleSearchChange={handleSearchChange}
-        filteredProducts={filteredProducts}
+        
         handleProductClick={handleProductClick}
       />
   

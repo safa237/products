@@ -19,150 +19,151 @@ import Nav from 'react-bootstrap/Nav';
 import './navheader.css';
 
 
-function NavHeader({ searchTerm, handleSearchChange , filteredProducts, handleProductClick }) {
-
-    const dispatch = useDispatch();
+function NavHeader({handleProductClick}) {
+  const dispatch = useDispatch();
   const language = useSelector(selectLanguage);
   const translations = useSelector(selectTranslations);
+  const allProducts = useSelector((state) => state.products);
   const products = useSelector((state) => state.products);
-  const wishlist = useSelector(selectWishlist);
-  const cart = useSelector(state => state.cart);
- // const [searchTerm, setSearchTerm] = useState('');
 
   const navigate = useNavigate();
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Track user login status
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const cart = useSelector(state => state.cart);
 
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId'); // Clear userId on logout
+   
+  };
   useEffect(() => {
+    const checkLoggedInStatus = () => {
+      const userToken = localStorage.getItem('token');
+      setIsLoggedIn(!!userToken);
+
+      if (userToken) {
+        const storedWishlist = localStorage.getItem('wishlist');
+        const parsedWishlist = storedWishlist ? JSON.parse(storedWishlist) : [];
+        parsedWishlist.forEach((productId) => {
+          dispatch(addToWishlist(productId));
+        });
+      }
+    };
+
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get('https://mostafaben.bsite.net/api/Categories');
+        setCategories(response.data);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+
     checkLoggedInStatus();
-  }, []);
+    fetchCategories();
+  }, [dispatch]);
 
   const handleLanguageChange = (e) => {
     const selectedLanguage = e.target.value;
     dispatch(setLanguage(selectedLanguage));
   };
+  const [selectedCategoryColor, setSelectedCategoryColor] = useState('');
 
+  const handleCategoryFilter = (categoryId) => {
+    setSelectedCategoryId(categoryId);
+    setSelectedCategoryColor(categoryId === null ? '' : 'red'); // Set the color for the selected category
 
-  const checkLoggedInStatus = () => {
-    const userToken = localStorage.getItem('token');
-    setIsLoggedIn(!!userToken); 
-
-    if (userToken) {
-      const storedWishlist = localStorage.getItem('wishlist');
-      const parsedWishlist = storedWishlist ? JSON.parse(storedWishlist) : [];
-      parsedWishlist.forEach((productId) => {
-        dispatch(addToWishlist(productId));
-      });
-    }
+  };
+ 
+  const handleSearchChangeInternal = (e) => {
+    const term = e.target.value.toLowerCase();
+    setSearchTerm(term);
   };
 
-  
-  const handleLogout = () => {
-    localStorage.removeItem('token');
+  /*const handleProductClick = (productId) => {
+    // Handle product click logic here
+    console.log('Product clicked:', productId);
+  };*/
+
+  /*const filteredProducts = allProducts.filter((product) => {
+    const titleMatches = product.title.toLowerCase().includes(searchTerm.toLowerCase());
+    const categoryMatches = !selectedCategoryId || product.categoryId === selectedCategoryId;
+
+    return titleMatches && categoryMatches;
+  });*/
+  const filteredProducts = products.filter((product) => {
+    const matchesSearch = product.title.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategoryId ? product.categoryId === selectedCategoryId : true;
+
+    return matchesSearch && matchesCategory;
+  });
+
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState('All Categories');
    
-    setIsLoggedIn(false); 
-    setIsDropdownOpen(false); 
-  };
 
-
-
-  const [quantity, setQuantity] = useState(0);
-
-
-
-  
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  const handleDropdownOptionClick = (option) => {
-    if (option === 'profile') {
-      navigate('/profile'); 
-    } else if (option === 'logout') {
-      handleLogout();
-    }
-  
-    // Close the dropdown after handling the option
-    setIsDropdownOpen(false);
-  };
-  
- /* const filteredProducts = products.filter((product) =>
-  product.title && product.title.toLowerCase().includes(searchTerm.toLowerCase())
-);*/
-
-const allProducts = useSelector((state) => state.products);
-const cartProducts = useSelector((state) => state.cart);
-
-/*const handleSearchChange = (e) => {
-  const term = e.target.value;
-  setSearchTerm(term.toLowerCase());
-};*/
-
-// Filter the products based on the search term entered in the Cart page
-/*const filteredProducts = allProducts.filter((product) =>
-  product.title.toLowerCase().includes(searchTerm)
-);*/
-  const handleUserIconClick = () => {
-    toggleDropdown();
-  };
-
-
-    return(
-      <Navbar  collapseOnSelect expand="lg"  className="bg-body-tertiary">
+  return (
+    <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
       <Container>
         <Navbar.Brand>
           <img src={logo} alt="Logo" />
         </Navbar.Brand>
-        <div >
-        {/** <div className='search' >
-                <input type="text" style={{ marginTop : '25px', width : '300px' ,background: 'white'}} placeholder="Search" className="search-input"
-                value={searchTerm}
-                onChange={handleSearchChange}
-                />
-                <FaSearch className="search-icon" />
-                {searchTerm && (
-          <div className="search-dropdown">
-            {filteredProducts.map((product) => (
-              <div
-                key={product.id}
-                onClick={() => handleProductClick(product.id)}
-                className="product-dropdown-item"
-              >
-                <p style={{color : '#3A7E89'}}>{product.title}</p>
-              </div>
-            ))}
-          </div>
-        )}
-              </div> */}
-
-<div className="wrapper">
+        <div className="wrapper">
+        <div className='search-dropdown-container'>
           <div>
-            <a href="" target="_blank" hidden></a>
+        
+
+      <div className='searchcontainer'>
+        
+      <button onClick={toggleDropdown} className="dropdown-button">
+      {selectedCategory}
+      </button>
+      {isDropdownOpen && (
+        <ul className={`dropdown-list ${isDropdownOpen ? 'open' : ''}`}>
+          {categories.map(category => (
+            <li
+              key={category.id}
+              onClick={() => handleCategoryFilter(category.id) }
+              className={`filterbycat ${selectedCategoryId === category.id ? 'selected' : ''}`}
+
+            >
+              {category.name}
+            </li>
+          ))}
+        </ul>
+      )}
             <input
               type="text"
               placeholder="search "
               value={searchTerm}
-              onChange={handleSearchChange}
+              onChange={handleSearchChangeInternal}
             />
-            <div className="icon" onClick={() => handleProductClick(filteredProducts[0]?.id)}>
-              <i className="fas fa-search"></i>
-            </div>
+            
           </div>
         </div>
         {searchTerm && (
-        <div className="autocom-box">
-          {filteredProducts.map((product) => (
-            <li  className="product-dropdown-item" key={product.id} 
-            onClick={() => handleProductClick(product.id)}>
-              {product.title}
-            </li>
-          ))}
-        </div>
+          <div className="autocom-box">
+            {filteredProducts.map((product) => (
+              <li
+                className="product-dropdown-item"
+                key={product.id}
+                onClick={() => handleProductClick(product.id)}
+              >
+                {product.title}
+              </li>
+            ))}
+          </div>
         )}
-    
-        </div>
+      </div>
+      </div>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto"></Nav>
@@ -201,8 +202,8 @@ const cartProducts = useSelector((state) => state.cart);
           </Nav>
         </Navbar.Collapse>
       </Container>
-
     </Navbar>
-    );
+  );
 }
+
 export default NavHeader;

@@ -44,7 +44,7 @@
 .rateFilter{
   border-top-right-radius: 30%;
   border-bottom-right-radius: 30%;
- 
+  min-height: 500px;
   
 }
 .rateFilter p{
@@ -92,7 +92,6 @@
 }
 .rateFilter{
   display: flex;
-  justify-content: space-between;
   flex-direction: column;
  
 }
@@ -182,6 +181,7 @@
     display: flex;
     justify-content: space-between;
     flex-direction: column;
+    overflow-y: hidden;
   }
   .store-flex .storeside{
     width: 80%;

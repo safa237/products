@@ -55,7 +55,7 @@
   .autocom-box{
     position: fixed;
     top: 65px; 
-    left: 380px;
+    left: 490px;
     transform: translateX(-50%);
     width: 280px;
     background: rgba(255, 255, 255, 0.9);
@@ -68,12 +68,16 @@
   .wrapper input{
     border: 1px solid #3a7e89;
     width: 250px;
-    margin-left: 30px;
+    margin-left: -1px;
     margin-top: 25px;
     border-radius: 5px;
     padding-left: 5px;
   }
-  
+  .selectCat{
+    border: 1px solid #3a7e89;
+    background-color: #3a7e89;
+    color: white;
+  }
 
 
 
@@ -115,3 +119,64 @@
   color: #333;
   text-decoration: none;
 }
+
+
+
+/* Dropdown.css */
+.dropdown-button{
+  border: 1px solid #3a7e89;
+  width: 100px;
+  margin-left: 15px;
+  margin-top: 25px;
+  border-radius: 5px;
+  
+}
+.search-dropdown-container{
+  display: flex;
+  flex-direction: row;
+}
+.dropdown-container {
+  position: relative;
+}
+.dropdown-list {
+  position: fixed;
+    top: 65px; 
+    transform: translateX(-50%);
+    z-index: 1000;
+    overflow-y: hidden;
+  display: none;
+  list-style: none;
+  padding: 0;
+  margin-left: 65px;
+  background-color: #3a7e89;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+ 
+}
+
+.dropdown-list li {
+  cursor: pointer;
+  width: 100px;
+  padding-left: 5px;
+  padding-right: 5px;
+  background-color: transparent;
+  color: white;
+  border-bottom : 1px solid white;
+  width: 100px;
+}
+
+.dropdown-list.open {
+  display: block;
+}
+
+.filterbycat.selected {
+  color: red;
+  font-weight: bold;
+  background-color: #f8f8f8;
+  border-bottom: 2px solid red;
+  transition: transform 0.3s ease; 
+}
+
+.filterbycat.selected:hover {
+  transform: scale(1.1); 
+}
+
