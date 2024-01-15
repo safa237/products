@@ -119,7 +119,7 @@ const Products = () => {
                     <td>{product.price}</td>
                     <td>{product.rate}</td>
                     <td>{product.categoryId}</td>
-                    <td>{product.storeline}</td>
+                    <td>{product.descreption}</td>
 
                     <td>
                       <button className="action-button edit-button">

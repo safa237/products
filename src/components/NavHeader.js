@@ -94,12 +94,21 @@ function NavHeader({handleProductClick}) {
 
     return titleMatches && categoryMatches;
   });*/
+ /* const filteredProducts = products.filter((product) => {
+    const matchesSearch = product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategoryId ? product.categoryId === selectedCategoryId : true;
+  
+    return matchesSearch && matchesCategory;
+  });*/
+
   const filteredProducts = products.filter((product) => {
-    const matchesSearch = product.title.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+         product.descreption.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesCategory = selectedCategoryId ? product.categoryId === selectedCategoryId : true;
 
     return matchesSearch && matchesCategory;
-  });
+  }); 
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('All Categories');

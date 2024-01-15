@@ -16,7 +16,7 @@ const AddProduct = () => {
   const saveProduct = () => {
     const formData = new FormData();
     formData.append('Title', product.Title);
-    formData.append('Storyline', product.Descreption); // Change to match the backend model
+    formData.append('Descreption', product.Descreption); // Change to match the backend model
     formData.append('Price', product.Price);
     formData.append('Rate', product.Rate);
     formData.append('Poster', product.Poster);

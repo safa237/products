@@ -106,15 +106,9 @@ const [detailsOpen, setDetailsOpen] = useState(false);
             </div>
             <div className="detailsINFO">
               <h1 style={{color: 'white'}}>{product.title}</h1>
-              <p>
-              Dealing with dry skin is enough to leave anyone 
-frustrated, frazzled and, well, flaky. Even worse,
-chronic dryness is associated with a disrupted 
-skin barrier. “Without an optimal barrier function 
-your skin becomes more vulnerable to minor 
-trauma and infections, and it will take longer to
-heal,” says Dr. Hadley King, a board-certified 
-              </p>
+              <h1>
+              {product.descreption}
+              </h1>
             </div>
           </div>
           <div className="productFooter">
