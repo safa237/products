@@ -44,8 +44,7 @@
 .rateFilter{
   border-top-right-radius: 30%;
   border-bottom-right-radius: 30%;
-  min-height: 500px;
-  
+  min-height: 200px;
 }
 .rateFilter p{
   color: #3A7E89;

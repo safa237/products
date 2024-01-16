@@ -282,7 +282,7 @@ const handleProductClick = (productId) => {
       <NavHeader
         searchTermm={searchTerm}
         handleSearchChange={handleSearchChange}
-        filteredProducts={filteredProducts}
+        filteredProductss={filteredProducts}
         handleProductClick={handleProductClick}
       />
 

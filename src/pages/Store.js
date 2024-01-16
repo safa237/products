@@ -24,6 +24,7 @@ import NavHeader from '../components/NavHeader';
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
+import { useLocation } from 'react-router-dom';
 
 import './store.css';
 
@@ -35,6 +36,7 @@ function Store  ()  {
   const products = useSelector((state) => state.products);
   const wishlist = useSelector(selectWishlist);
   const cart = useSelector(state => state.cart);
+  
 
   const navigate = useNavigate();
   /*const [products, setProducts] = useState([]);*/
@@ -172,9 +174,9 @@ function Store  ()  {
   
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
 
-  const handleSearchChange = (e) => {
+  /*const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
-  };
+  };*/
 
   const handleCategoryFilter = (categoryId) => {
     setSelectedCategoryId(categoryId);
@@ -206,14 +208,39 @@ function Store  ()  {
 
     fetchCategories();
   }, []);
+
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const searchTermFromUrl = queryParams.get('search') || '';
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await dispatch(fetchProducts());
+        checkLoggedInStatus();
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+    setSearchTerm(searchTermFromUrl);
+  }, [language, searchTermFromUrl]);
+  
+  // ...
+
+  const handleSearchChange = (e) => {
+    const term = e.target.value;
+    setSearchTerm(term);
+    // Update the URL when the search term changes
+    navigate(`/store?search=${term}`);
+  };
+
   
     return (
       <div className="page-container">
       {/* Header Container */}
       <NavHeader
-        searchTerm={searchTerm}
-        handleSearchChange={handleSearchChange}
-        
+      
         handleProductClick={handleProductClick}
       />
   
@@ -265,9 +292,8 @@ function Store  ()  {
               </div>
               <div className='card-info card-infoStore'>
                 <h2>{product.title}</h2>
+                
                 <div className='rate'>
-  
-  
                 
                 {isLoggedIn && <StarRating rating={rating} /> }
   

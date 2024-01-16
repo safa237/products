@@ -17,9 +17,10 @@ import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import './navheader.css';
+import SidebarUser from './SidebarUser';
 
 
-function NavHeader({handleProductClick}) {
+function NavHeader({handleProductClick }) {
   const dispatch = useDispatch();
   const language = useSelector(selectLanguage);
   const translations = useSelector(selectTranslations);
@@ -36,7 +37,7 @@ function NavHeader({handleProductClick}) {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    localStorage.removeItem('userId'); // Clear userId on logout
+    localStorage.removeItem('userId'); 
    
   };
   useEffect(() => {
@@ -72,16 +73,21 @@ function NavHeader({handleProductClick}) {
   };
   const [selectedCategoryColor, setSelectedCategoryColor] = useState('');
 
-  const handleCategoryFilter = (categoryId) => {
+ /* const handleCategoryFilter = (categoryId) => {
     setSelectedCategoryId(categoryId);
     setSelectedCategoryColor(categoryId === null ? '' : 'red'); // Set the color for the selected category
-
-  };
+   
+  };*/
  
   const handleSearchChangeInternal = (e) => {
     const term = e.target.value.toLowerCase();
     setSearchTerm(term);
   };
+  /*const handleSearchSubmit = () => {
+    // Redirect to the store page with the search term in the query parameter
+    navigate(`/store?search=${searchTerm}`);
+  };*/
+ 
 
   /*const handleProductClick = (productId) => {
     // Handle product click logic here
@@ -102,6 +108,9 @@ function NavHeader({handleProductClick}) {
     return matchesSearch && matchesCategory;
   });*/
 
+ 
+  
+
   const filteredProducts = products.filter((product) => {
     const matchesSearch = product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
          product.descreption.toLowerCase().includes(searchTerm.toLowerCase())
@@ -110,15 +119,85 @@ function NavHeader({handleProductClick}) {
     return matchesSearch && matchesCategory;
   }); 
 
+  const [productExistsInCategory, setProductExistsInCategory] = useState(true);
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
+
+  const resetErrorMessage = () => {
+    setShowErrorMessage(false);
+    setProductExistsInCategory(true); // Reset the product exists flag if needed
+  };
+
+  /*const handleSearchSubmit = () => {
+    const productInCategory = filteredProducts.find(product => product.categoryId === selectedCategoryId);
+  
+    if (productInCategory) {
+      navigate(`/store?search=${searchTerm}&category=${selectedCategoryId}`);
+    } else {
+      setProductExistsInCategory(false);
+      setShowErrorMessage(true);
+        setTimeout(resetErrorMessage, 3000);
+    }
+  };*/
+
+  const handleSearchSubmit = () => {
+    // Filter products within the selected category
+    const productsInSelectedCategory = filteredProducts.filter(product => product.categoryId === selectedCategoryId);
+  
+    // Check if there are products matching the search term in the selected category
+    const searchTermLowerCase = searchTerm ? searchTerm.toLowerCase() : '';
+    const productsMatchingSearch = productsInSelectedCategory.filter(product => {
+      const productNameLowerCase = product.title ? product.title.toLowerCase() : '';
+      return productNameLowerCase.includes(searchTermLowerCase);
+    });
+  
+    if (selectedCategoryId !== null && productsMatchingSearch.length === 0) {
+      setProductExistsInCategory(false);
+      setShowErrorMessage(true);
+      setTimeout(resetErrorMessage, 3000);
+    } else {
+      // Continue with navigation
+      navigate(`/store?search=${searchTerm}${selectedCategoryId !== null ? `&category=${selectedCategoryId}` : ''}`);
+    }
+  };
+  
+  
+  
+  
+  
+  
+  
+  
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState('All Categories');
-   
+  const [selectedCategory, setSelectedCategory] = useState('All Categories');  
+
+ 
 
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
+  const handleSelect = (categoryId) => {
+    setSelectedCategoryId(categoryId);
+    handleCategoryFilter(categoryId);
+    toggleDropdown(); // Close the dropdown after selection
+  };
+
+ 
+
+  const handleCategoryFilter = (categoryId) => {
+    setSelectedCategoryId(categoryId);
+  };
+
+
+  const [showSidebar, setShowSidebar] = useState(false);
+
+  const toggleSidebar = () => {
+    setShowSidebar(!showSidebar);
+  };
+
+  
   return (
     <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
       <Container>
@@ -132,7 +211,7 @@ function NavHeader({handleProductClick}) {
 
       <div className='searchcontainer'>
         
-      <button onClick={toggleDropdown} className="dropdown-button">
+      {/*<button onClick={toggleDropdown} className="dropdown-button">
       {selectedCategory}
       </button>
       {isDropdownOpen && (
@@ -142,23 +221,54 @@ function NavHeader({handleProductClick}) {
               key={category.id}
               onClick={() => handleCategoryFilter(category.id) }
               className={`filterbycat ${selectedCategoryId === category.id ? 'selected' : ''}`}
+            >
+              {category.name}
+            </li>
+          ))}
+        </ul>
+          )}*/}
 
+<div className="custom-select">
+      <button onClick={toggleDropdown} className="dropdown-button">
+        {selectedCategoryId ? categories.find(cat => cat.id === selectedCategoryId)?.name : 'All Categories'}
+        </button>
+      {isDropdownOpen && (
+        <ul className={`dropdown-list ${isDropdownOpen ? 'open' : ''}`}>
+          {categories.map(category => (
+            <li
+              key={category.id}
+              onClick={() => handleSelect(category.id)}
+              className={`filterbycat ${selectedCategoryId === category.id ? 'selected' : ''}`}
             >
               {category.name}
             </li>
           ))}
         </ul>
       )}
+    </div>
+
+    
+
+
             <input
               type="text"
               placeholder="search "
               value={searchTerm}
               onChange={handleSearchChangeInternal}
-            />
+            ></input>
+            <FaSearch className='searchicon' onClick={handleSearchSubmit} />
             
           </div>
         </div>
-        {searchTerm && (
+        
+        <div className="autocom-box">
+        {productExistsInCategory === false && (
+          <div className="error-message">
+            This product does not exist in the selected category.
+          </div>
+        )}
+          </div>
+       {/**  {searchTerm && (
           <div className="autocom-box">
             {filteredProducts.map((product) => (
               <li
@@ -170,7 +280,7 @@ function NavHeader({handleProductClick}) {
               </li>
             ))}
           </div>
-        )}
+        )} */}
       </div>
       </div>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
@@ -182,19 +292,9 @@ function NavHeader({handleProductClick}) {
               <Link to="/home">{translations[language]?.home}</Link>
               <Link to="/store">{translations[language]?.store}</Link>
               <Link to="/blog">{translations[language]?.blog}</Link>
-              {isLoggedIn && <Link to="/order">{translations[language]?.orders}</Link> }
+             
             </div>
-            <Link to="/wishlist" className="cart-link">
-              {isLoggedIn && <FaHeart className="cart-icon" />}
-            </Link>
-            <Link to="/cart" className="cart-link">
-              {isLoggedIn && (
-                <div>
-                  <FaShoppingCart className="cart-icon" />
-                  <span>{cart.length}</span>
-                </div>
-              )}
-            </Link>
+           
            
             <select className='selectLang' value={language} onChange={handleLanguageChange}>
               <option value="english">English</option>
@@ -202,15 +302,25 @@ function NavHeader({handleProductClick}) {
               <option value="arabic">Arabic</option>
             </select>
             <div className='text-line'>
-             {isLoggedIn ? (
+            {isLoggedIn ? (
                   <Link onClick={handleLogout}>{translations[language]?.logout}</Link>
                 ) : (
                   <Link to="/authentication">{translations[language]?.login}</Link>
                 )} 
                 </div>
+                <div className="text-line">
+            {isLoggedIn && (
+                  <Link >
+                    <div className="user-profile" onClick={toggleSidebar}>
+                  <FaUser />
+                </div>
+                  </Link>)}
+            </div>
+                
           </Nav>
         </Navbar.Collapse>
       </Container>
+      <SidebarUser isOpen={showSidebar} onClose={toggleSidebar}   />
     </Navbar>
   );
 }
