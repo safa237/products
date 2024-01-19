@@ -99,9 +99,9 @@ body{
     .green-containerr {
       border-top-left-radius: 150px;
       border-top-right-radius: 150px;
-      background: linear-gradient(to right, #3EBF87, #52B443CC); 
-      bottom: 0; /* Set height to auto */
-      /* Hide the overflow content */
+      background: linear-gradient(to right, #52B443, #3EBF87);
+
+      bottom: 0;
       overflow-y: hidden;
     }
 
@@ -134,6 +134,7 @@ body{
       max-width: calc(25% - 20px); 
       position: relative;
       margin-left: 5px;
+      
     }
     
     
@@ -149,9 +150,8 @@ body{
     .favorite-icon,
     .cart-iconPro {
       font-size: 20px;
-      color: #333; 
       margin-top: 5px;
-      color: #3A7E89;
+      color: #3EBF87;
       transition: color 0.3s ease;
     }
     .favorite-icon:hover {
@@ -177,12 +177,32 @@ body{
       position: absolute;
       bottom: 15px;
       right: 20px;
-     background-color:#3A7E89 ;
+     background-color: #3EBF87 ;
      border-style: none;
      border-radius: 15px;
      height: 40px;
      width: 100px;
      color: white;
+  }
+  .titleProduct{
+    text-align: center;
+    margin-top: 35px;
+  }
+  .titleProduct h1{
+    color: #FFFDFD;
+font-family: Inter;
+font-size: 32px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+  }
+  .titleProduct h2{
+    color: #FFFDFD;
+font-family: Inter;
+font-size: 30px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
   }
   .popular{
       text-align: center;
@@ -197,6 +217,25 @@ body{
   font-weight: 200;
   line-height: normal;
   }
+  .card-info h2{
+    color: #3EBF87;
+
+font-family: Inter;
+font-size: 25px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+  }
+  .price{
+    color: #696767;
+
+    font-family: Inter;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+
   .popular h3{
       font-weight: bold;
   }
@@ -356,6 +395,7 @@ body{
   height: 50px;
   background-color: transparent;
 }
+
 
 @media(max-width: 870px){
   #search-item{

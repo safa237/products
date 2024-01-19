@@ -24,7 +24,6 @@ import About from "./pages/About";
 import Brand from "./pages/brand";
 import Blog from "./pages/Blog";
 import Contact from "./pages/Contact";
-import Profile from "./pages/Profile";
 import Cart from "./pages/products/Cart";
 import WishList from "./pages/WishList";
 import ConfirmOrder from "./pages/products/ConfirmOrder";
@@ -33,7 +32,9 @@ import AddBlog from "./pages/Admin/Actions/blogAction/AddBlog";
 import DetailsBlog from "./pages/Admin/Actions/blogAction/DetailsBlog";
 import EditBlog from "./pages/Admin/Actions/blogAction/EditBlog";
 import MyOrders from "./pages/MyOrders";
-
+import ProfileInfo from "./pages/ProfileInfo";
+import ChangePassword from "./pages/ChangePassword";
+import BlogDetails from "./pages/BlogDetails";
 
 function App() {
   return (
@@ -45,15 +46,18 @@ function App() {
       <Route path="/store" element={<Store />} />
       <Route path="/brand" element={<Brand />} />
       <Route path="/blog" element={<Blog />} />
+      <Route path="/blog/:blogId" element={<BlogDetails />} />
       <Route path="/order" element={<MyOrders />} />
       <Route path="/contact" element={<Contact />} />
-      <Route path="/profile" element={<Profile />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/wishlist" element={<WishList />} />
+      <Route path="/profile" element={<ProfileInfo />} />
+      <Route path="/changePassword" element={<ChangePassword />} />
       <Route path="/order/confirm" element={<ConfirmOrder/>} />
       <Route
           path="/home/product/:productId"
           element={<ProductDetails /> }  />
+      
      
       <Route path="/authentication" element={<Sign />} />
       <Route path="/authentication/forget-password" element={< ForgetPassword/>} />

@@ -61,6 +61,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  padding-bottom: 15px;
 }
 .cart-link{
   display: flex;
@@ -72,7 +73,18 @@
 }
 .cart-link h5{
   text-decoration: none;
-  margin-top: 5px;
+  margin-top: 10px;
   color: #23b447e6;
+  font-size: medium;
+}
+.cart-link{
+  color: #23b447e6;
+  font-size: medium;
+}
+.logout-link{
+  color: #23b447e6;
+  font-size: medium;
+  text-decoration: none;
+  margin-left: 25px;
 }
 

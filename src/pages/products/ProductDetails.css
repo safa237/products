@@ -1,5 +1,6 @@
 .detailsPage .header-container{
   margin-bottom: 5px;
+  min-height: 500px;
 }
 .productImg{
     width: 300px;
@@ -27,8 +28,8 @@
     margin-top: 3em;
   }
   .detailsIMG img{
-    width: 400px;
-    height: 400px;
+    width: 200px;
+    height: 200px;
     object-fit: contain;
 }
 .productFooter{
@@ -73,64 +74,37 @@
 .cart{
   margin-right: 2em;
 }
-
-@media only screen and (max-width: 767px) {
-  .flexContent {
-    flex-direction: column;
-  }
-  .flexContent .detailsIMG,
-  .flexContent .detailsINFO {
-    width: 90%;
-  }
-  .detailsIMG img {
-    width: 100%;
-    height: auto;
-    border-top-right-radius: 0;
-    border-bottom-left-radius: 0;
-  }
-  .detailsINFO {
-    width: 90%;
-    margin-left: 1em;
-    margin-top: 1em;
-  }
-  /*.productFooter,
-  .flexFooter,
-  .middlefooter {
-    width: 100%;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-  }
-  .counter {
-    margin-left: 0;
-    margin-top: 1em;
-  }
-  .counter button {
-    margin-left: 5px;
-    margin-right: 5px;
-  }*/
-  .productFooter {
-    height: auto;
-  }
-  .flexFooter {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-  .middlefooter {
-    width: 100%;
-    margin-top: 1em;
-  }
-  .counter {
-    margin: 1em 0;
-  }
-  .counter button {
-    margin: 0.5em;
-  }
-  .review button {
-    margin-top: 1em;
-  }
-  .cart{
-    margin-right: 1px;
-  }
+.detailsflex{
+  display: flex;
+  flex-direction: column;
 }
+.detailsflex .detailsflexabout{
+  height: 25%;
+}
+.detailsflexabout h1{
+  font-size: large;
+  color: white;
+}
+.detailsflexabout p{
+  text-align: start;
+  color: white;
+}
+.detailsflex .detailsfleximg{
+  height: 90%;
+}
+.detailsfleximg{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.detailsINFO h1{
+  font-size: large;
+  color: white;
+}
+.detailsINFO span{
+  font-size: medium;
+  color: white;
+}
+
 

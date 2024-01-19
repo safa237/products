@@ -96,7 +96,12 @@ const [detailsOpen, setDetailsOpen] = useState(false);
         <div className="green-containerr">
           
           <div className="header-container flexContent">
-         
+            <div className="detailsflex">
+            <div className="detailsflexabout">
+              <h1>about this product : </h1>
+              <p></p>
+            </div>
+            <div className="detailsfleximg">
             <div className="detailsIMG">
             {product.poster && (
              <img className="productImg"
@@ -105,10 +110,18 @@ const [detailsOpen, setDetailsOpen] = useState(false);
 
             </div>
             <div className="detailsINFO">
-              <h1 style={{color: 'white'}}>{product.title}</h1>
-              <h1>
-              {product.descreption}
-              </h1>
+              <h1>Product Details: </h1>
+              <h1 style={{color: 'white'}}>Title : <span>{product.title}</span></h1>
+              <h1 style={{color: 'white'}}>descreption : <span>{product.descreption}</span></h1>
+              <h1 style={{color: 'white'}}>Brand:</h1>
+              <h1 style={{color: 'white'}}>Item Form:</h1>
+              <h1 style={{color: 'white'}}>Item Volume:</h1>
+              <h1 style={{color: 'white'}}>Special Ingredients:</h1>
+              <h1 style={{color: 'white'}}>Age Range:</h1>
+              <h1 style={{color: 'white'}}>Container Type:</h1>
+              <h1 style={{color: 'white'}}>Number Of Items:</h1>
+            </div>
+            </div>
             </div>
           </div>
           <div className="productFooter">
@@ -140,9 +153,10 @@ const [detailsOpen, setDetailsOpen] = useState(false);
         </div>
     
         <ReviewDialog
-          isOpen={detailsOpen}
-          onCancel={handleCancelDetails}
-       />
+      isOpen={detailsOpen}
+      onCancel={handleCancelDetails}
+      productId={params.productId} 
+    />
     </div>
   );
 }

@@ -10,10 +10,12 @@ import { setLanguage ,selectLanguage ,selectTranslations} from '../../rtk/slices
 import { useSelector , useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { FaUser } from "react-icons/fa";
+import axios from 'axios';
+import { useState } from 'react';
 import './review.css';
 
 
-const ReviewDialog = ({ isOpen, onCancel}) => {
+const ReviewDialog = ({ isOpen, onCancel , productId }) => {
 
     const language = useSelector(selectLanguage);
     const translations = useSelector(selectTranslations);
@@ -31,6 +33,36 @@ const ReviewDialog = ({ isOpen, onCancel}) => {
       const handleViewProductClick = () => {
         onCancel(); 
       };
+
+
+      const [reviewText, setReviewText] = useState('');
+      const userId = localStorage.getItem('userId');
+
+
+      const handlePostReview = () => {
+        const reviewData = {
+          productId: productId,
+          userId: userId,
+          name: 'User', 
+          commentText: reviewText,
+        };
+      
+        axios.post('https://mostafaben.bsite.net/api/Reviwes/addReview', reviewData, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        .then(response => {
+         
+          console.log('Review posted successfully', response.data);
+          setReviewText(''); 
+        })
+        .catch(error => {
+          
+          console.error('Error posting review', error);
+        });
+      };
+      
     return (
       <div className='review'>
         {isOpen && (
@@ -63,6 +95,14 @@ const ReviewDialog = ({ isOpen, onCancel}) => {
                 <p>my review is product is very goof , thak you very much</p>
                </div>
               </div>
+
+              <input
+  placeholder='write comment'
+  value={reviewText}
+  onChange={(e) => setReviewText(e.target.value)}
+/>
+
+<button onClick={handlePostReview}>Post Review</button>
              
             
           </div> 

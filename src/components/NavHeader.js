@@ -38,7 +38,7 @@ function NavHeader({handleProductClick }) {
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('userId'); 
-   
+    setIsLoggedIn(false);
   };
   useEffect(() => {
     const checkLoggedInStatus = () => {
@@ -66,6 +66,13 @@ function NavHeader({handleProductClick }) {
     checkLoggedInStatus();
     fetchCategories();
   }, [dispatch]);
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      // Additional cleanup logic can be added here
+      // For example, you might want to clear the wishlist or perform other actions
+    }
+  }, [isLoggedIn]);
 
   const handleLanguageChange = (e) => {
     const selectedLanguage = e.target.value;
@@ -178,11 +185,16 @@ function NavHeader({handleProductClick }) {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  const handleSelect = (categoryId) => {
+ /* const handleSelect = (categoryId) => {
     setSelectedCategoryId(categoryId);
     handleCategoryFilter(categoryId);
     toggleDropdown(); // Close the dropdown after selection
+  };*/
+  const handleSelect = (categoryId) => {
+    setSelectedCategoryId(categoryId);
+    handleCategoryFilter(categoryId);
   };
+  
 
  
 
@@ -200,128 +212,95 @@ function NavHeader({handleProductClick }) {
   
   return (
     <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
-      <Container>
+  <Container>
+    <div className='flexNav'>
+      <div className='flexNavone'>
+
+      <div className='search-dropdown-container'>
+  <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
+    <select
+      value={selectedCategoryId}
+      onChange={(e) => handleSelect(parseInt(e.target.value))}
+      className="dropdown-select"
+    >
+      <option  value={null}>All</option>
+      {categories.map((category) => (
+        <option key={category.id} value={category.id}>
+          {category.name}
+        </option>
+      ))}
+    </select>
+    <div className="input-with-icon">
+      <input
+        type="text"
+        placeholder="Search Product"
+        value={searchTerm}
+        onChange={handleSearchChangeInternal}
+      />
+      <FaSearch className='searchicon' onClick={handleSearchSubmit} />
+    </div>
+    <div className="autocom-box">
+      {productExistsInCategory === false && (
+        <div className="error-message">
+          This product does not exist in the selected category.
+        </div>
+      )}
+    </div>
+  </div>
+</div>
+
         <Navbar.Brand>
           <img src={logo} alt="Logo" />
         </Navbar.Brand>
-        <div className="wrapper">
-        <div className='search-dropdown-container'>
-          <div>
-        
+        <div className='flexRightNav'>
+        <select className='selectLang' value={language} onChange={handleLanguageChange}>
+          <option value="english">English</option>
+          <option value="french">Française</option>
+          <option value="arabic">لغه عربيه</option>
+        </select>
 
-      <div className='searchcontainer'>
-        
-      {/*<button onClick={toggleDropdown} className="dropdown-button">
-      {selectedCategory}
-      </button>
-      {isDropdownOpen && (
-        <ul className={`dropdown-list ${isDropdownOpen ? 'open' : ''}`}>
-          {categories.map(category => (
-            <li
-              key={category.id}
-              onClick={() => handleCategoryFilter(category.id) }
-              className={`filterbycat ${selectedCategoryId === category.id ? 'selected' : ''}`}
-            >
-              {category.name}
-            </li>
-          ))}
-        </ul>
-          )}*/}
-
-<div className="custom-select">
-      <button onClick={toggleDropdown} className="dropdown-button">
-        {selectedCategoryId ? categories.find(cat => cat.id === selectedCategoryId)?.name : 'All Categories'}
-        </button>
-      {isDropdownOpen && (
-        <ul className={`dropdown-list ${isDropdownOpen ? 'open' : ''}`}>
-          {categories.map(category => (
-            <li
-              key={category.id}
-              onClick={() => handleSelect(category.id)}
-              className={`filterbycat ${selectedCategoryId === category.id ? 'selected' : ''}`}
-            >
-              {category.name}
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-
-    
-
-
-            <input
-              type="text"
-              placeholder="search "
-              value={searchTerm}
-              onChange={handleSearchChangeInternal}
-            ></input>
-            <FaSearch className='searchicon' onClick={handleSearchSubmit} />
-            
-          </div>
+        <div className="text-line">
+          
+          {!isLoggedIn && (
+            <Link to="/authentication">{translations[language]?.login}</Link>
+          )}
         </div>
-        
-        <div className="autocom-box">
-        {productExistsInCategory === false && (
-          <div className="error-message">
-            This product does not exist in the selected category.
-          </div>
-        )}
-          </div>
-       {/**  {searchTerm && (
-          <div className="autocom-box">
-            {filteredProducts.map((product) => (
-              <li
-                className="product-dropdown-item"
-                key={product.id}
-                onClick={() => handleProductClick(product.id)}
-              >
-                {product.title}
-              </li>
-            ))}
-          </div>
-        )} */}
+
+        <div className="text-line">
+          {isLoggedIn && (
+            <Link>
+              <div className="user-profile" onClick={toggleSidebar}>
+                <FaUser />
+              </div>
+            </Link>
+          )}
+        </div>
       </div>
       </div>
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="me-auto"></Nav>
-          <Nav>
-            
-            <div className="text-line">
-              <Link to="/home">{translations[language]?.home}</Link>
-              <Link to="/store">{translations[language]?.store}</Link>
-              <Link to="/blog">{translations[language]?.blog}</Link>
-             
-            </div>
-           
-           
-            <select className='selectLang' value={language} onChange={handleLanguageChange}>
-              <option value="english">English</option>
-              <option value="french">French</option>
-              <option value="arabic">Arabic</option>
-            </select>
-            <div className='text-line'>
-            {isLoggedIn ? (
-                  <Link onClick={handleLogout}>{translations[language]?.logout}</Link>
-                ) : (
-                  <Link to="/authentication">{translations[language]?.login}</Link>
-                )} 
-                </div>
-                <div className="text-line">
-            {isLoggedIn && (
-                  <Link >
-                    <div className="user-profile" onClick={toggleSidebar}>
-                  <FaUser />
-                </div>
-                  </Link>)}
-            </div>
-                
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-      <SidebarUser isOpen={showSidebar} onClose={toggleSidebar}   />
-    </Navbar>
+
+     
+      <Container className='navPagesContainer'>
+    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+    <Navbar.Collapse id="responsive-navbar-nav">
+      <Nav className="me-auto">
+        <div className="navPages">
+          <Link to="/home">{translations[language]?.home}</Link>
+          <Link to="/store">{translations[language]?.store}</Link>
+          <Link to="/blog">{translations[language]?.blog}</Link>
+          <Link to="/about">{translations[language]?.about}</Link>
+          <Link to="/contact">{translations[language]?.contact}</Link>
+        </div>
+      </Nav>
+    </Navbar.Collapse>
+  </Container>
+    </div>
+  </Container>
+
+  
+
+  <SidebarUser isOpen={showSidebar} onClose={toggleSidebar} handleLogout={handleLogout} />
+</Navbar>
+
   );
 }
 

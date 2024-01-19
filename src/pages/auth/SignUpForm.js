@@ -15,7 +15,6 @@ const SignUpForm = ({ showPassword, handleTogglePasswordVisibility }) => {
 
 
   const [formData, setFormData] = useState({
-  
     email: '',
     password: '',
     confirmPassword: '',

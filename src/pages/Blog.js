@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import './stylehome.css';
 import './blog.css';
 import { Link } from 'react-router-dom';
-import { FaSearch } from 'react-icons/fa';
 import { FaHeart } from 'react-icons/fa';
 import { AiOutlineDislike } from 'react-icons/ai';
 import { IoMdShare } from 'react-icons/io';
@@ -15,6 +14,11 @@ import { setLanguage , selectLanguage , selectTranslations } from '../rtk/slices
 import { useDispatch } from 'react-redux';
 import NavHeader from '../components/NavHeader';
 import { useNavigate } from 'react-router-dom';
+import email from '../images/Email icon.png';
+import address from '../images/Location icon.png';
+import phone from '../images/phone icon.png';
+import { FaSearch } from 'react-icons/fa';
+
 
 function Blog() {
   const navigate = useNavigate();
@@ -77,11 +81,13 @@ function Blog() {
       const response = await axios.get(`https://mostafaben.bsite.net/api/Blogs/${clickedBlog.id}`);
       setDetailsOpen(true);
       setDialogBlogContent(response.data);
+      
+      // Use navigate to move to the BlogDetails page with the blog ID
+      navigate(`/blog/${clickedBlog.id}`);
     } catch (error) {
       console.error('Error fetching blog details:', error);
-    }
-    finally {
-      setLoading(false); 
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -100,6 +106,42 @@ function Blog() {
     navigate(`/home/product/${productId}`);
   };
 
+  const [searchTermBlog, setSearchTermBlog] = useState('');
+  const [productExistsInCategory, setProductExistsInCategory] = useState(true);
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
+
+  const resetErrorMessage = () => {
+    setShowErrorMessage(false);
+    setProductExistsInCategory(true); // Reset the product exists flag if needed
+  };
+
+  const handleSearchChangeBlog = (e) => {
+    const term = e.target.value;
+    setSearchTermBlog(term.toLowerCase());
+  };
+
+  const handleSearchSubmitBlog = async (e) => {
+    e.preventDefault();
+    const foundBlog = blogs.find(
+      (blog) =>
+        blog.title.toLowerCase().includes(searchTermBlog) ||
+        blog.descreption.toLowerCase().includes(searchTermBlog)
+    );
+
+    if (foundBlog) {
+      navigate(`/blog/${foundBlog.id}`);
+    } else {
+      setProductExistsInCategory(false);
+      setShowErrorMessage(true);
+      setTimeout(() => {
+        resetErrorMessage();
+        setSearchTermBlog(''); // Clear the search term after showing the error message
+      }, 3000);
+    }
+  };
+
+ 
+
 
   return (
    
@@ -113,6 +155,25 @@ function Blog() {
 
       <div className="green-containerr">
         <div className='testtt'>
+        <div className='searchBlog'>
+        <form className='formsearchblog' onSubmit={handleSearchSubmitBlog}>
+    <input
+      placeholder='search blog'
+      value={searchTermBlog}
+      onChange={handleSearchChangeBlog}
+    />
+    <button type="submit">
+      <FaSearch style={{fontSize: '25px'}}/>
+    </button>
+  </form>
+  <div className="autocom-box autocom-blog">
+              {productExistsInCategory === false && (
+                <div className="error-message">
+                  Blog not found. Please try another search.
+                </div>
+              )}
+            </div>
+          </div>
       {loading && (
       <div className="loading-spinner" style={{width: '50px' , height: '50px' , marginTop: '10em'}}>
       </div>
@@ -148,7 +209,9 @@ function Blog() {
                   </div>
                   <h6>{selectedBlog ? selectedBlog.descreption : blogs[0].descreption.substring(0, 525)}...</h6>
                   <div className='readArticle'>
-                       <button onClick={() => handleBlogClick(blogs[0])} className='read'> read article </button>
+                     <button onClick={() => handleBlogClick(blogs[0])} className="read">
+                         read article
+                     </button>
                  </div>
                 </div>
               </div>
@@ -166,7 +229,7 @@ function Blog() {
                     <div className='buttons'>
                       
                       <div className='readArticle'>
-                          <button onClick={() => handleBlogClick(blog)} className='read'> read article </button>
+                      <button onClick={() => handleBlogClick(blog)} className="read">read article</button>
                       </div>
                     </div>
                   </div>
@@ -194,25 +257,59 @@ function Blog() {
           <p>6 Ways the Holidays Can Wreak Havoc on Your Skin And What You Can Do About It</p>
         </div>
       </div>*/}
-      <div className='footerr blogfooter'>
-        <div className=' header-container flex-footer'>
-          <div className='footer-info'>
-            <Link to={translations[language]?.links} className="footer-link">{translations[language]?.links}</Link>
-            <Link to={translations[language]?.shipping} className="footer-link">{translations[language]?.shipping}</Link>
-          </div>
-          <div className='footer-info'>
-            <Link to={translations[language]?.private} className="footer-link">{translations[language]?.private}</Link>
-            <Link to={translations[language]?.cookies} className="footer-link">{translations[language]?.cookies}</Link>
-          </div>
-          <div className='footer-info'>
-            <Link to={translations[language]?.info} className="footer-link">{translations[language]?.info}</Link>
-            <Link to={translations[language]?.contactP} className="footer-link">{translations[language]?.contactP}</Link>
-          </div>
-          <div className='footer-info'>
-            <Link to={translations[language]?.subscribe} className="footer-link">{translations[language]?.subscribe}</Link>
+       <div className='footerr footerPhr'>
+          <div className=' header-container '>
+            <div className='flexFooter'>
+                <div className='cartfooter'>
+                    <div className='important'>
+                        <h1>important links</h1>
+                        <Link className='footerlink'>privacy policy </Link>
+                        <Link className='footerlink'>cookies policy </Link>
+                        <Link className='footerlink'>Terms & conditions </Link>
+                    </div>
+                    <div className='information'>
+                        <h1>Informations sur la livraison</h1>
+                        <h2>Informations d'expédition Pour garantir que vos achats arrivent sans problème, assurez-vous de fournir l'adresse et le numéro de téléphone corrects pour garantir une 
+                        expérience d'achat pratique et efficace. Assurez-vous que vos informations d'expédition sont à jour, y compris les détails de l'adresse et le délai de livraison souhaité, pour 
+                        vous assurer de recevoir votre commande rapidement et sans retards inutiles.
+                        </h2>
+                    </div>
+                </div>
+                <div className='cartfooter cartfootertwo'>
+                <div className='important'>
+                        <h1>coordonnées</h1>
+                        <h2>Contactez-nous pour toute demande de renseignements ou d'assistance dont vous avez besoin, nous sommes là pour vous fournir soutien et conseils
+                        </h2>
+                    </div>
+                    <div className='address'>
+                        <div className='flexaddress'>
+                        <img  src={address}/>
+                        <h2>l'adresse:</h2>
+                        </div>
+                        <h2>LAAYOUNE : MADINAT EL WAHDA BLOC B NR 91 LAAYOUNE (M) <br />
+                        Tetouan: Mezanine bloc B Bureau n 4 BOROUJ 16 Avenue des Far N° 873 Tétouan
+                        </h2>
+                    </div>
+                    <div className='flexphoneemail'>
+                    <div className='address'>
+                        <div className='flexaddress'>
+                        <img  src={phone}/>
+                        <h2>Phone:</h2>
+                        </div>
+                        <h2>00212689831227</h2>
+                    </div>
+                    <div className='address'>
+                        <div className='flexaddress'>
+                        <img  src={email}/>
+                        <h2>Email:</h2>
+                        </div>
+                        <h2>contact@vitaparapharma.com</h2>
+                    </div>
+                    </div>
+                </div>
+            </div>
           </div>
         </div>
-      </div>
       <DialogBlog isOpen={detailsOpen} onCancel={handleCancelDetails} blogContent={dialogBlogContent} />
     </div>
       </div>

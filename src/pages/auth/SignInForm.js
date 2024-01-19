@@ -54,10 +54,12 @@ const SignInForm = () => {
         'Content-Type': 'application/json',
       },
     })
-      .then(result => {
-        localStorage.setItem('token', result.data.token);
-        navigate('/home');
-      })
+    .then(result => {
+      const { token, userId } = result.data;
+      localStorage.setItem('token', token);
+      localStorage.setItem('userId', userId);
+      navigate('/home');
+    })
       .catch(err => {
         console.log(err);
         setErrors({ general: 'Invalid email or password' });

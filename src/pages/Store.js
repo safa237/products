@@ -20,11 +20,13 @@ import DetailsDialog from './products/DetailsDialog';
 import { addToCart } from '../rtk/slices/Cart-slice';
 import { CiStar } from "react-icons/ci";
 import NavHeader from '../components/NavHeader';
-
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import { useLocation } from 'react-router-dom';
+import email from '../images/Email icon.png';
+import address from '../images/Location icon.png';
+import phone from '../images/phone icon.png';
 
 import './store.css';
 
@@ -48,7 +50,12 @@ function Store  ()  {
   const [detailsOpen, setDetailsOpen] = useState(false);
   
   const [searchTerm, setSearchTerm] = useState('');
+  const [priceRange, setPriceRange] = useState({ min: 0, max: 2000 });
 
+  const handlePriceRangeChange = (event) => {
+    const { value } = event.target;
+    setPriceRange((prevRange) => ({ ...prevRange, max: value }));
+  };
   
   
 
@@ -182,11 +189,20 @@ function Store  ()  {
     setSelectedCategoryId(categoryId);
   };
 
-  const filteredProducts = products.filter((product) => {
+ /* const filteredProducts = products.filter((product) => {
     const matchesSearch = product.title.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategoryId ? product.categoryId === selectedCategoryId : true;
 
     return matchesSearch && matchesCategory;
+  });*/
+
+  const filteredProducts = products.filter((product) => {
+    const matchesSearch = product.title.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategoryId ? product.categoryId === selectedCategoryId : true;
+    const matchesPriceRange =
+      product.price >= priceRange.min && product.price <= priceRange.max;
+
+    return matchesSearch && matchesCategory && matchesPriceRange;
   });
 
   const handleProductClick = (productId) => {
@@ -235,6 +251,12 @@ function Store  ()  {
     navigate(`/store?search=${term}`);
   };
 
+
+  const [value, setValue] = useState(50);
+
+  const handleChange = (event) => {
+    setValue(event.target.value);
+  };
   
     return (
       <div className="page-container">
@@ -340,14 +362,27 @@ function Store  ()  {
     </button>
   ))}
 </div>
-          {/*<p style={{marginTop:'5em'}}>filter by category</p>
+         {/*<p style={{marginTop:'5em'}}>filter by category</p>
           <div className='rateFilter'>
             <div ><CiStar /> Five Only</div>
             <div > <CiStar />four Only</div>
             <div> <CiStar />three Only</div>
             <div><CiStar /> two Only</div>
             <div><CiStar /> one Only</div>
-          </div>*/}
+  </div>*/}
+
+  <h5 style={{color : 'white'}}>filter by price : {priceRange.max}</h5>
+   <div className="range-slider">
+      <input
+        type="range"
+        min="0"
+        max="2000"
+        value={priceRange.max}
+        onChange={handlePriceRangeChange}
+      />
+     
+    </div>
+   
           
           
           </div>
@@ -361,25 +396,57 @@ function Store  ()  {
   
         </div>
         
-        <div className='footerr blogfooter'>
-          <div className=' header-container flex-footer'>
-        
-          <div className='footer-info'>
-  <Link to={translations[language]?.links} className="footer-link">{translations[language]?.links}</Link>
-  <Link to={translations[language]?.shipping} className="footer-link">{translations[language]?.shipping}</Link>
-</div>
-<div className='footer-info'>
-  <Link to={translations[language]?.private} className="footer-link">{translations[language]?.private}</Link>
-  <Link to={translations[language]?.cookies} className="footer-link">{translations[language]?.cookies}</Link>
-</div>
-<div className='footer-info'>
-  <Link to={translations[language]?.info} className="footer-link">{translations[language]?.info}</Link>
-  <Link to={translations[language]?.contactP} className="footer-link">{translations[language]?.contactP}</Link>
-</div>
-<div className='footer-info'>
-  <Link to={translations[language]?.subscribe} className="footer-link">{translations[language]?.subscribe}</Link>
-</div>
-
+        <div className='footerr footerPhr'>
+          <div className=' header-container '>
+            <div className='flexFooter'>
+                <div className='cartfooter'>
+                    <div className='important'>
+                        <h1>important links</h1>
+                        <Link className='footerlink'>privacy policy </Link>
+                        <Link className='footerlink'>cookies policy </Link>
+                        <Link className='footerlink'>Terms & conditions </Link>
+                    </div>
+                    <div className='information'>
+                        <h1>Informations sur la livraison</h1>
+                        <h2>Informations d'expédition Pour garantir que vos achats arrivent sans problème, assurez-vous de fournir l'adresse et le numéro de téléphone corrects pour garantir une 
+                        expérience d'achat pratique et efficace. Assurez-vous que vos informations d'expédition sont à jour, y compris les détails de l'adresse et le délai de livraison souhaité, pour 
+                        vous assurer de recevoir votre commande rapidement et sans retards inutiles.
+                        </h2>
+                    </div>
+                </div>
+                <div className='cartfooter cartfootertwo'>
+                <div className='important'>
+                        <h1>coordonnées</h1>
+                        <h2>Contactez-nous pour toute demande de renseignements ou d'assistance dont vous avez besoin, nous sommes là pour vous fournir soutien et conseils
+                        </h2>
+                    </div>
+                    <div className='address'>
+                        <div className='flexaddress'>
+                        <img  src={address}/>
+                        <h2>l'adresse:</h2>
+                        </div>
+                        <h2>LAAYOUNE : MADINAT EL WAHDA BLOC B NR 91 LAAYOUNE (M) <br />
+                        Tetouan: Mezanine bloc B Bureau n 4 BOROUJ 16 Avenue des Far N° 873 Tétouan
+                        </h2>
+                    </div>
+                    <div className='flexphoneemail'>
+                    <div className='address'>
+                        <div className='flexaddress'>
+                        <img  src={phone}/>
+                        <h2>Phone:</h2>
+                        </div>
+                        <h2>00212689831227</h2>
+                    </div>
+                    <div className='address'>
+                        <div className='flexaddress'>
+                        <img  src={email}/>
+                        <h2>Email:</h2>
+                        </div>
+                        <h2>contact@vitaparapharma.com</h2>
+                    </div>
+                    </div>
+                </div>
+            </div>
           </div>
         </div>
       </div>

@@ -1,0 +1,89 @@
+.userinfoContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 150px;
+}
+.imgInfo{
+    width: 30%;
+    margin-right: 15px;
+}
+.userdetailsInfo{
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+}
+
+.userinfoContainer {
+    display: flex;
+   
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 150px;
+}
+
+.imgInfo {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+   
+}
+
+.userdetailsInfo {
+    width: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-left: 2px solid #ccc;
+}
+
+/* Additional style to center content inside .imgInfo */
+.imgInfo h5 {
+    margin: 0; 
+    color: white;
+    margin-top: 10px;
+}
+.flexinput{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
+.flexinput input{
+    background-color: transparent;
+    color: white;
+    border-radius: 15px;
+    margin-left: 15px;
+}
+input::placeholder {
+    color: white;
+}
+.imgInfo button{
+    width: 80px;
+    font-weight: bold;
+    background-color: white;
+    color: #3A7E89;
+    border-radius: 15px;
+    margin-top: 10px;
+}
+.flexbutton{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: transparent;
+    width: 150px;
+    border-radius: 15px;
+    border: 1px solid white;
+    margin-top: 15px;
+}
+.flexbutton button{
+    background-color: transparent;
+    border: none;
+    outline: none;
+    margin-left: auto;
+    margin-right: auto;
+}

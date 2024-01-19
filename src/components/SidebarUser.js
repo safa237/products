@@ -3,16 +3,18 @@ import React from 'react';
 import { FaUser } from 'react-icons/fa';
 import { FaHeart, FaShoppingCart , FaBars } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { MdOutlineWifiPassword } from "react-icons/md";
+import { IoIosLogOut } from "react-icons/io";
+
+import ChangePassword from '../pages/ChangePassword';
 import './sidebaruser.css';
 
-function SidebarUser({ isOpen, onClose  }) {
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('userId');
-    // Notify the parent component (NavHeader) about the logout
-   
+function SidebarUser({ isOpen, onClose , handleLogout  }) {
+  
+  const handleLogoutClick = () => {
+    handleLogout();
     onClose();
-  };
+};
 
     return (
         <div className={`sidebaruser ${isOpen ? 'open' : ''}`}>
@@ -22,6 +24,15 @@ function SidebarUser({ isOpen, onClose  }) {
             </div>
             <hr className="separator" /> */}
             <nav className="sidebar-nav">
+            <Link to="/profile" className="cart-link">
+              <FaUser style={{marginRight : '15px' , fill: '#23b447e6'}} className="cart-icon" />
+              <h5>My Profile</h5>
+            </Link>
+            <Link to="/changePassword" className="cart-link">
+              <MdOutlineWifiPassword style={{marginRight : '15px' , fill: '#23b447e6'}} className="cart-icon" />
+              <h5>Change Password</h5>
+            </Link>
+
             <Link to="/order" className="cart-link">
               <FaBars style={{marginRight : '15px' , fill: '#23b447e6'}} className="cart-icon" />
               <h5>orders</h5>
@@ -34,7 +45,11 @@ function SidebarUser({ isOpen, onClose  }) {
               <FaShoppingCart style={{marginRight : '15px' , fill: '#23b447e6'}} className="cart-icon" />
               <h5>cart</h5>
             </Link>
-           
+            <Link  onClick={handleLogoutClick} className="cart-link">
+              <IoIosLogOut style={{marginRight : '15px' , fill: '#23b447e6'}} className="cart-icon" />
+              <h5>Log Out</h5>
+            </Link>
+    
             </nav>
            
         </div>
