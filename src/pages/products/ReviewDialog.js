@@ -35,32 +35,44 @@ const ReviewDialog = ({ isOpen, onCancel , productId }) => {
       };
 
 
-      const [reviewText, setReviewText] = useState('');
-      const userId = localStorage.getItem('userId');
-
-
-      const handlePostReview = () => {
-        const reviewData = {
-          productId: productId,
-          userId: userId,
-          name: 'User', 
-          commentText: reviewText,
+      const [formData, setFormData] = useState({
+        name: '',
+        commentText: '',
+      });
+    
+      const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+          ...formData,
+          [name]: value,
+        });
+      };
+    
+      const handleSubmit = (e) => {
+        e.preventDefault();
+    
+        const postData = {
+          UserId: 1, 
+          productId: 2, 
+          ...formData,
         };
-      
-        axios.post('https://mostafaben.bsite.net/api/Reviwes/addReview', reviewData, {
+    
+        fetch('https://mostafaben.bsite.net/api/Reviwes/addReview', {
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
+          body: JSON.stringify(postData),
         })
-        .then(response => {
-         
-          console.log('Review posted successfully', response.data);
-          setReviewText(''); 
-        })
-        .catch(error => {
-          
-          console.error('Error posting review', error);
-        });
+          .then(response => response.json())
+          .then(data => {
+            console.log('Review submitted successfully:', data);
+            // You can handle the response as needed
+          })
+          .catch(error => {
+            console.error('Error submitting review:', error);
+            // Handle error appropriately
+          });
       };
       
     return (
@@ -96,13 +108,28 @@ const ReviewDialog = ({ isOpen, onCancel , productId }) => {
                </div>
               </div>
 
-              <input
-  placeholder='write comment'
-  value={reviewText}
-  onChange={(e) => setReviewText(e.target.value)}
-/>
-
-<button onClick={handlePostReview}>Post Review</button>
+            {/**  <form onSubmit={handleSubmit}>
+      <label>
+        Name:
+        <input
+          type="text"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+        />
+      </label>
+      <br />
+      <label>
+        Comment:
+        <textarea
+          name="commentText"
+          value={formData.commentText}
+          onChange={handleChange}
+        />
+      </label>
+      <br />
+      <button type="submit">Submit</button>
+    </form> */} 
              
             
           </div> 

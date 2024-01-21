@@ -27,9 +27,10 @@ import { useLocation } from 'react-router-dom';
 import email from '../images/Email icon.png';
 import address from '../images/Location icon.png';
 import phone from '../images/phone icon.png';
+import SidebarUser from '../components/SidebarUser';
+
 
 import './store.css';
-
 
 function Store  ()  {
   const dispatch = useDispatch();
@@ -86,7 +87,7 @@ function Store  ()  {
     };
 
     fetchData();
-  }, [language]);
+  }, [language ]);
 
 
   const handleLanguageChange = (e) => {
@@ -187,7 +188,12 @@ function Store  ()  {
 
   const handleCategoryFilter = (categoryId) => {
     setSelectedCategoryId(categoryId);
+     
+    navigate(`/store?category=${categoryId}`); 
+    dispatch(fetchProducts(categoryId));
   };
+
+  
 
  /* const filteredProducts = products.filter((product) => {
     const matchesSearch = product.title.toLowerCase().includes(searchTerm.toLowerCase());
@@ -240,6 +246,9 @@ function Store  ()  {
 
     fetchData();
     setSearchTerm(searchTermFromUrl);
+
+    const categoryIdFromUrl = queryParams.get('category');
+  setSelectedCategoryId(categoryIdFromUrl ? parseInt(categoryIdFromUrl) : null);
   }, [language, searchTermFromUrl]);
   
   // ...
@@ -258,13 +267,186 @@ function Store  ()  {
     setValue(event.target.value);
   };
   
+
+
+
+
+
+
+  const [selectedCategoryIdTwo, setSelectedCategoryIdTwo] = useState(null);
+
+
+  const handleSelect = (categoryId) => {
+    setSelectedCategoryId(categoryId);
+    handleCategoryFilter(categoryId);
+  };
+
+  
+  const handleSelectTwo  = (categoryId) => {
+    setSelectedCategoryIdTwo(categoryId);
+    navigate(`/store?category=${categoryId}`);
+  };
+  
+  const handleSearchChangeInternal = (e) => {
+    const term = e.target.value.toLowerCase();
+    setSearchTerm(term);
+  };
+  const handleSearchSubmit = () => {
+    
+    const productsInSelectedCategory = filteredProducts.filter(product => product.categoryId === selectedCategoryId);
+  
+    
+    const searchTermLowerCase = searchTerm ? searchTerm.toLowerCase() : '';
+    const productsMatchingSearch = productsInSelectedCategory.filter(product => {
+      const productNameLowerCase = product.title ? product.title.toLowerCase() : '';
+      return productNameLowerCase.includes(searchTermLowerCase);
+    });
+  
+    if (selectedCategoryId !== null && productsMatchingSearch.length === 0) {
+      setProductExistsInCategory(false);
+      setShowErrorMessage(true);
+      setTimeout(resetErrorMessage, 3000);
+    } else {
+      navigate(`/store?search=${searchTerm}${selectedCategoryId !== null ? `&category=${selectedCategoryId}` : ''}`);
+    }
+  };
+  const [productExistsInCategory, setProductExistsInCategory] = useState(true);
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
+
+  const resetErrorMessage = () => {
+    setShowErrorMessage(false);
+    setProductExistsInCategory(true); 
+  };
+
+  const [showSidebar, setShowSidebar] = useState(false);
+
+  const toggleSidebar = () => {
+    setShowSidebar(!showSidebar);
+  };
+
     return (
       <div className="page-container">
       {/* Header Container */}
-      <NavHeader
-      
-        handleProductClick={handleProductClick}
+      <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
+  <Container>
+    <div className='flexNav'>
+      <div className='flexNavone'>
+
+      <div className='search-dropdown-container'>
+  <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
+    <select
+      value={selectedCategoryId}
+      onChange={(e) => handleSelect(parseInt(e.target.value))}
+      className="dropdown-select"
+    >
+      <option  value={null}>All</option>
+      {categories.map((category) => (
+        <option key={category.id} value={category.id}>
+          {category.name}
+        </option>
+      ))}
+    </select>
+    <div className="input-with-icon">
+      <input
+        type="text"
+        placeholder="Search Product"
+        value={searchTerm}
+        onChange={handleSearchChangeInternal}
       />
+      <FaSearch className='searchicon' onClick={handleSearchSubmit} />
+    </div>
+    <div className="autocom-box">
+      {productExistsInCategory === false && (
+        <div className="error-message">
+          This product does not exist in the selected category.
+        </div>
+      )}
+    </div>
+  </div>
+</div>
+
+        <Navbar.Brand>
+          <img src={logo} alt="Logo" />
+        </Navbar.Brand>
+        <div className='flexRightNav'>
+        <select className='selectLang' value={language} onChange={handleLanguageChange}>
+          <option value="english">English</option>
+          <option value="french">Française</option>
+          <option value="arabic">لغه عربيه</option>
+        </select>
+
+        <div className="text-line">
+          
+          {!isLoggedIn && (
+            <Link to="/authentication">{translations[language]?.login}</Link>
+          )}
+        </div>
+
+        <div className="text-line">
+          {isLoggedIn && (
+            <Link>
+              <div className="user-profile" onClick={toggleSidebar}>
+                <FaUser />
+              </div>
+            </Link>
+          )}
+        </div>
+      </div>
+      </div>
+
+     
+      <Container className='navPagesContainer'>
+    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+    <Navbar.Collapse id="responsive-navbar-nav">
+      <Nav className="me-auto">
+        <div className="navPages">
+          <Link to="/home">{translations[language]?.home}</Link>
+          <Link to="/store">{translations[language]?.store}</Link>
+          <Link to="/blog">{translations[language]?.blog}</Link>
+
+
+ {/*<select
+  value={selectedCategoryIdTwo}
+  onChange={(e) => handleSelectTwo(parseInt(e.target.value))}
+  className="dropdown-selectTwo"
+>
+  <option value={null} className="dropdown-selectTwo">{translations[language]?.categories}</option>
+  {categories.map((category) => (
+    <option key={category.id} value={category.id}>
+      {category.name}
+    </option>
+  ))}
+  </select>*/}
+
+
+  <select
+    value={selectedCategoryId}
+    onChange={(e) => handleCategoryFilter(parseInt(e.target.value))}
+    className="dropdown-selectTwo"
+  >
+    <option value={null}>All Categories</option>
+    {categories.map(category => (
+      <option key={category.id} value={category.id}>
+        {category.name}
+      </option>
+    ))}
+  </select>
+
+
+
+          <Link to="/about">{translations[language]?.about}</Link>
+          <Link to="/contact">{translations[language]?.contact}</Link>
+        </div>
+      </Nav>
+    </Navbar.Collapse>
+  </Container>
+    </div>
+  </Container>
+
+  
+
+  <SidebarUser isOpen={showSidebar} onClose={toggleSidebar} handleLogout={handleLogout} />
+</Navbar>
   
       {/* Green Container */}
       <div className="green-containerr">

@@ -4,6 +4,8 @@ import ProductSlice from './slices/Product-slice';
 import WishlistSlice from './slices/Wishlist-slice';
 import cartSlice from './slices/Cart-slice';
 import SearchSlice from './slices/Search-slice';
+import AuthSlice from './slices/Auth-slice';
+import UserSlice from './slices/User-slice';
 
 const store = configureStore({
   reducer: {
@@ -12,6 +14,8 @@ const store = configureStore({
     wishlist: WishlistSlice,
     cart: cartSlice,
     search: SearchSlice,
+    auth: AuthSlice,
+    user : UserSlice,
   },
 });
 

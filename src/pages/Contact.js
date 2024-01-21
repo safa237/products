@@ -22,6 +22,8 @@ import './contact.css';
 function Contact() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const language = useSelector(selectLanguage);
+  const translations = useSelector(selectTranslations);
   const [searchTerm, setSearchTerm] = useState('');
   const [isEditing, setIsEditing] = useState(false); 
   const allProducts = useSelector((state) => state.products);
@@ -72,7 +74,7 @@ function Contact() {
                             <img src={path}/>
                         </div>
                         <div className='detailscontact'>
-                            <h4>l'adresse</h4>
+                            <h4>{translations[language]?.addresscontact}</h4>
                             <h2>LAAYOUNE : MADINAT EL WAHDA BLOC B NR 91 LAAYOUNE (M).</h2>
                             <h2>Tetouan: Mezanine bloc B Bureau n 4 BOROUJ 16 Avenue des Far N° 873 Tétouan</h2>
                         </div>
@@ -85,9 +87,9 @@ function Contact() {
                             <img src={clock}/>
                         </div>
                         <div className='detailscontact'>
-                            <h4>Heures de travail</h4>
-                            <h2>Monday to Friday: 7am - 7pm</h2>
-                            <h2>Weekend: 10am - 5pm</h2>
+                            <h4>{translations[language]?.hours}</h4>
+                            <h2>{translations[language]?.day}</h2>
+                            <h2>{translations[language]?.weekend}</h2>
                         </div>
                      
                     </div>
@@ -98,7 +100,7 @@ function Contact() {
                             <img src={phone2}/>
                         </div>
                         <div className='detailscontact'>
-                            <h4>numéro de téléphone</h4>
+                            <h4>{translations[language]?.phonenumber}</h4>
                             <h2>00212689831227</h2>
                         </div>
                      
@@ -110,7 +112,7 @@ function Contact() {
                             <img src={email2}/>
                         </div>
                         <div className='detailscontact'>
-                            <h4>E-mail</h4>
+                            <h4>{translations[language]?.email}</h4>
                             <h2>contact@vitaparapharma.com</h2>
                         </div>
                      
@@ -120,7 +122,7 @@ function Contact() {
                 </div>
                 <div className='onecontactForm'>
                     <div className='formcontact'>
-                        <h4>You are always welcome to contact us with questions, and inquirie about our services.</h4>
+                        <h4>{translations[language]?.contactform}</h4>
                         <input
                            type="text"
                            placeholder="First Name"
@@ -135,7 +137,7 @@ function Contact() {
                     
                     </div>
                     <div className='contactbtn'>
-                        <button>Submit Message</button>
+                        <button>{translations[language]?.submitcontact}</button>
                         </div>
                 </div>
             </div>

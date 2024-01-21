@@ -1,6 +1,8 @@
+// StarRating.js
+
 import React, { useState } from 'react';
 import { FaStar, FaStarHalfAlt } from 'react-icons/fa';
-import './StarRating.css'; // Import your CSS file for styling
+import './StarRating.css';
 
 const StarRating = ({ initialRating, onRatingChange }) => {
   const [rating, setRating] = useState(initialRating || 0);
@@ -8,7 +10,7 @@ const StarRating = ({ initialRating, onRatingChange }) => {
 
   const handleStarClick = (clickedRating) => {
     setRating(clickedRating);
-    
+
     if (onRatingChange) {
       onRatingChange(clickedRating);
     }
@@ -43,4 +45,3 @@ const StarRating = ({ initialRating, onRatingChange }) => {
 };
 
 export default StarRating;
-

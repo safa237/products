@@ -393,6 +393,15 @@ background-color: transparent;
  
 }
 
+.dropdown-selectTwo{
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: #3A7E89;
+  font-weight: 700;
+  font-size: 18px;
+}
+
 
 @media screen and (max-width: 480px) {
 .search-dropdown {

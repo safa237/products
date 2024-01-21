@@ -1,6 +1,6 @@
 .detailsPage .header-container{
   margin-bottom: 5px;
-  min-height: 500px;
+  min-height: 600px;
 }
 .productImg{
     width: 300px;
@@ -23,8 +23,8 @@
     width: 40%;
   }
   .flexContent .detailsINFO{
-   
-    width: 40%;
+   min-height: 150px;
+    width: 60%;
     margin-top: 3em;
   }
   .detailsIMG img{
@@ -79,7 +79,7 @@
   flex-direction: column;
 }
 .detailsflex .detailsflexabout{
-  height: 25%;
+  height: 15%;
 }
 .detailsflexabout h1{
   font-size: large;
@@ -96,6 +96,8 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  
+  width: 1500px;
 }
 
 .detailsINFO h1{

@@ -1,6 +1,6 @@
 // Wishlist-slice.js
 
-/*import { createSlice , createAction} from '@reduxjs/toolkit';
+import { createSlice , createAction} from '@reduxjs/toolkit';
 
 const localStorageKey = 'wishlist';
 
@@ -50,12 +50,12 @@ const wishlistSlice = createSlice({
 export const { addToWishlist, removeFromWishlist } = wishlistSlice.actions;
 export const selectWishlist = (state) => state.wishlist;
 
-export default wishlistSlice.reducer;*/
+export default wishlistSlice.reducer;
 
 
 // wishlistSlice.js
 
-import { createSlice, createAction } from '@reduxjs/toolkit';
+/*import { createSlice, createAction } from '@reduxjs/toolkit';
 
 export const loadWishlistFromStorage = (userId) => {
   const storedWishlist = localStorage.getItem(`wishlist_${userId}`);
@@ -101,4 +101,4 @@ const wishlistSlice = createSlice({
 export const { addToWishlist, removeFromWishlist } = wishlistSlice.actions;
 export const selectWishlist = (state) => state.wishlist;
 
-export default wishlistSlice.reducer;
+export default wishlistSlice.reducer;*/

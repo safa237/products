@@ -9,16 +9,16 @@ import { useEffect } from 'react';
 import { useDispatch , useSelector } from 'react-redux';
 import { setLanguage , selectLanguage , selectTranslations } from '../../rtk/slices/Translate-slice';
 import './sign.css';
-
 import { jwtDecode } from 'jwt-decode';
 import { loadWishlistFromStorage } from '../../rtk/slices/Wishlist-slice';
 import { addToWishlist } from '../../rtk/slices/Wishlist-slice';
-
+import { setAuthData } from '../../rtk/slices/Auth-slice';
 
 const SignInForm = () => {
   const dispatch = useDispatch();
   const language = useSelector(selectLanguage);
   const translations = useSelector(selectTranslations);
+ 
 
   const [formData, setFormData] = useState({
     email: '',
@@ -46,24 +46,27 @@ const SignInForm = () => {
   };
 
   const handleUserLogin = () => {
-    console.log('user Login Payload:', formData); // Log the payload
-
-    // User login logic
+    console.log('user Login Payload:', formData); 
+  
     axios.post('https://mostafaben.bsite.net/api/Users/login', formData, {
       headers: {
         'Content-Type': 'application/json',
       },
     })
     .then(result => {
-      const { token, userId } = result.data;
+      const {token, userId } = result.data;
       localStorage.setItem('token', token);
-      localStorage.setItem('userId', userId);
+    localStorage.setItem('userId', userId);
+
+    dispatch(setAuthData({ userId }));
       navigate('/home');
+      console.log("userid" , userId);
+     
     })
-      .catch(err => {
-        console.log(err);
-        setErrors({ general: 'Invalid email or password' });
-      });
+    .catch(err => {
+      console.log(err);
+      setErrors({ general: 'Invalid email or password' });
+    });
   };
   
   
@@ -147,7 +150,7 @@ const SignInForm = () => {
           </div>
         </div>
         {errors.general && <div className="text-danger">{errors.general}</div>}
-        <Link to="/forget-password">Forgot Password</Link>
+       
         <input type="submit" className="signbtn" value={translations[language]?.login} />
       </form>
     </>

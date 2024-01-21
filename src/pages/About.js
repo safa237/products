@@ -23,6 +23,8 @@ import './about.css';
 function About() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const language = useSelector(selectLanguage);
+  const translations = useSelector(selectTranslations);
   const [searchTerm, setSearchTerm] = useState('');
   const [isEditing, setIsEditing] = useState(false); 
   const allProducts = useSelector((state) => state.products);
@@ -72,12 +74,11 @@ function About() {
             </div>
             <div className='infoabout'>
                 <div>
-                    <h5>Your trusted partner for your health needs. We provide high-quality products and distinguished 
-                    service to ensure your health and comfort. Get to know us and how we care for you
+                    <h5>{translations[language]?.aboutParagraph}
                     </h5>
                 </div>
                 <div className='buybtn'>
-                    <button className='buynowbtn'>Buy Now</button>
+                   
                 </div>
             </div>
           </div>
@@ -88,9 +89,8 @@ function About() {
                    <img src={goal} alt="goal" />
                 </div>
                 <div className='detailscardabout'>
-                    <h3> High accuracy </h3>
-                    <p> High accuracy guarantees you an excellent shopping experience on our e-commerce 
-                    website, as we always strive to ensure the quality of our products and the accuracy of our services
+                    <h3> {translations[language]?.accuracy} </h3>
+                    <p> {translations[language]?.accuracyParagraph}
                     </p>
                 </div>
             </div>
@@ -99,10 +99,8 @@ function About() {
                    <img src={awards} alt="awards" />
                 </div>
                 <div className='detailscardabout'>
-                    <h3> Awards </h3>
-                    <p> Winners of multiple awards, we guarantee you an exceptional shopping experience on our e-commerce website, as our 
-                    services and products are distinguished by excellence and recognition.
-                    </p>
+                    <h3> {translations[language]?.awards} </h3>
+                    <p> {translations[language]?.winners} </p>
                 </div>
             </div>
             <div className='cardabout'>
@@ -110,9 +108,8 @@ function About() {
                    <img src={people} alt="people" />
                 </div>
                 <div className='detailscardabout'>
-                    <h3> Friends of yours </h3>
-                    <p> We are your friends' place in the world of e-commerce, as we provide you with products and 
-                    services that give you a unique and reliable shopping experience
+                    <h3> {translations[language]?.friends}</h3>
+                    <p> {translations[language]?.friendParagraph}
                     </p>
                 </div>
             </div>
@@ -121,9 +118,8 @@ function About() {
                    <img src={delivery} alt="delivery" />
                 </div>
                 <div className='detailscardabout'>
-                    <h3> Fast shipping </h3>
-                    <p> We offer a fast shipping service that makes your products reach you as quickly as possible, so 
-                    you can enjoy an immediate and comfortable shopping experience
+                    <h3>  {translations[language]?.Fastshipping} </h3>
+                    <p>  {translations[language]?.offer}
                     </p>
                 </div>
             </div>

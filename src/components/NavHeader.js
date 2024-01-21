@@ -20,7 +20,8 @@ import './navheader.css';
 import SidebarUser from './SidebarUser';
 
 
-function NavHeader({handleProductClick }) {
+
+function NavHeader({  handleProductClick }) {
   const dispatch = useDispatch();
   const language = useSelector(selectLanguage);
   const translations = useSelector(selectTranslations);
@@ -31,6 +32,7 @@ function NavHeader({handleProductClick }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [categories, setCategories] = useState([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+  const [selectedCategoryIdTwo, setSelectedCategoryIdTwo] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const cart = useSelector(state => state.cart);
 
@@ -69,8 +71,7 @@ function NavHeader({handleProductClick }) {
 
   useEffect(() => {
     if (!isLoggedIn) {
-      // Additional cleanup logic can be added here
-      // For example, you might want to clear the wishlist or perform other actions
+    
     }
   }, [isLoggedIn]);
 
@@ -80,40 +81,12 @@ function NavHeader({handleProductClick }) {
   };
   const [selectedCategoryColor, setSelectedCategoryColor] = useState('');
 
- /* const handleCategoryFilter = (categoryId) => {
-    setSelectedCategoryId(categoryId);
-    setSelectedCategoryColor(categoryId === null ? '' : 'red'); // Set the color for the selected category
-   
-  };*/
  
   const handleSearchChangeInternal = (e) => {
     const term = e.target.value.toLowerCase();
     setSearchTerm(term);
   };
-  /*const handleSearchSubmit = () => {
-    // Redirect to the store page with the search term in the query parameter
-    navigate(`/store?search=${searchTerm}`);
-  };*/
- 
-
-  /*const handleProductClick = (productId) => {
-    // Handle product click logic here
-    console.log('Product clicked:', productId);
-  };*/
-
-  /*const filteredProducts = allProducts.filter((product) => {
-    const titleMatches = product.title.toLowerCase().includes(searchTerm.toLowerCase());
-    const categoryMatches = !selectedCategoryId || product.categoryId === selectedCategoryId;
-
-    return titleMatches && categoryMatches;
-  });*/
- /* const filteredProducts = products.filter((product) => {
-    const matchesSearch = product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategoryId ? product.categoryId === selectedCategoryId : true;
   
-    return matchesSearch && matchesCategory;
-  });*/
 
  
   
@@ -131,26 +104,16 @@ function NavHeader({handleProductClick }) {
 
   const resetErrorMessage = () => {
     setShowErrorMessage(false);
-    setProductExistsInCategory(true); // Reset the product exists flag if needed
+    setProductExistsInCategory(true); 
   };
 
-  /*const handleSearchSubmit = () => {
-    const productInCategory = filteredProducts.find(product => product.categoryId === selectedCategoryId);
-  
-    if (productInCategory) {
-      navigate(`/store?search=${searchTerm}&category=${selectedCategoryId}`);
-    } else {
-      setProductExistsInCategory(false);
-      setShowErrorMessage(true);
-        setTimeout(resetErrorMessage, 3000);
-    }
-  };*/
+ 
 
   const handleSearchSubmit = () => {
-    // Filter products within the selected category
+    
     const productsInSelectedCategory = filteredProducts.filter(product => product.categoryId === selectedCategoryId);
   
-    // Check if there are products matching the search term in the selected category
+    
     const searchTermLowerCase = searchTerm ? searchTerm.toLowerCase() : '';
     const productsMatchingSearch = productsInSelectedCategory.filter(product => {
       const productNameLowerCase = product.title ? product.title.toLowerCase() : '';
@@ -162,17 +125,9 @@ function NavHeader({handleProductClick }) {
       setShowErrorMessage(true);
       setTimeout(resetErrorMessage, 3000);
     } else {
-      // Continue with navigation
       navigate(`/store?search=${searchTerm}${selectedCategoryId !== null ? `&category=${selectedCategoryId}` : ''}`);
     }
   };
-  
-  
-  
-  
-  
-  
-  
   
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -185,18 +140,18 @@ function NavHeader({handleProductClick }) {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
- /* const handleSelect = (categoryId) => {
-    setSelectedCategoryId(categoryId);
-    handleCategoryFilter(categoryId);
-    toggleDropdown(); // Close the dropdown after selection
-  };*/
+ 
   const handleSelect = (categoryId) => {
     setSelectedCategoryId(categoryId);
     handleCategoryFilter(categoryId);
   };
-  
 
- 
+  
+  const handleSelectTwo  = (categoryId) => {
+    setSelectedCategoryIdTwo(categoryId);
+    navigate(`/store?category=${categoryId}`);
+  };
+  
 
   const handleCategoryFilter = (categoryId) => {
     setSelectedCategoryId(categoryId);
@@ -287,6 +242,22 @@ function NavHeader({handleProductClick }) {
           <Link to="/home">{translations[language]?.home}</Link>
           <Link to="/store">{translations[language]?.store}</Link>
           <Link to="/blog">{translations[language]?.blog}</Link>
+
+
+<select
+  value={selectedCategoryIdTwo}
+  onChange={(e) => handleSelectTwo(parseInt(e.target.value))}
+  className="dropdown-selectTwo"
+>
+  <option value={null} className="dropdown-selectTwo">{translations[language]?.categories}</option>
+  {categories.map((category) => (
+    <option key={category.id} value={category.id}>
+      {category.name}
+    </option>
+  ))}
+</select>
+
+
           <Link to="/about">{translations[language]?.about}</Link>
           <Link to="/contact">{translations[language]?.contact}</Link>
         </div>
