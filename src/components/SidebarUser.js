@@ -28,10 +28,6 @@ function SidebarUser({ isOpen, onClose , handleLogout  }) {
               <FaUser style={{marginRight : '15px' , fill: '#23b447e6'}} className="cart-icon" />
               <h5>My Profile</h5>
             </Link>
-            <Link to="/changePassword" className="cart-link">
-              <MdOutlineWifiPassword style={{marginRight : '15px' , fill: '#23b447e6'}} className="cart-icon" />
-              <h5>Change Password</h5>
-            </Link>
 
             <Link to="/order" className="cart-link">
               <FaBars style={{marginRight : '15px' , fill: '#23b447e6'}} className="cart-icon" />
@@ -44,6 +40,10 @@ function SidebarUser({ isOpen, onClose , handleLogout  }) {
             <Link to="/cart" className="cart-link">
               <FaShoppingCart style={{marginRight : '15px' , fill: '#23b447e6'}} className="cart-icon" />
               <h5>cart</h5>
+            </Link>
+            <Link to="/changePassword" className="cart-link">
+              <MdOutlineWifiPassword style={{marginRight : '15px' , fill: '#23b447e6'}} className="cart-icon" />
+              <h5>Change Password</h5>
             </Link>
             <Link  onClick={handleLogoutClick} className="cart-link">
               <IoIosLogOut style={{marginRight : '15px' , fill: '#23b447e6'}} className="cart-icon" />

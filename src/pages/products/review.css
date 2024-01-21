@@ -6,7 +6,7 @@
 }
 .flexReview{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     margin-top: 1em;
     height: 150px;
     margin-right: 20px;
@@ -15,4 +15,9 @@
     text-align: start;
     color: #337429cc;
     margin-top: -10px;
+}
+.onereview{
+    display: flex;
+    flex-direction: row;
+    
 }

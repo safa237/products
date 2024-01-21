@@ -123,22 +123,21 @@ function Home() {
 
   const rating = selectedProduct ? selectedProduct.rate : 0;
 
-  const handleRatingChange = async (userId, productId, newRating) => {
+  const handleRatingChange = async (newRating , productId) => {
     try {
       const headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
       };
       const numericRating = parseFloat(newRating);
-      await axios.post('https://mostafaben.bsite.net/api/Rating', {
-        userId : userId,
-        productId: parseInt(productId),
+      await axios.post(`https://mostafaben.bsite.net/api/Rating/addRating?userId=13&productId=${productId}`, {
         value: numericRating,
       }, { headers });
       console.log('userid' , userId);
       console.log('productid' , productId);
   
       console.log('Rating submitted successfully!');
+      console.log('newRating' , newRating);
     } catch (error) {
       console.log('userid' , userId);
       console.log('productid' , productId);
@@ -251,14 +250,14 @@ function Home() {
                       className={`favorite-icon ${wishlist.includes(product.id) ? 'favorite-icon-active' : ''}`}
                       onClick={() => handleAddToFavorites(product.id )}
                     /> 
-                      <FaShoppingCart
+                     {/*<FaShoppingCart
                         className={`cart-iconPro ${
                           cart.some((item) => item.productId === product.id)
                             ? 'cart-iconPro-active'
                             : ''
                         }`}
                         onClick={() => handleAddToCart(product.id, product)}
-                      />
+                      />*/ } 
                       {isLoggedIn && (
                         <FaEye
                           className="cart-iconPro"
@@ -267,29 +266,27 @@ function Home() {
                       )}
                     </div>
                     <div className="card-img">
-                      <img src={`data:image/png;base64,${product.poster}`} alt="Product poster" />
+                    <Link to={isLoggedIn ? `/home/product/${product.id}` : null}>
+    <img src={`data:image/png;base64,${product.poster}`} alt="Product poster" />
+  </Link>
                     </div>
                     <div className="card-info">
                       <h2>{product.title}</h2>
                       <div className="rate">
                         <StarRating
                           initialRating={product.rate}
-                          onRatingChange={(newRating) => handleRatingChange(userId ,product.id, newRating)}
+                          onRatingChange={(newRating) => handleRatingChange(product.productId ,newRating)}
                         />
                       </div>
                       <div className="price">{`$${product.price}`}</div>
                     </div>
                     <button
-                      className="proBtn"
-                      onClick={() => detailsBtn()}
-                    >
-                      <Link
-                        style={{ color: 'white', textDecoration: 'none' }}
-                        to={isLoggedIn ? `/home/product/${product.id}` : null}
-                      >
-                        {translations[language]?.detailsbtn}
-                      </Link>
-                    </button>
+  className="proBtn"
+  onClick={() => handleAddToCart(product.id, product)}
+>
+  add to cart
+</button>
+
                   </div>
                 </div>
               ))}

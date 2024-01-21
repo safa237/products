@@ -45,29 +45,41 @@ const SignInForm = () => {
     setFormData({ ...formData, [field]: value, role });
   };
 
-  const handleUserLogin = () => {
-    console.log('user Login Payload:', formData); 
   
+  const handleUserLogin = () => {
+    /*console.log('user Login Payload:', formData);*/
     axios.post('https://mostafaben.bsite.net/api/Users/login', formData, {
       headers: {
         'Content-Type': 'application/json',
       },
     })
-    .then(result => {
-      const {token, userId } = result.data;
-      localStorage.setItem('token', token);
-    localStorage.setItem('userId', userId);
+      .then(result => {
+        console.log('API Response:', result.data);
 
-    dispatch(setAuthData({ userId }));
-      navigate('/home');
-      console.log("userid" , userId);
-     
-    })
-    .catch(err => {
-      console.log(err);
-      setErrors({ general: 'Invalid email or password' });
-    });
+        const { token, email } = result.data;
+        localStorage.setItem('token', token);
+        localStorage.setItem('userId', email);
+        dispatch(setAuthData({ email }));
+        console.log('Logged in with email:', email);
+        if (email) {
+          localStorage.setItem('token', token);
+          localStorage.setItem('userId', email);
+          dispatch(setAuthData({ email }));
+          console.log('Logged in with email:', email);
+          navigate('/home');
+        } else {
+          console.error('Email is missing in the API response.');
+        }
+  
+        navigate('/home');
+      })
+      .catch(err => {
+        console.log(err);
+        setErrors({ general: 'Invalid email or password' });
+      });
   };
+  
+  
   
   
   

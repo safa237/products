@@ -15,7 +15,7 @@ import { useState } from 'react';
 import './review.css';
 
 
-const ReviewDialog = ({ isOpen, onCancel , productId }) => {
+const ReviewDialog = ({ isOpen, onCancel , productId  }) => {
 
     const language = useSelector(selectLanguage);
     const translations = useSelector(selectTranslations);
@@ -34,6 +34,28 @@ const ReviewDialog = ({ isOpen, onCancel , productId }) => {
         onCancel(); 
       };
 
+      const [reviews, setReviews] = useState([]);
+
+      const fetchReviews = async () => {
+        try {
+          const response = await axios.get(
+            'https://mostafaben.bsite.net/api/Reviwes/pendingReviews'
+          );
+    
+          setReviews(response.data);
+        } catch (error) {
+          console.error('Error fetching reviews:', error);
+          // Handle error appropriately
+        }
+      };
+    
+      useEffect(() => {
+        if (isOpen) {
+          fetchReviews();
+        }
+      }, [isOpen]);
+
+
 
       const [formData, setFormData] = useState({
         name: '',
@@ -47,33 +69,35 @@ const ReviewDialog = ({ isOpen, onCancel , productId }) => {
           [name]: value,
         });
       };
-    
-      const handleSubmit = (e) => {
+      
+      const handleSubmit = async (e) => {
         e.preventDefault();
-    
+      
         const postData = {
-          UserId: 1, 
-          productId: 2, 
-          ...formData,
+          name: formData.name,
+          commentText: formData.commentText,
         };
-    
-        fetch('https://mostafaben.bsite.net/api/Reviwes/addReview', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(postData),
-        })
-          .then(response => response.json())
-          .then(data => {
-            console.log('Review submitted successfully:', data);
-            // You can handle the response as needed
-          })
-          .catch(error => {
-            console.error('Error submitting review:', error);
-            // Handle error appropriately
+      
+        const url = `https://mostafaben.bsite.net/api/Reviwes/addReview?userId=14&productId=${productId}`;
+      
+        try {
+          const response = await axios.post(url, postData, {
+            headers: {
+              'Content-Type': 'application/json',
+            },
           });
+      
+          console.log('Review submitted successfully:', response.data);
+          fetchReviews();
+          // Additional handling if needed
+        } catch (error) {
+          console.error('Error submitting review:', error);
+          // Handle error appropriately
+        }
       };
+      
+      
+      
       
     return (
       <div className='review'>
@@ -86,50 +110,45 @@ const ReviewDialog = ({ isOpen, onCancel , productId }) => {
             <div>
               <button style={{marginTop: '3em'}} onClick={handleViewProductClick}>View Product</button>
             </div>
-            <div className='flexReview'>
-              <FaUser style={{fontSize: '50px'}}/>
-               <div style={{marginLeft:'5px'}}>
-                <p >name</p>
-                <p>my review is product is very goof , thak you very much</p>
-               </div>
-              </div>
-              <div className='flexReview'>
-              <FaUser style={{fontSize: '50px'}}/>
-               <div style={{marginLeft:'5px'}}>
-                <p >name</p>
-                <p>my review is product is very goof , thak you very much</p>
-               </div>
-              </div>
-              <div className='flexReview'>
-              <FaUser style={{fontSize: '50px'}}/>
-               <div style={{marginLeft:'5px'}}>
-                <p >name</p>
-                <p>my review is product is very goof , thak you very much</p>
-               </div>
-              </div>
 
-            {/**  <form onSubmit={handleSubmit}>
-      <label>
-        Name:
-        <input
-          type="text"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-        />
-      </label>
-      <br />
-      <label>
-        Comment:
-        <textarea
-          name="commentText"
-          value={formData.commentText}
-          onChange={handleChange}
-        />
-      </label>
-      <br />
-      <button type="submit">Submit</button>
-    </form> */} 
+            <div >
+                  {reviews.map((review, index) => (
+                    <div key={index} className='flexReview'>
+                      <div className='onereview'>
+                      <div style={{marginRight: '15px'}}><FaUser style={{ fontSize: '50px' }} /></div>
+                      <div style={{ marginLeft: '5px' }}>
+                        <p>{review.name}</p>
+                        <p>{review.commentText}</p>
+                      </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+             
+
+              <form onSubmit={handleSubmit}>
+  <label>
+    Name:
+    <input
+      type="text"
+      name="name"
+      value={formData.name}
+      onChange={handleChange}
+    />
+  </label>
+  <br />
+  <label>
+    Comment:
+    <textarea
+      name="commentText"
+      value={formData.commentText}
+      onChange={handleChange}
+    />
+  </label>
+  <br />
+  <button type="submit">Submit</button>
+</form>
+
              
             
           </div> 
