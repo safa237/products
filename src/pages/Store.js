@@ -324,6 +324,27 @@ function Store  ()  {
     setShowSidebar(!showSidebar);
   };
 
+  const [userRating, setUserRating] = useState(0);
+  const fetchUserRating = async () => {
+    try {
+      const response = await axios.get('https://mostafaben.bsite.net/api/Rating/user/14');
+      return response.data.value || 0;
+    } catch (error) {
+      console.error('Error fetching user rating:', error);
+      return 0;
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const rating = await fetchUserRating();
+      setUserRating(rating);
+    };
+
+    fetchData();
+  }, []);
+
+
     return (
       <div className="page-container">
       {/* Header Container */}
@@ -424,7 +445,7 @@ function Store  ()  {
     onChange={(e) => handleCategoryFilter(parseInt(e.target.value))}
     className="dropdown-selectTwo"
   >
-    <option value={null}>All Categories</option>
+    <option value={null}>Categories</option>
     {categories.map(category => (
       <option key={category.id} value={category.id}>
         {category.name}
@@ -489,32 +510,33 @@ function Store  ()  {
 
               </div>
               <div className="card-imgstore" >
-              <img
-        src={`data:image/png;base64,${product.poster}`}
-        alt="Product poster"
-      />
+              
+                    <Link to={isLoggedIn ? `/home/product/${product.id}` : null}>
+    <img src={`data:image/png;base64,${product.poster}`} alt="Product poster" />
+  </Link>
+                  
               </div>
               <div className='card-info card-infoStore'>
                 <h2>{product.title}</h2>
                 
                 <div className='rate'>
                 
-                {isLoggedIn && <StarRating rating={rating} /> }
+                {isLoggedIn && <StarRating
+                           initialRating={product.rate}
+                          isClickable={false}
+                        /> }
   
                 </div>
                 <div className='price'>{`$${product.price}`}</div>
               </div>
-             {isLoggedIn && <button
-                     className='proBtn'
-                     onClick={() => detailsBtn()}
-               >
-                   <Link
-                     style={{ color: "white", textDecoration: "none" }}
-                     to={isLoggedIn ? `/home/product/${product.id}` : null}
-                   >
-                    {translations[language]?.detailsbtn}
-                  </Link>
-              </button> }
+             {isLoggedIn &&  <button
+  className="proBtn"
+  onClick={() => handleAddToCart(product.id, product)}
+>
+  add to cart
+</button>
+              
+               }
              
             </div>
           </div>
@@ -531,7 +553,7 @@ function Store  ()  {
                     onClick={() => handleCategoryFilter(null)}
                     className='filterbycat'
                   >
-                    All Categoryies
+                    All Categories
                   </button>
   {categories.map(category => (
     <button

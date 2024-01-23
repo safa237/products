@@ -25,6 +25,7 @@
 }
 .flexContainerCart .confirmtotal{
     width: 500px;
+    min-height: 300px;
 }
 .confirmtotal p{
     color: red;

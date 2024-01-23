@@ -59,7 +59,7 @@
     border-radius: 15px;
     margin-left: 15px;
 }
-input::placeholder {
+.userdetailsInfo input::placeholder {
     color: white;
 }
 .imgInfo button{

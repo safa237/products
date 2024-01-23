@@ -132,6 +132,7 @@ function ConfirmOrder() {
             placeholder="First Name"
             value={formData.firstName}
           onChange={handleInputChange}
+         
           />
           <input className="name"
             type="text"
@@ -139,6 +140,7 @@ function ConfirmOrder() {
             placeholder="Last Name"
             value={formData.lastName}
           onChange={handleInputChange}
+          
           />
         </div>
         <select 
@@ -200,12 +202,13 @@ function ConfirmOrder() {
             style={{ marginRight: '10px', padding: '5px', borderRadius: '5px', border: '1px solid #ccc' }}
             value={formData.street}
           onChange={handleInputChange}
+         
           />
           <input
             type="text"
             placeholder="City"
             name="city"
-            style={{ marginRight: '10px', padding: '5px', borderRadius: '5px', border: '1px solid #ccc' }}
+            style={{  marginRight: '10px', padding: '5px', borderRadius: '5px', border: '1px solid #ccc' }}
             value={formData.city}
           onChange={handleInputChange}
           />
@@ -254,15 +257,18 @@ function ConfirmOrder() {
            
           </div>
           <div className="total confirmtotal">
-              <h4>Total Price : {totalprice.toFixed(2)}</h4>
-              <h6>Paiement when recieving</h6>
-
-             <p > <input
-        type="checkbox"
-        id="myCheckbox"
-      /> i agree to conditions and privacy policy</p>  
-              <button onClick={handleSubmit} className="confirmbtn">Confirm</button>
-            </div>
+  <Link to="/privacy-policy" style={{ textDecoration: 'none', color: 'inherit' }}>
+    <h4>Total Price : {totalprice.toFixed(2)}</h4>
+    <h6>Paiement when recieving</h6>
+    <h6>Your Personal data will be used to process your order , support your experience throughout this website , and for other purposes described in our privacy policy.</h6>
+    <p>
+      <input type="checkbox" id="myCheckbox" /> i agree to conditions and privacy policy
+    </p>
+    <button onClick={handleSubmit} className="confirmbtn">
+      Confirm
+    </button>
+  </Link>
+</div>
         </div>
 
 

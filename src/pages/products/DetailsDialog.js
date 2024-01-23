@@ -72,7 +72,10 @@ const handleAddToCart = () => {
 
                     
                     <div className='rate'>
-                         <StarRating rating={rating} />
+                    <StarRating
+                           initialRating={product.rate}
+                          isClickable={false}
+                        />
                     </div>
 
                     <div className='counter-flex'>

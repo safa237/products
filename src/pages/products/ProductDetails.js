@@ -280,15 +280,15 @@ const [detailsOpen, setDetailsOpen] = useState(false);
             </div>
             <div className="detailsINFO">
               <h1>Product Details: </h1>
-              <h1 style={{color: 'white'}}>Title : <span>{product.title}</span></h1>
-              <h1 style={{color: 'white'}}>descreption : <span>{product.descreption}</span></h1>
-              <h1 style={{color: 'white'}}>Brand:</h1>
-              <h1 style={{color: 'white'}}>Item Form:</h1>
-              <h1 style={{color: 'white'}}>Item Volume:</h1>
-              <h1 style={{color: 'white'}}>Special Ingredients:</h1>
-              <h1 style={{color: 'white'}}>Age Range:</h1>
-              <h1 style={{color: 'white'}}>Container Type:</h1>
-              <h1 style={{color: 'white'}}>Number Of Items:</h1>
+              <h1 style={{color: 'white'}}> <span></span></h1>
+              <h1 style={{color: 'white'}}> <span></span></h1>
+              <h1 style={{color: 'white'}}></h1>
+              <h1 style={{color: 'white'}}></h1>
+              <h1 style={{color: 'white'}}></h1>
+              <h1 style={{color: 'white'}}></h1>
+              <h1 style={{color: 'white'}}></h1>
+              <h1 style={{color: 'white'}}></h1>
+              <h1 style={{color: 'white'}}></h1>
             </div>
             </div>
             </div>

@@ -130,7 +130,7 @@ function Home() {
         'Accept': 'application/json',
       };
       const numericRating = parseFloat(newRating);
-      await axios.post(`https://mostafaben.bsite.net/api/Rating/addRating?userId=13&productId=${productId}`, {
+      await axios.post(`https://mostafaben.bsite.net/api/Rating/addRating?userId=14&productId=${productId}`, {
         value: numericRating,
       }, { headers });
       console.log('userid' , userId);
@@ -250,14 +250,14 @@ function Home() {
                       className={`favorite-icon ${wishlist.includes(product.id) ? 'favorite-icon-active' : ''}`}
                       onClick={() => handleAddToFavorites(product.id )}
                     /> 
-                     {/*<FaShoppingCart
+                     {/* <FaShoppingCart
                         className={`cart-iconPro ${
                           cart.some((item) => item.productId === product.id)
                             ? 'cart-iconPro-active'
                             : ''
                         }`}
                         onClick={() => handleAddToCart(product.id, product)}
-                      />*/ } 
+                      />*/ }
                       {isLoggedIn && (
                         <FaEye
                           className="cart-iconPro"
@@ -274,8 +274,8 @@ function Home() {
                       <h2>{product.title}</h2>
                       <div className="rate">
                         <StarRating
-                          initialRating={product.rate}
-                          onRatingChange={(newRating) => handleRatingChange(product.productId ,newRating)}
+                           initialRating={product.rate}
+                          isClickable={false}
                         />
                       </div>
                       <div className="price">{`$${product.price}`}</div>
