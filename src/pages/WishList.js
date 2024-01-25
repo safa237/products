@@ -1,101 +1,188 @@
-import React from 'react';
-import { selectWishlist } from '../rtk/slices/Wishlist-slice';
-import { selectProducts } from '../rtk/slices/Product-slice';
-import { removeFromWishlist } from '../rtk/slices/Wishlist-slice';
-import { Button, Container , Table , Image } from "react-bootstrap";
-
-import { FaHeart, FaShoppingCart , FaEye } from 'react-icons/fa';
-import { FaUser } from 'react-icons/fa';
-import Slider from './slider/Slider';
-import StarRating from './rate/StarRating';
-import axios from 'axios';
-import { useEffect , useState} from 'react';
-import { Link, Navigate } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch , useSelector } from 'react-redux';
-import { setLanguage , selectLanguage , selectTranslations } from '../rtk/slices/Translate-slice';
-import { fetchProducts } from '../rtk/slices/Product-slice';
-import { addToWishlist   } from '../rtk/slices/Wishlist-slice';
-import DetailsDialog from './products/DetailsDialog';
-import { addToCart } from '../rtk/slices/Cart-slice';
-import { CiStar } from "react-icons/ci";
+/*import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectProducts, addToWishlist, removeFromWishlist } from '../rtk/slices/Product-slice';
+import { Button, Container, Table } from 'react-bootstrap';
+import { FaHeart } from 'react-icons/fa';
 import NavHeader from '../components/NavHeader';
-import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
-import { useLocation } from 'react-router-dom';
-import email from '../images/Email icon.png';
-import address from '../images/Location icon.png';
-import phone from '../images/phone icon.png';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function Wishlist() {
   const navigate = useNavigate();
-  const wishlist = useSelector(selectWishlist);
-  const products = useSelector(selectProducts);
   const dispatch = useDispatch();
+  const products = useSelector(selectProducts);
   const [searchTerm, setSearchTerm] = useState('');
-  const allProducts = useSelector((state) => state.products);
+  const [wishlistProducts, setWishlistProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
+  const fetchWishlistProducts = async () => {
+    try {
+      const response = await axios.get('https://mostafaben.bsite.net/api/Wishlist/25');
+      setWishlistProducts(response.data); // Assuming the API response is an array of products
+      setLoading(false);
+      console.log("success fetch products", response.data);
+      console.log("productid", response.data.wishlistItem.productId);
+    } catch (error) {
+      console.error('Error fetching wishlist products:', error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchWishlistProducts();
+  }, []); 
 
   const handleSearchChange = (e) => {
     const term = e.target.value;
     setSearchTerm(term.toLowerCase());
   };
 
-  const filteredProducts = allProducts.filter((product) =>
-    product.title.toLowerCase().includes(searchTerm)
+  return (
+    <div className="wishlistContainer">
+      <NavHeader
+        searchTerm={searchTerm}
+        handleSearchChange={handleSearchChange}
+      />
+      <Container style={{ marginTop: '50px' }}>
+        <Table striped bordered hover size="sm">
+          <thead>
+            <tr>
+              <th>Title</th>
+             
+            </tr>
+          </thead>
+          <tbody>
+            {loading ? (
+              <tr>
+                <td colSpan="2">Loading...</td>
+              </tr>
+            ) : wishlistProducts.length === 0 ? (
+              <tr>
+                <td colSpan="2">No products found in wishlist.</td>
+              </tr>
+            ) : (
+              wishlistProducts.map((product) => (
+                <tr key={product.id}>
+                  <td>{product.productId}</td>
+                  
+                </tr>
+              ))
+            )}
+          </tbody>
+        </Table>
+      </Container>
+    </div>
   );
+}
 
-  const handleProductClick = (productId) => {
-    navigate(`/home/product/${productId}`);
+export default Wishlist;*/
+
+
+// WishlistPage.js
+/*import React from 'react';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+
+const Wishlist = () => {
+  const dispatch = useDispatch();
+  const wishlist = useSelector((state) => state.wishlist);
+  console.log('Wishlist State:', wishlist);
+  return (
+    <div>
+      <h1>Wishlist</h1>
+      {wishlist.map((product) => (
+        <div key={product.id}>
+          
+          {product && (
+            <>
+              <h1>{product.id}</h1>
+              <p>{product.price}</p> 
+            </>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+
+
+export default Wishlist;*/
+
+// Wishlist.js
+
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectProducts, addToWishlist, removeFromWishlist } from '../rtk/slices/Product-slice';
+import { Button, Container, Table } from 'react-bootstrap';
+import { FaHeart } from 'react-icons/fa';
+import NavHeader from '../components/NavHeader';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
+function Wishlist() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const products = useSelector(selectProducts);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [wishlistProducts, setWishlistProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const userId = useSelector((state) => state.auth.id);
+
+  const fetchWishlistProducts = async () => {
+    try {
+      const response = await axios.get(`https://mostafaben.bsite.net/api/Wishlist/${userId}`);
+      setWishlistProducts(response.data); // Assuming the API response is an array of products
+      setLoading(false);
+      console.log("success fetch products", response.data);
+    } catch (error) {
+      console.error('Error fetching wishlist products:', error);
+      setLoading(false);
+    }
   };
 
-  
-  const wishlistProducts = products.filter((product) =>
-    wishlist.includes(product.id)
-  );
+  useEffect(() => {
+    fetchWishlistProducts();
+  }, []); 
+
+  const handleSearchChange = (e) => {
+    const term = e.target.value;
+    setSearchTerm(term.toLowerCase());
+  };
 
   return (
-    <div className='whishlistCont'>
-    <NavHeader
-        searchTermm={searchTerm}
+    <div className="wishlistContainer">
+      <NavHeader
+        searchTerm={searchTerm}
         handleSearchChange={handleSearchChange}
-        filteredProductss={filteredProducts}
-        handleProductClick={handleProductClick}
       />
-      <div className='green-containerr greenabout cartGreen'>
-        <div className='contactContainer home-containerr'>
-    <Container style={{marginTop: '50px'}}>
+      <Container style={{ marginTop: '50px' }}>
         <Table striped bordered hover size="sm">
-      <thead>
-        <tr>
-          <th>Image</th>
-          <th>Title</th>
-          
-          <th>Price</th>
-        </tr>
-      </thead>
-      <tbody>
-      {wishlistProducts.map((product) => (
-            <tr key={product.id}>
-            <td>
-                <Image
-                        src={`data:image/png;base64,${product.poster}`}
-                        alt="Product poster"
-                        style={{width: "100px" , height: "100px"}}
-                />
-            </td>
-            <td>{product.title}</td>
-           
-            <td>{product.price}</td>
-            
-          </tr>
-      ))}
-      </tbody>
-    </Table>
-        </Container>
-        </div>
-        </div>
-        </div>
+          <thead>
+            <tr>
+              <th>Product ID</th>
+            </tr>
+          </thead>
+          <tbody>
+            {loading ? (
+              <tr>
+                <td colSpan="1">Loading...</td>
+              </tr>
+            ) : wishlistProducts.length === 0 ? (
+              <tr>
+                <td colSpan="1">No products found in wishlist.</td>
+              </tr>
+            ) : (
+              wishlistProducts.map((wishlistItem) => (
+                <tr key={wishlistItem.wishlistItem.id}>
+                  <td>{wishlistItem.wishlistItem.productId}</td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </Table>
+      </Container>
+    </div>
   );
 }
 

@@ -56,20 +56,11 @@ const SignInForm = () => {
       .then(result => {
         console.log('API Response:', result.data);
 
-        const { token, email } = result.data;
+        const { token, email , id } = result.data;
         localStorage.setItem('token', token);
         localStorage.setItem('userId', email);
-        dispatch(setAuthData({ email }));
-        console.log('Logged in with email:', email);
-        if (email) {
-          localStorage.setItem('token', token);
-          localStorage.setItem('userId', email);
-          dispatch(setAuthData({ email }));
-          console.log('Logged in with email:', email);
-          navigate('/home');
-        } else {
-          console.error('Email is missing in the API response.');
-        }
+        dispatch(setAuthData({ email, token, id }));
+        console.log('Logged in with id:', id);
   
         navigate('/home');
       })

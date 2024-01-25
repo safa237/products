@@ -257,17 +257,22 @@ function ConfirmOrder() {
            
           </div>
           <div className="total confirmtotal">
-  <Link to="/privacy-policy" style={{ textDecoration: 'none', color: 'inherit' }}>
+ 
     <h4>Total Price : {totalprice.toFixed(2)}</h4>
     <h6>Paiement when recieving</h6>
-    <h6>Your Personal data will be used to process your order , support your experience throughout this website , and for other purposes described in our privacy policy.</h6>
+    <h6>Your Personal data will be used to process your order , support your experience throughout this website , and for other purposes described in our 
+         
+       <Link to="/privacy-policy" style={{ textDecoration: 'none', color: 'inherit' }}>
+       <strong> privacy policy </strong> .
+         </Link>
+          </h6>
     <p>
       <input type="checkbox" id="myCheckbox" /> i agree to conditions and privacy policy
     </p>
     <button onClick={handleSubmit} className="confirmbtn">
       Confirm
     </button>
-  </Link>
+  
 </div>
         </div>
 

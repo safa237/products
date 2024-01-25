@@ -5,24 +5,26 @@ import { FaSearch } from 'react-icons/fa';
 
 import logo from '../.././images/Vita Logo2.png' ;
 import lotion from '../.././images/lotion.png';
-import StarRating from '../rate/StarRating';
 import { setLanguage ,selectLanguage ,selectTranslations} from '../../rtk/slices/Translate-slice';
 import { useSelector , useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { FaUser } from "react-icons/fa";
 import axios from 'axios';
 import { useState } from 'react';
+import StarRating from '../rate/StarRating';
 import './review.css';
 
 
 const ReviewDialog = ({ isOpen, onCancel , productId  }) => {
-
     const language = useSelector(selectLanguage);
     const translations = useSelector(selectTranslations);
     const dispatch = useDispatch();
-
+    const userId = useSelector((state) => state.auth.id);
+    const email = useSelector((state) => state.auth.email);
+    const [rating, setRating] = useState(0);
 
     useEffect(() => {
+      console.log('id is' , userId);
       }, [language]);
    
       const handleOverlayClick = (e) => {
@@ -58,7 +60,6 @@ const ReviewDialog = ({ isOpen, onCancel , productId  }) => {
 
 
       const [formData, setFormData] = useState({
-        name: '',
         commentText: '',
       });
     
@@ -72,13 +73,12 @@ const ReviewDialog = ({ isOpen, onCancel , productId  }) => {
       
       const handleSubmit = async (e) => {
         e.preventDefault();
-      
         const postData = {
-          name: formData.name,
+          value: rating,
           commentText: formData.commentText,
         };
       
-        const url = `https://mostafaben.bsite.net/api/Reviwes/addReview?userId=14&productId=${productId}`;
+        const url = `https://mostafaben.bsite.net/api/Reviwes/addReview?userId=${userId}&productId=${productId}`;
       
         try {
           const response = await axios.post(url, postData, {
@@ -89,10 +89,12 @@ const ReviewDialog = ({ isOpen, onCancel , productId  }) => {
       
           console.log('Review submitted successfully:', response.data);
           fetchReviews();
-          // Additional handling if needed
+          setFormData({
+            commentText: '',
+          });
+          setRating(0);
         } catch (error) {
           console.error('Error submitting review:', error);
-          // Handle error appropriately
         }
       };
       
@@ -116,39 +118,48 @@ const ReviewDialog = ({ isOpen, onCancel , productId  }) => {
                     <div key={index} className='flexReview'>
                       <div className='onereview'>
                       <div style={{marginRight: '15px'}}><FaUser style={{ fontSize: '50px' }} /></div>
-                      <div style={{ marginLeft: '5px' }}>
-                        <p>{review.name}</p>
-                        <p>{review.commentText}</p>
+                      <div className='infoComment' style={{ marginLeft: '5px' }}>
+                        <div> 
+                        <h5>{email} </h5> <p>2 days ago </p>
+                        </div>
+                        <div className='stars'>
+                            <StarRating
+                              initialRating={review.value} 
+                              isClickable={false} 
+                            />
+                          </div>
                       </div>
                       </div>
+                      <p>{review.commentText}</p>
                     </div>
                   ))}
                 </div>
              
-
-              <form onSubmit={handleSubmit}>
-  <label>
-    Name:
-    <input
-      type="text"
-      name="name"
-      value={formData.name}
-      onChange={handleChange}
-    />
-  </label>
-  <br />
-  <label>
-    Comment:
-    <textarea
-      name="commentText"
-      value={formData.commentText}
-      onChange={handleChange}
-    />
-  </label>
-  <br />
-  <button type="submit">Submit</button>
-</form>
-
+              <div className='commentdiv'>
+                <form onSubmit={handleSubmit}>
+                  <div className='flexReviewRate'>
+                  <div className='reviewdiv'>
+                  <label>
+                  
+                    <textarea
+                      placeholder='Write Your Review'
+                      name="commentText"
+                      value={formData.commentText}
+                      onChange={handleChange}
+                    />
+                  </label>
+                  </div>
+                  <div className='stars'>
+                  <StarRating
+                      initialRating={rating}
+                      onRatingChange={(newRating) => setRating(newRating)}
+                      isClickable={true}
+                    />
+                  </div>
+                  </div>
+                  <button type="submit">Submit</button>
+                </form>
+              </div>
              
             
           </div> 

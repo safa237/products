@@ -12,12 +12,12 @@ import { Link, Navigate } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLanguage, selectLanguage, selectTranslations } from '../rtk/slices/Translate-slice';
-import { fetchProducts } from '../rtk/slices/Product-slice';
-import { addToWishlist, removeFromWishlist } from '../rtk/slices/Wishlist-slice';
-import { selectWishlist } from '../rtk/slices/Wishlist-slice';
+import { fetchProducts , selectProducts, selectProductIds} from '../rtk/slices/Product-slice';
+//import {  removeFromWishlist } from '../rtk/slices/Wishlist-slice';
+//import { selectWishlist } from '../rtk/slices/Wishlist-slice';
 import DetailsDialog from './products/DetailsDialog';
 import { addToCart, deleteFromCart } from '../rtk/slices/Cart-slice';
-import { clearWishlist } from '../rtk/slices/Wishlist-slice';
+//import { clearWishlist } from '../rtk/slices/Wishlist-slice';
 import { clearCart } from '../rtk/slices/Cart-slice';
 import { logoutAction, setAuthData } from '../rtk/slices/Auth-slice'; // Assuming your auth slice includes setAuthData
 import NavHeader from '../components/NavHeader';
@@ -28,17 +28,17 @@ import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import { jwtDecode } from 'jwt-decode';
-import { loadWishlistFromStorage } from '../rtk/slices/Wishlist-slice';
+//import { loadWishlistFromStorage } from '../rtk/slices/Wishlist-slice';
 import { setSearchTerm } from '../rtk/slices/Search-slice';
 import { selectUserId } from '../rtk/slices/User-slice';
+//import { addToWishlist } from '../rtk/slices/Wishlist-slice';
+import { addToWishlist , removeFromWishlist } from '../rtk/slices/Wishlist-slice';
+import { clearWishlist } from '../rtk/slices/Wishlist-slice';
 
 function Home() {
   const dispatch = useDispatch();
-  const userId = useSelector(selectUserId);
   const language = useSelector(selectLanguage);
   const translations = useSelector(selectTranslations);
-  const products = useSelector((state) => state.products);
-  const wishlist = useSelector(selectWishlist);
   const cart = useSelector((state) => state.cart);
   const [loading, setLoading] = useState(true);
   const searchTerm = useSelector((state) => state.search.searchTerm);
@@ -50,8 +50,9 @@ function Home() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [isInCart, setIsInCart] = useState(false);
+  const userId = useSelector((state) => state.auth.id);
+  const products = useSelector(selectProducts);
   
-  const productId = useSelector((state) => state.productSlice); 
 
   const token = useSelector((state) => state.auth.token);
 
@@ -59,6 +60,109 @@ function Home() {
     const term = e.target.value;
     dispatch(setSearchTerm(term));
   };
+
+  const [favoriteStatus, setFavoriteStatus] = useState({});
+
+  const handleAddToFavorites = (productId) => {
+    const url = `https://mostafaben.bsite.net/api/Wishlist?userId=${userId}&productId=${productId}`;
+  
+    axios.post(url)
+      .then(response => {
+        console.log(`Product ${productId} added to favorites successfully`, response.data);
+        setFavoriteStatus(prevState => ({ ...prevState, [productId]: true }));
+        saveFavoritesToLocalStorage(userId, { ...favoriteStatus, [productId]: true });
+      })
+      .catch(error => {
+        console.error(`Failed to add product ${productId} to favorites`, error);
+      });
+  };
+  
+  const handleRemoveFromFavorites = (productId) => {
+    const url = `https://mostafaben.bsite.net/api/Wishlist/${productId}`;
+  
+    axios.delete(url)
+      .then(response => {
+        console.log(`Product ${productId} removed from favorites successfully`, response.data);
+        setFavoriteStatus(prevState => ({ ...prevState, [productId]: false }));
+        saveFavoritesToLocalStorage(userId, { ...favoriteStatus, [productId]: false });
+      })
+      .catch(error => {
+        console.error(`Failed to remove product ${productId} from favorites`, error);
+      });
+  };
+
+  /*const handleAddToFavorites = (productId, product) => {
+    console.log('Product Object:', product);
+    if (!productId || !product) {
+      console.error('Product ID or product is undefined');
+      return;
+    }
+  
+    const isFavorite = favoriteStatus[productId] || false;
+  
+    if (!isFavorite) {
+      const url = `https://mostafaben.bsite.net/api/Wishlist?userId=${userId}&productId=${productId}`;
+  
+      axios
+        .post(url)
+        .then((response) => {
+          console.log(`Product ${productId} added to favorites successfully`, response.data);
+          setFavoriteStatus((prevState) => ({ ...prevState, [productId]: true }));
+          saveFavoritesToLocalStorage(userId, { ...favoriteStatus, [productId]: true });
+          dispatch(addToWishlist(product)); // Dispatch action to add to wishlist
+    
+        })
+        .catch((error) => {
+          console.error(`Failed to add product ${productId} to favorites`, error);
+        });
+    } else {
+      // Handle case when the product is already in favorites
+    }
+  };
+  
+  const handleRemoveFromFavorites = (productId, product) => {
+    const url = `https://mostafaben.bsite.net/api/Wishlist/${productId}`;
+  
+    axios
+      .delete(url)
+      .then((response) => {
+        console.log(`Product ${productId} removed from favorites successfully`, response.data);
+        setFavoriteStatus((prevState) => ({ ...prevState, [productId]: false }));
+        saveFavoritesToLocalStorage(userId, { ...favoriteStatus, [productId]: false });
+        dispatch(removeFromWishlist(productId));
+      })
+      .catch((error) => {
+        console.error(`Failed to remove product ${productId} from favorites`, error);
+      });
+  };*/
+  
+  const saveFavoritesToLocalStorage = (userId, favorites) => {
+    const userFavorites = JSON.parse(localStorage.getItem(`favorites_${userId}`)) || {};
+    localStorage.setItem(`favorites_${userId}`, JSON.stringify({ ...userFavorites, ...favorites }));
+  };
+  
+  const handleClick = (productId, product) => {
+    if (!productId) {
+      console.error('Product ID is undefined');
+      return;
+    }
+  
+    const isFavorite = favoriteStatus[productId] || false;
+  
+    if (isFavorite) {
+      handleRemoveFromFavorites(productId, product);
+    } else {
+      handleAddToFavorites(productId, product);
+    }
+  };
+  
+  useEffect(() => {
+    const savedFavorites = JSON.parse(localStorage.getItem(`favorites_${userId}`)) || {};
+    setFavoriteStatus(savedFavorites);
+    checkLoggedInStatus();
+  }, [userId]);
+
+  
 
   const handleDetailsClick = (selectedProduct) => {
     if (!isLoggedIn) {
@@ -74,6 +178,7 @@ function Home() {
   };
 
   useEffect(() => {
+    console.log('userid' , userId)
     const fetchData = async () => {
       try {
         await dispatch(fetchProducts());
@@ -98,23 +203,15 @@ function Home() {
   const checkLoggedInStatus = () => {
     const userToken = localStorage.getItem('token');
     setIsLoggedIn(!!userToken);
-
-    // Load wishlist from localStorage
-    if (userToken) {
-      const storedWishlist = localStorage.getItem('wishlist');
-      const parsedWishlist = storedWishlist ? JSON.parse(storedWishlist) : [];
-      // Dispatch the addToWishlist action to update the store
-      parsedWishlist.forEach((productId) => {
-        dispatch(addToWishlist(productId));
-      });
-    }
+    setIsLoggedInState(!!userToken);
+    setIsUserLoggedInState(!!userToken);
   };
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
-    dispatch(clearWishlist());
     dispatch(clearCart());
+    dispatch(clearWishlist()); 
     setIsLoggedIn(false);
     setIsLoggedInState(false);
     setIsDropdownOpen(false);
@@ -175,7 +272,7 @@ function Home() {
     }
   };
 
-  const handleAddToFavorites = (productId) => {
+  /*const handleAddToFavorites = (productId) => {
     if (!isLoggedIn) {
       alert('Please sign in to add to favorites.');
       return;
@@ -191,7 +288,7 @@ function Home() {
       // Add the product to the wishlist
       dispatch(addToWishlist(productId));
     }
-  };
+  };*/
 
   const detailsBtn = () => {
     if (!isLoggedIn) {
@@ -226,6 +323,7 @@ function Home() {
   return (
     <div className="page-container">
       <NavHeader
+        userId={userId}
         searchTermm={searchTerm}
         handleSearchChange={handleSearchChange}
         filteredProductss={filteredProducts}
@@ -246,18 +344,15 @@ function Home() {
                 <div style={{ borderRadius: '5%' }} className="card" key={product.id}>
                   <div className="card-body">
                     <div className="card-icons">
-                     <FaHeart
+                     {/*<FaHeart
                       className={`favorite-icon ${wishlist.includes(product.id) ? 'favorite-icon-active' : ''}`}
                       onClick={() => handleAddToFavorites(product.id )}
-                    /> 
-                     {/* <FaShoppingCart
-                        className={`cart-iconPro ${
-                          cart.some((item) => item.productId === product.id)
-                            ? 'cart-iconPro-active'
-                            : ''
-                        }`}
-                        onClick={() => handleAddToCart(product.id, product)}
-                      />*/ }
+              /> */}
+              <FaHeart
+  onClick={() => handleClick(product.id, product)}
+  style={{ color: favoriteStatus[product.id] ? 'red' : 'black' }}
+/>
+                    
                       {isLoggedIn && (
                         <FaEye
                           className="cart-iconPro"

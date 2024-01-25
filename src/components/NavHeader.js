@@ -11,17 +11,17 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch , useSelector } from 'react-redux';
 import { setLanguage , selectLanguage , selectTranslations } from '../rtk/slices/Translate-slice';
 import { fetchProducts } from '../rtk/slices/Product-slice';
-import { addToWishlist , removeFromWishlist  } from '../rtk/slices/Wishlist-slice';
-import { selectWishlist } from '../rtk/slices/Wishlist-slice';
+//import { addToWishlist , removeFromWishlist  } from '../rtk/slices/Wishlist-slice';
+//import { selectWishlist } from '../rtk/slices/Wishlist-slice';
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import './navheader.css';
 import SidebarUser from './SidebarUser';
+import { clearWishlist } from '../rtk/slices/Wishlist-slice';
 
 
-
-function NavHeader({  handleProductClick }) {
+function NavHeader({ userId , handleProductClick }) {
   const dispatch = useDispatch();
   const language = useSelector(selectLanguage);
   const translations = useSelector(selectTranslations);
@@ -40,6 +40,12 @@ function NavHeader({  handleProductClick }) {
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('userId'); 
+    const storedUserId = localStorage.getItem('userId');
+  if (userId !== storedUserId) {
+    dispatch(clearWishlist());
+    localStorage.removeItem('wishlist');
+  }
+
     setIsLoggedIn(false);
   };
   useEffect(() => {
@@ -47,13 +53,13 @@ function NavHeader({  handleProductClick }) {
       const userToken = localStorage.getItem('token');
       setIsLoggedIn(!!userToken);
 
-      if (userToken) {
+      /*if (userToken) {
         const storedWishlist = localStorage.getItem('wishlist');
         const parsedWishlist = storedWishlist ? JSON.parse(storedWishlist) : [];
         parsedWishlist.forEach((productId) => {
           dispatch(addToWishlist(productId));
         });
-      }
+      }*/
     };
 
     const fetchCategories = async () => {

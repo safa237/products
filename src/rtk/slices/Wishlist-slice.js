@@ -1,6 +1,6 @@
 // Wishlist-slice.js
 
-import { createSlice , createAction} from '@reduxjs/toolkit';
+/*import { createSlice , createAction} from '@reduxjs/toolkit';
 
 const localStorageKey = 'wishlist';
 
@@ -15,8 +15,6 @@ const saveWishlistToStorage = (wishlist) => {
 
 export const clearWishlist = createAction('wishlist/clearWishlist');
 
-
-// Define the initial state here
 const initialState = loadWishlistFromStorage();
 
 const wishlistSlice = createSlice({
@@ -102,3 +100,77 @@ export const { addToWishlist, removeFromWishlist } = wishlistSlice.actions;
 export const selectWishlist = (state) => state.wishlist;
 
 export default wishlistSlice.reducer;*/
+
+
+// wishlistSlice.js
+/*import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+
+ const addToWishlist = createAsyncThunk(
+  "wishlist/addToWishlist",
+  async ({ userId, productId }) => {
+    const res = await fetch(
+      `https://mostafaben.bsite.net/api/Wishlist?userId=${userId}&productId=${productId}`,
+      {
+        method: "POST", // or "PUT" or "DELETE" depending on your API
+        // Add any headers or body as needed for your API request
+      }
+    );
+    const data = await res.json();
+    return data;
+  }
+);
+
+const wishlistSlice = createSlice({
+  name: "wishlist",
+  initialState: {
+    // Add wishlist-specific state if needed
+  },
+  reducers: {
+    // Add any wishlist-specific reducers if needed
+  },
+  extraReducers: (builder) => {
+    builder.addCase(addToWishlist.fulfilled, (state, action) => {
+      // Handle success if needed
+    });
+  },
+});
+
+export { addToWishlist }; // Export the new action
+
+export default wishlistSlice.reducer;*/
+
+
+
+
+// wishlistSlice.js
+import { createSlice } from '@reduxjs/toolkit';
+
+const storedWishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+
+const wishlistSlice = createSlice({
+  name: 'wishlist',
+  initialState: storedWishlist,
+  reducers: {
+    addToWishlist: (state, action) => {
+      console.log('Adding to wishlist:', action.payload);
+      state.push(action.payload);
+      localStorage.setItem('wishlist', JSON.stringify(state));
+    },
+    removeFromWishlist: (state, action) => {
+      console.log('Removing from wishlist:', action.payload);
+      const updatedState = state.filter((product) => product.id !== action.payload);
+      localStorage.setItem('wishlist', JSON.stringify(updatedState));
+      return updatedState;
+    },
+    clearWishlist: (state) => {
+      localStorage.removeItem('wishlist'); // Clear Wishlist data in local storage
+      return [];
+    },
+  },
+});
+
+
+
+export const { addToWishlist, removeFromWishlist , clearWishlist} = wishlistSlice.actions;
+export default wishlistSlice.reducer;
+
