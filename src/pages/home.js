@@ -61,7 +61,8 @@ function Home() {
     dispatch(setSearchTerm(term));
   };
 
-  const [favoriteStatus, setFavoriteStatus] = useState({});
+  const [favoriteStatus, setFavoriteStatus] = useState(JSON.parse(localStorage.getItem(`favorites_${userId}`)) || {});
+
 
   const handleAddToFavorites = (productId) => {
     const url = `https://mostafaben.bsite.net/api/Wishlist?userId=${userId}&productId=${productId}`;
@@ -141,7 +142,7 @@ function Home() {
     localStorage.setItem(`favorites_${userId}`, JSON.stringify({ ...userFavorites, ...favorites }));
   };
   
-  const handleClick = (productId, product) => {
+  /*const handleClick = (productId, product) => {
     if (!productId) {
       console.error('Product ID is undefined');
       return;
@@ -154,12 +155,48 @@ function Home() {
     } else {
       handleAddToFavorites(productId, product);
     }
-  };
+  };*/
+
+  const handleClick = (productId, product) => {
+  setFavoriteStatus((prevState) => ({ ...prevState, [productId]: !prevState[productId] }));
+
+  const url = `https://mostafaben.bsite.net/api/Wishlist/${productId}`;
+
+  // If the product is currently in favorites, remove it; otherwise, add it
+  if (!favoriteStatus[productId]) {
+    // Add the product to favorites
+    axios
+      .post(`https://mostafaben.bsite.net/api/Wishlist?userId=${userId}&productId=${productId}`)
+      .then((response) => {
+        console.log(`Product ${productId} added to favorites successfully`, response.data);
+        // Save favorites to local storage
+        saveFavoritesToLocalStorage(userId, { ...favoriteStatus, [productId]: true });
+      })
+      .catch((error) => {
+        console.error(`Failed to add product ${productId} to favorites`, error);
+      });
+  } else {
+    // Remove the product from favorites
+    axios
+      .delete(url)
+      .then((response) => {
+        console.log(`Product ${productId} removed from favorites successfully`, response.data);
+        // Save favorites to local storage
+        saveFavoritesToLocalStorage(userId, { ...favoriteStatus, [productId]: false });
+      })
+      .catch((error) => {
+        console.error(`Failed to remove product ${productId} from favorites`, error);
+      });
+  }
+
+  // ... rest of the code (if any)
+};
+
   
   useEffect(() => {
     const savedFavorites = JSON.parse(localStorage.getItem(`favorites_${userId}`)) || {};
     setFavoriteStatus(savedFavorites);
-    checkLoggedInStatus();
+   
   }, [userId]);
 
   
@@ -211,7 +248,7 @@ function Home() {
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
     dispatch(clearCart());
-    dispatch(clearWishlist()); 
+   
     setIsLoggedIn(false);
     setIsLoggedInState(false);
     setIsDropdownOpen(false);
@@ -349,7 +386,7 @@ function Home() {
                       onClick={() => handleAddToFavorites(product.id )}
               /> */}
               <FaHeart
-  onClick={() => handleClick(product.id, product)}
+  onClick={() => handleClick(product.id , product)}
   style={{ color: favoriteStatus[product.id] ? 'red' : 'black' }}
 />
                     
