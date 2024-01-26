@@ -172,10 +172,11 @@ function NavHeader({ userId , handleProductClick }) {
 
   
   return (
-    <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
-  <Container>
-    <div className='flexNav'>
-      <div className='flexNavone'>
+    <Navbar  collapseOnSelect expand="lg" className=" bg-body-tertiary">
+      
+  <Container >
+    <div  className='flexNav'>
+      <div  className='flexNavone'>
 
       <div className='search-dropdown-container'>
   <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
@@ -223,7 +224,9 @@ function NavHeader({ userId , handleProductClick }) {
         <div className="text-line">
           
           {!isLoggedIn && (
-            <Link to="/authentication">{translations[language]?.login}</Link>
+            <div className='logindiv'>
+                <Link  to="/authentication">{translations[language]?.login}</Link>
+            </div>
           )}
         </div>
 

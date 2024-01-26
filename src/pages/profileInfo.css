@@ -45,7 +45,7 @@
 /* Additional style to center content inside .imgInfo */
 .imgInfo h5 {
     margin: 0; 
-    color: white;
+    color: black;
     margin-top: 10px;
 }
 .flexinput{
@@ -59,25 +59,25 @@
     border-radius: 15px;
     margin-left: 15px;
 }
-.userdetailsInfo input::placeholder {
-    color: white;
-}
+
 .imgInfo button{
     width: 80px;
     font-weight: bold;
     background-color: white;
-    color: #3A7E89;
+    color: black;
+    background-color: #3EBF87;
     border-radius: 15px;
     margin-top: 10px;
+    margin-left: -10px;
 }
 .flexbutton{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    background-color: transparent;
+    background-color: white;
     width: 150px;
     border-radius: 15px;
-    border: 1px solid white;
+    border: 1px solid rgb(199, 191, 191);
     margin-top: 15px;
 }
 .flexbutton button{
@@ -86,4 +86,5 @@
     outline: none;
     margin-left: auto;
     margin-right: auto;
+    color: black;
 }

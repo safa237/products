@@ -34,6 +34,7 @@ import { selectUserId } from '../rtk/slices/User-slice';
 //import { addToWishlist } from '../rtk/slices/Wishlist-slice';
 import { addToWishlist , removeFromWishlist } from '../rtk/slices/Wishlist-slice';
 import { clearWishlist } from '../rtk/slices/Wishlist-slice';
+import HorizontalScroll from '../components/Carousel';
 
 function Home() {
   const dispatch = useDispatch();
@@ -189,7 +190,7 @@ function Home() {
       });
   }
 
-  // ... rest of the code (if any)
+ 
 };
 
   
@@ -378,7 +379,7 @@ function Home() {
           {!loading && (
             <div className="card-container">
               {filteredProducts.map((product) => (
-                <div style={{ borderRadius: '5%' }} className="card" key={product.id}>
+                <div style={{ borderRadius: '15%'  }} className="card" key={product.id}>
                   <div className="card-body">
                     <div className="card-icons">
                      {/*<FaHeart
@@ -387,7 +388,7 @@ function Home() {
               /> */}
               <FaHeart
   onClick={() => handleClick(product.id , product)}
-  style={{ color: favoriteStatus[product.id] ? 'red' : 'black' }}
+  style={{ color: favoriteStatus[product.id] ? 'red' : '#61DAA2' }}
 />
                     
                       {isLoggedIn && (
@@ -425,13 +426,8 @@ function Home() {
             </div>
           )}
 
-         
-
-  
-          
-  
         </div>
-        
+
         <div className='footerr footerPhr'>
           <div className=' header-container '>
             <div className='flexFooter'>

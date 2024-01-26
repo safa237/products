@@ -45,25 +45,26 @@
     width: 120px;
     height: 30px;
     border-radius: 10px;
-    background-color: white;
+    background-color: #61DAA2;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
     margin-left: 7em;
 }
 .readArticle button{
     background-color: transparent;
+    color: white;
 }
 .share{
     text-align: end;
     margin-top: -50px;
 }
 .icon{
-    color: #3A7E89;
+    color: black;
     font-size: 20px;
     margin-left: 10px;
 }
 p{
     font-size: large;
-    color: white;
+    color: black;
     font-style: nprmal;
 }
 .card-blog{
@@ -97,7 +98,7 @@ p{
 }
 button{
     border: none;
-    color: #3A7E89;
+    color: #61DAA2;
     margin-left: auto;
 }
 .read{
@@ -105,7 +106,7 @@ button{
 }
 .publicBlogs{
     
-    color: #3A7E89;
+    color: black;
 }
 .publicBlogs p{
     text-align: start;
@@ -130,13 +131,13 @@ button{
 .card2 p{
    
     font-size: 15px;
-    color: #3A7E89;
+    color: black;
 }
 .blogfooter{
     padding-bottom: 2em;
 }
 .infoblog h6{
-        color: white;
+        color: black;
         white-space: pre-wrap;
         word-wrap: break-word;
         text-align: justify;
@@ -146,7 +147,7 @@ button{
         margin-top: 2em;
 }
 .infoblog h5{
-        color: white;
+        color: black;
         white-space: pre-wrap;
         word-wrap: break-word;
         text-align: justify;
@@ -175,7 +176,7 @@ button{
     width: 500px;
     height: 50px;
     border-radius: 15px;
-    border: 1px solid white;
+    border: 1px solid black;
 }
 .formsearchblog{
     display: flex;
@@ -198,11 +199,15 @@ button{
     height: 100%;
     background-color: transparent;
    padding-left: -15px;
-    color: white;
+    color: black;
     padding-left: 10px;
 }
 .autocom-blog{
     margin-top: 8em;
+}
+.actionblog{
+    display: flex;
+    flex-direction: row;
 }
   @media only screen and (max-width: 767px) {
     .searchBlog {
@@ -217,7 +222,7 @@ button{
         height: 100%;
         background-color: transparent;
        padding-left: -15px;
-        color: white;
+        color: black;
         padding-left: 10px;
     }
     .blog-flex{
@@ -243,6 +248,11 @@ button{
         margin-top: 3em;
         margin-left: 1px;
     }
+    .favblog{
+        display: inline-block;
+    margin-left: 35em;
+    margin-bottom: 15px 
+    }
     .blog-container{
         margin-right: 15px;
     }
@@ -250,7 +260,7 @@ button{
         margin-left: 1px; 
     }*/
     .infoblog h5{
-        color: #3A7E89;
+        color: black;
         white-space: pre-wrap;
         word-wrap: break-word;
         text-align: justify;
@@ -258,7 +268,7 @@ button{
         font-size: xx-large;
     }
     .infoblog h6 {
-        color: white;
+        color: black;
         white-space: pre-wrap;
         word-wrap: break-word;
         text-align: justify;

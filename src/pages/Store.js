@@ -473,7 +473,9 @@ function Store  ()  {
         <div className="text-line">
           
           {!isLoggedIn && (
-            <Link to="/authentication">{translations[language]?.login}</Link>
+             <div className='logindiv'>
+             <Link  to="/authentication">{translations[language]?.login}</Link>
+         </div>
           )}
         </div>
 
@@ -600,14 +602,13 @@ function Store  ()  {
                 </div>
                 <div className='price'>{`$${product.price}`}</div>
               </div>
-             {isLoggedIn &&  <button
+              <button
   className="proBtn"
   onClick={() => handleAddToCart(product.id, product)}
 >
   add to cart
 </button>
               
-               }
              
             </div>
           </div>
@@ -618,6 +619,7 @@ function Store  ()  {
           <div className='storeside'>
             <p></p>
           <div>
+          <h5 style={{color : 'black'}}>filter by category</h5>
           <div className='rateFilter'>
           <button
                     color="primary"
@@ -646,8 +648,8 @@ function Store  ()  {
             <div><CiStar /> one Only</div>
   </div>*/}
 
-  <h5 style={{color : 'white'}}>filter by price : {priceRange.max}</h5>
-   <div className="range-slider">
+  <h5 style={{marginTop: '50px' , color : 'black'}}>filter by price : {priceRange.max}</h5>
+   <div  className="range-slider">
       <input
         type="range"
         min="0"

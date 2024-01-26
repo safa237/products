@@ -1,5 +1,5 @@
 #slider {
-    margin-top: 50px;
+    margin-top: 5px;
   }
 .height-300 {
     height: 200px;
@@ -10,7 +10,7 @@
 }
 #slider .carousel-inner .carousel-item img {
   height: 100%;
-  background: lightgray 50% / cover no-repeat;
+  background: white;
 
 }
 

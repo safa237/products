@@ -109,7 +109,7 @@ const ReviewDialog = ({ isOpen, onCancel , productId  }) => {
            
             <div  className="grey-container">
           <div className='header-container  '>
-            <div>
+            <div >
               <button style={{marginTop: '3em'}} onClick={handleViewProductClick}>View Product</button>
             </div>
 

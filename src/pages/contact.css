@@ -104,9 +104,9 @@ input :focus{
     outline: none;
     border: none;
 }
-input ::placeholder{
+/*input ::placeholder{
     color: #3EBF87;
-}
+}*/
 @media(max-width: 870px){
     .flexcontact{
         display: flex;

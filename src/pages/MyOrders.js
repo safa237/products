@@ -31,6 +31,7 @@ function MyOrders() {
 
       const [currentStep, setCurrentStep] = useState(1); // Set the initial step
   const [showWizard, setShowWizard] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
 
   const getStepContent = (stepNumber) => {
     if (currentStep >= stepNumber) {
@@ -50,8 +51,13 @@ function MyOrders() {
   };
 
   const handleDetailsClick = () => {
+    setShowDetails(!showDetails);
+  };
+
+  const handleWizardClick = () => {
     setShowWizard(!showWizard);
   };
+
   const handleLanguageChange = (e) => {
     const selectedLanguage = e.target.value;
     dispatch(setLanguage(selectedLanguage));
@@ -75,14 +81,51 @@ function MyOrders() {
       {/* Green Container */}
       <div className="green-containerr">
         <div className='home-containerr testtt'>
+        <div className="myprdersParagraph">
+            <h1>My Orders</h1>
+            <span>View and edit all your pending Delivered and Returned Orders here.</span>
+          </div>
         <div className="myOrders">
       <div className="orderInfo">
         <div>name</div>
         <div>order placed</div>
         <div>total price</div>
-        <button onClick={handleDetailsClick}> {translations[language]?.track}</button>
+        <div style={{cursor: "pointer"}} onClick={handleDetailsClick}>show details :</div>
+       
       </div>
-      {showWizard && (
+      
+    </div>
+    {showDetails && (
+        <div className="">
+          <div className="headerdetails">
+        <div className="headerdetailsflex">
+          <div><p>Paiement when recieving</p></div>
+          <div >
+          <div className="orderInfo">
+            <button onClick={handleWizardClick}> {translations[language]?.track}</button>
+            </div>
+          </div>
+          </div>
+          <hr/>
+          <div className="orderInfo">
+        <div>image</div>
+        <div>quantity</div>
+        <div>unit price</div>
+        <div>total price</div>
+       
+          </div>
+          <div className="orderInfo">
+        <div>image</div>
+        <div>quantity</div>
+        <div>unit price</div>
+        <div>total price</div>
+       
+          </div>
+        </div>
+        
+      </div>
+    )}
+    {showWizard && (
         <section className="step-wizard">
           <ul className="step-wizard-list">
   <li
@@ -116,7 +159,6 @@ function MyOrders() {
 </ul>
         </section>
       )}
-    </div>
         </div>
         </div>
         </div>

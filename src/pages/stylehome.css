@@ -2,7 +2,7 @@
 
 /* Container Styles */
 body{
-    background: linear-gradient( #f8f4f4, #FFFFFF);
+    background-color: #fff;
     overflow-y: hidden;
     overflow-x: hidden;
   }
@@ -81,14 +81,14 @@ body{
       margin-top: 10px;
     }
     .text-line a{
-      color: #3A7E89;
+      color: white;
       font-family: Inter;
       font-size: 20px;
       font-style: normal;
       font-weight: 200;
       line-height: normal;
       text-decoration: none;
-      margin-left: 35px;
+     
     }
     .search-container{
       margin-left: 15em;
@@ -97,10 +97,8 @@ body{
     
     /* Green Container Styles */
     .green-containerr {
-      border-top-left-radius: 150px;
-      border-top-right-radius: 150px;
-      background: linear-gradient(to right, #52B443, #3EBF87);
-
+    
+      background: #F8F8F8;
       bottom: 0;
       overflow-y: hidden;
     }
@@ -114,10 +112,7 @@ body{
       overflow-y: hidden;
     }
     .green-containerr {
-  border-top-left-radius: 150px;
-  border-top-right-radius: 150px;
-  background: linear-gradient(to right, #3EBF87, #52B443CC); 
- 
+  background: #F8F8F8; 
 }
 
 
@@ -144,7 +139,8 @@ body{
       right: 10px;
       display: flex;
       flex-direction: column;
-  
+      margin-top: 10px;
+      margin-right: 10px;
     }
    
     .favorite-icon,
@@ -160,6 +156,9 @@ body{
     
     .favorite-icon-active {
       color: #ff0000; /* Red color for the active (in wishlist) heart icon */
+    }
+    .card{
+      border-radius: 15%;
     }
     
     .card-img img {
@@ -189,20 +188,20 @@ body{
     margin-top: 35px;
   }
   .titleProduct h1{
-    color: #FFFDFD;
-font-family: Inter;
-font-size: 32px;
-font-style: normal;
-font-weight: 700;
-line-height: normal;
+    color: #050404;
+    font-family: Inter;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
   }
   .titleProduct h2{
-    color: #FFFDFD;
-font-family: Inter;
-font-size: 30px;
-font-style: normal;
-font-weight: 700;
-line-height: normal;
+    color: #050404;
+    font-family: Inter;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
   }
   .popular{
       text-align: center;
@@ -493,10 +492,10 @@ line-height: normal;
     margin-right: 10px;
   }
 
-  .green-container {
+ /* .green-container {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
-  }
+  }*/
   .flex-footer {
     flex-direction: row;
     align-items: start; /* Center items in the column */

@@ -13,6 +13,7 @@ import email from '../images/Email icon.png';
 import address from '../images/Location icon.png';
 import phone from '../images/phone icon.png';
 import { Link } from 'react-router-dom';
+import './privacypolicy.css';
 
 function PrivacyPolicy() {
     const dispatch = useDispatch();

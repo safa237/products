@@ -3,7 +3,7 @@ import './stylehome.css';
 import './blog.css';
 import { Link } from 'react-router-dom';
 import { FaHeart } from 'react-icons/fa';
-import { AiOutlineDislike } from 'react-icons/ai';
+import { AiOutlineDislike, AiOutlineLike } from 'react-icons/ai';
 import { IoMdShare } from 'react-icons/io';
 import logo from '../images/Vita Logo2.png';
 import lotion2 from '../images/lotion2.png';
@@ -192,6 +192,7 @@ function Blog() {
                 </div>
                 <div className='infoblog'>
                   <h5>{selectedBlog ? selectedBlog.title : blogs[0].title}</h5>
+                  
                   <div className='share'>
                     <input
                       ref={pageLinkRef}
@@ -201,12 +202,14 @@ function Blog() {
                       style={{ position: 'absolute', left: '-9999px' }}
                     />
                     <IoMdShare
-                      style={{ fontSize: '40px', cursor: 'pointer' }}
+                      style={{ fontSize: '35px', cursor: 'pointer' }}
                       className='icon'
                       onClick={handleCopyLink}
                     />
                     {isCopied && <span style={{ marginLeft: '5px', color: '#3A7E89' }}>Link copied!</span>}
                   </div>
+                 
+                  
                   <h6>{selectedBlog ? selectedBlog.descreption : blogs[0].descreption.substring(0, 525)}...</h6>
                   <div className='readArticle'>
                      <button onClick={() => handleBlogClick(blogs[0])} className="read">

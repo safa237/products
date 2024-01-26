@@ -1,10 +1,13 @@
+.bg-body-tertiary{
+  background-color: #FFF;
+}
 .search-dropdown {
   position: fixed;
   top: 65px; 
   left: 380px;
   transform: translateX(-50%);
   width: 280px;
-  background: #3a7e89;
+  background: #61DAA2;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   overflow-y: hidden;
@@ -15,7 +18,7 @@
 .product-dropdown-item {
   padding: 10px;
   cursor: pointer;
-  color: #3a7e89;
+  color: #61DAA2;
   width: 100%;
   box-sizing: border-box;
   border-bottom: 1px solid #ccc;
@@ -23,7 +26,7 @@
     border-bottom: none;
   }
   &:hover {
-    background-color: #3a7e89;
+    background-color: #61DAA2;
   }
 }
 .autocom-box{
@@ -41,11 +44,11 @@
 }
 .wrapper input{
   position: relative;
-  border: 1px solid #3a7e89;
+  border: 1px solid black;
   width: 270px;
   margin-left: -1px;
   margin-top: 25px;
-  border: 1px solid #3a7e89;
+  border: 1px solid black;
   border-top-right-radius:15px ;
   border-bottom-right-radius:15px ;
   padding-left: 10px;
@@ -54,10 +57,10 @@
   margin-bottom: 15px;
   width: 100%;
   border-radius: 10px;
-  border: 1px solid #3a7e89;
+  border: 1px solid black;
 }
 .searchicon{
-  color: #3a7e89;
+  color: black;
   margin-left: -20px;
   margin-top: 30px;
   position: absolute;
@@ -78,8 +81,8 @@
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  background-color: #3a7e89;
-  color: #3a7e89;
+  background-color: #61DAA2;
+  color: #61DAA2;
   border-radius: 5px;
   width: 70px;
   border-top-left-radius:10px ;
@@ -88,9 +91,9 @@
 }
 
 .selectCat{
-  border: 1px solid #3a7e89;
-  background-color: #3a7e89;
-  color: #3a7e89;
+  border: 1px solid #61DAA2;
+  background-color: #61DAA2;
+  color: #61DAA2;
 }
 
 
@@ -116,7 +119,7 @@ margin-right: 10px;
 position: absolute;
 top: 30px; /* Adjust as needed */
 right: 0;
-background-color: #3a7e89;
+background-color: #61DAA2;
 box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 padding: 10px;
 z-index: 100;
@@ -151,9 +154,9 @@ border-radius: 4px;
 
 .dropdown-list {
 list-style: none;
-background-color: #3a7e89;
+background-color: #61DAA2;
 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-border: 1px solid #3a7e89;
+border: 1px solid #61DAA2;
 
 border-radius: 4px;
 position: fixed;
@@ -174,12 +177,12 @@ display: block;
 }
 
 .filterbycat.selected {
-background-color: #3a7e89;
+background-color: #61DAA2;
 }
 
 .dropdown-button{
 color: white;
-background-color: #3a7e89;
+background-color: #61DAA2;
 border-radius: 50%;
 min-width: 150px;
 height: 30px;
@@ -204,7 +207,7 @@ border-bottom-right-radius: 10px;
 
 .custom-select li {
 text-align: center;
-background-color: #3a7e89;
+background-color: black;
 color: white;
 display: flex; 
 align-items:flex-start ; 
@@ -340,12 +343,12 @@ background-color: transparent;
     font-size: inherit;
     line-height: inherit;
     border-radius: 10px;
-    border: 1px solid #3a7e89;
+    border: 1px solid black;
 }
 
 .dropdown-select {
   color: white;
-  background-color: #3A7E89;
+  background-color: #61DAA2;
   height: 25px;
   border: none;
   outline: none;
@@ -366,7 +369,7 @@ background-color: transparent;
   color: white;
 }
 .input-with-icon input::placeholder {
-  color: #3a7e89;
+  color: black;
 }
 
 .input-with-icon {
@@ -397,7 +400,7 @@ background-color: transparent;
   background-color: transparent;
   border: none;
   outline: none;
-  color: #3A7E89;
+  color: black;
   font-weight: 700;
   font-size: 18px;
 }
@@ -422,17 +425,17 @@ background-color: transparent;
 
 .wrapper input{
   position: relative;
-  border: 1px solid #3a7e89;
+  border: 1px solid gray;
   width: 100px;
   margin-left: -5px;
   margin-top: 25px;
-  border: 1px solid #3a7e89;
+  border: 1px solid gray;
   border-bottom-right-radius:15px;
   border-bottom-right-radius:15px;
   padding-left: 10px;
 }
 .searchicon{
-  color: #3a7e89;
+  color: black;
   margin-left: -20px;
   margin-top: 30px;
   position: absolute;
@@ -465,8 +468,7 @@ background-color: transparent;
 display: flex;
 flex-direction: column;
 width: 100%;
-margin-left: 20px;
-margin-right: 20px;
+
 }
 .flexNavone{
 width: 100%;
@@ -494,7 +496,7 @@ margin-left: 10px;
 padding-left: 10px;
 }
 .text-line a{
-  color: #3a7e89;
+  color: black;
 }
 .navPages{
 display: flex;
@@ -503,10 +505,18 @@ justify-content: space-between;
 width: 1000px;
 }
 .navPages a{
-  color: #3A7E89;
+  color: black;
   text-decoration: none;
   font-weight: 700;
   font-size: 18px;
+}
+.logindiv{
+  background-color: #61DAA2;
+  padding: 10px;
+  border-radius: 15px;
+}
+.logindiv a{
+  color: white;
 }
 
 @media(max-width: 870px){

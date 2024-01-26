@@ -34,7 +34,7 @@
 }
 .infoabout h5{
     margin-top: 100px;
-    color: #FFF;
+    color: black;
 
 font-family: Inter;
 font-size: 35px;
@@ -120,7 +120,7 @@ line-height: normal;
     justify-content: space-between;
 }
 .important h1 , .information h1{
-    color: #FFF;
+    color: black;
 font-family: Inter;
 font-size: 20px;
 font-style: normal;

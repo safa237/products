@@ -56,7 +56,7 @@ function ProfileInfo() {
         <div className="header-container">
           <div className="userinfoContainer">
             <div className="imgInfo">
-              <FaUser style={{ fontSize: '80px', color: '#3A7E89' }} />
+              <FaUser style={{ fontSize: '60px', color: 'black' }} />
               <h5>username@gmail.com</h5>
               <button onClick={handleEditClick}>Edit</button>
             </div>
@@ -66,11 +66,13 @@ function ProfileInfo() {
                     type="text"
                     name="firstName"
             placeholder="First Name"
+            style={{'::placeholder': { color: 'black' }}}
           />
           <input className="name"
             type="text"
             name="Last Name"
             placeholder="Last Name"
+            style={{'::placeholder': { color: 'black' }}}
           />
                  </div>
 
@@ -79,11 +81,13 @@ function ProfileInfo() {
                     type="text"
                     name="Email"
             placeholder="Email"
+            style={{'::placeholder': { color: 'black' }}}
           />
           <input className="name"
             type="text"
             name="phone"
             placeholder="Phone"
+            style={{'::placeholder': { color: 'black' }}}
           />
                  </div>
 
@@ -92,11 +96,13 @@ function ProfileInfo() {
                     type="text"
                     name="Country"
             placeholder="Country"
+            style={{'::placeholder': { color: 'black' }}}
           />
           <input className="name"
             type="text"
             name="postal code"
             placeholder="Postal Code"
+            style={{'::placeholder': { color: 'black' }}}
           />
                  </div>
 
@@ -105,11 +111,13 @@ function ProfileInfo() {
             type="text"
             name="lastName"
             placeholder="City"
+            style={{'::placeholder': { color: 'black' }}}
           />
                  <input className="name"
                     type="text"
                     name="street"
             placeholder="Street"
+            style={{'::placeholder': { color: 'black' }}}
           />
          
                  </div>
