@@ -1,5 +1,8 @@
 import React from 'react';
 import logo from '../images/Vita Logo2.png' ;
+import loginimg from '../images/loginIcon.png';
+import logoutimg from '../images/logouticon.png';
+import cartimg from '../images/Cart.png';
 import product from '../images/product.png' ;
 import { FaSearch } from 'react-icons/fa';
 import { FaHeart, FaShoppingCart , FaEye } from 'react-icons/fa';
@@ -172,8 +175,17 @@ function NavHeader({ userId , handleProductClick }) {
 
   
   return (
+    <>
+    <div className='flexLanguage '>
+        <div className='languageInnav rightAlign'>
+      <select className='selectLang ' value={language} onChange={handleLanguageChange}>
+          <option value="english">English</option>
+          <option value="french">Française</option>
+          <option value="arabic">لغه عربيه</option>
+        </select>
+        </div>
+      </div>
     <Navbar  collapseOnSelect expand="lg" className=" bg-body-tertiary">
-      
   <Container >
     <div  className='flexNav'>
       <div  className='flexNavone'>
@@ -215,29 +227,33 @@ function NavHeader({ userId , handleProductClick }) {
           <img src={logo} alt="Logo" />
         </Navbar.Brand>
         <div className='flexRightNav'>
-        <select className='selectLang' value={language} onChange={handleLanguageChange}>
-          <option value="english">English</option>
-          <option value="french">Française</option>
-          <option value="arabic">لغه عربيه</option>
-        </select>
+       
 
         <div className="text-line">
           
           {!isLoggedIn && (
-            <div className='logindiv'>
-                <Link  to="/authentication">{translations[language]?.login}</Link>
+            <div className='logindiv flexlogindiv '>
+               <div> <img style={{width: '15px' , height: '15px'}} src={loginimg} alt='user'/> </div>
+               <div> <Link  to="/authentication">Login</Link> </div>
             </div>
           )}
         </div>
 
-        <div className="text-line">
+        <div className="text-line text-linelogout">
+          
           {isLoggedIn && (
+           <>
+             <Link to="/cart" className="cart-link">
+             <img style={{marginRight : '10px' , width: '30px' , height: '30px'}} src={cartimg} alt='cart'/>
+           </Link>
             <Link>
               <div className="user-profile" onClick={toggleSidebar}>
-                <FaUser />
+              <img style={{width: '40px' , height: '40px'}} src={logoutimg} alt='user'/>
               </div>
             </Link>
+            </>
           )}
+         
         </div>
       </div>
       </div>
@@ -280,7 +296,7 @@ function NavHeader({ userId , handleProductClick }) {
 
   <SidebarUser isOpen={showSidebar} onClose={toggleSidebar} handleLogout={handleLogout} />
 </Navbar>
-
+</>
   );
 }
 

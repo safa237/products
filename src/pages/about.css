@@ -65,7 +65,8 @@ line-height: normal;
     margin-left: 90px;
 }
 .flexabout .cardabout{
-    background-color: white;
+    background-color: #fff;
+    box-shadow: 10px 5px 10px #8080809e;
     width: 20%;
     min-height: 350px;
     display: flex;
@@ -74,6 +75,8 @@ line-height: normal;
     align-items: center;
     text-align: center;
     border-radius: 25px;
+    margin-right: 10px;
+    margin-bottom: 10px;
 }
 .cardabout .imgcardabout{
     background-color: #3EBF87;

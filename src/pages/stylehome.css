@@ -2,7 +2,7 @@
 
 /* Container Styles */
 body{
-    background-color: #fff;
+  
     overflow-y: hidden;
     overflow-x: hidden;
   }
@@ -97,12 +97,10 @@ body{
     
     /* Green Container Styles */
     .green-containerr {
-    
-      background: #F8F8F8;
+      background: #F8F8F8; 
       bottom: 0;
       overflow-y: hidden;
     }
-
    
     .home-containerr {
       position: relative;
@@ -111,9 +109,7 @@ body{
       margin-right: 50px;
       overflow-y: hidden;
     }
-    .green-containerr {
-  background: #F8F8F8; 
-}
+  
 
 
     .card-container {

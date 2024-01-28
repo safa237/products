@@ -30,7 +30,9 @@ import phone from '../images/phone icon.png';
 import SidebarUser from '../components/SidebarUser';
 import { addToWishlist , removeFromWishlist } from '../rtk/slices/Wishlist-slice';
 import { clearWishlist } from '../rtk/slices/Wishlist-slice';
-
+import loginimg from '../images/loginIcon.png';
+import logoutimg from '../images/logouticon.png';
+import cartimg from '../images/Cart.png';
 import './store.css';
 
 function Store  ()  {
@@ -422,10 +424,20 @@ function Store  ()  {
     return (
       <div className="page-container">
       {/* Header Container */}
-      <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
-  <Container>
-    <div className='flexNav'>
-      <div className='flexNavone'>
+      <>
+    <div className='flexLanguage '>
+        <div className='languageInnav rightAlign'>
+      <select className='selectLang ' value={language} onChange={handleLanguageChange}>
+          <option value="english">English</option>
+          <option value="french">Française</option>
+          <option value="arabic">لغه عربيه</option>
+        </select>
+        </div>
+      </div>
+    <Navbar  collapseOnSelect expand="lg" className=" bg-body-tertiary">
+  <Container >
+    <div  className='flexNav'>
+      <div  className='flexNavone'>
 
       <div className='search-dropdown-container'>
   <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
@@ -464,28 +476,30 @@ function Store  ()  {
           <img src={logo} alt="Logo" />
         </Navbar.Brand>
         <div className='flexRightNav'>
-        <select className='selectLang' value={language} onChange={handleLanguageChange}>
-          <option value="english">English</option>
-          <option value="french">Française</option>
-          <option value="arabic">لغه عربيه</option>
-        </select>
+       
 
         <div className="text-line">
           
           {!isLoggedIn && (
-             <div className='logindiv'>
-             <Link  to="/authentication">{translations[language]?.login}</Link>
-         </div>
+            <div className='logindiv flexlogindiv '>
+               <div> <img style={{width: '15px' , height: '15px'}} src={loginimg} alt='user'/> </div>
+               <div> <Link  to="/authentication">Login</Link> </div>
+            </div>
           )}
         </div>
 
         <div className="text-line">
           {isLoggedIn && (
+            <>
+             <Link to="/cart" className="cart-link">
+             <img style={{marginRight : '10px' , width: '30px' , height: '30px'}} src={cartimg} alt='cart'/>
+           </Link>
             <Link>
               <div className="user-profile" onClick={toggleSidebar}>
-                <FaUser />
+              <img style={{width: '40px' , height: '40px'}} src={logoutimg} alt='user'/>
               </div>
             </Link>
+            </>
           )}
         </div>
       </div>
@@ -502,7 +516,7 @@ function Store  ()  {
           <Link to="/blog">{translations[language]?.blog}</Link>
 
 
- {/*<select
+<select
   value={selectedCategoryIdTwo}
   onChange={(e) => handleSelectTwo(parseInt(e.target.value))}
   className="dropdown-selectTwo"
@@ -513,22 +527,7 @@ function Store  ()  {
       {category.name}
     </option>
   ))}
-  </select>*/}
-
-
-  <select
-    value={selectedCategoryId}
-    onChange={(e) => handleCategoryFilter(parseInt(e.target.value))}
-    className="dropdown-selectTwo"
-  >
-    <option value={null}>Categories</option>
-    {categories.map(category => (
-      <option key={category.id} value={category.id}>
-        {category.name}
-      </option>
-    ))}
-  </select>
-
+</select>
 
 
           <Link to="/about">{translations[language]?.about}</Link>
@@ -544,6 +543,7 @@ function Store  ()  {
 
   <SidebarUser isOpen={showSidebar} onClose={toggleSidebar} handleLogout={handleLogout} />
 </Navbar>
+</>
   
       {/* Green Container */}
       <div className="green-containerr">
@@ -618,8 +618,9 @@ function Store  ()  {
            
           <div className='storeside'>
             <p></p>
-          <div>
+          <div >
           <h5 style={{color : 'black'}}>filter by category</h5>
+          <div className='filterCatdiv'>
           <div className='rateFilter'>
           <button
                     color="primary"
@@ -638,6 +639,7 @@ function Store  ()  {
       {category.name}
     </button>
   ))}
+</div>
 </div>
          {/*<p style={{marginTop:'5em'}}>filter by category</p>
           <div className='rateFilter'>

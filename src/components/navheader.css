@@ -1,5 +1,6 @@
-.bg-body-tertiary{
-  background-color: #FFF;
+
+.navPagesContainer{
+  background-color: #FCFCFC; 
 }
 .search-dropdown {
   position: fixed;
@@ -215,7 +216,12 @@ justify-content: flex-start;
 margin-left: -10px;
 }
 .selectLang{
-background-color: transparent;
+  background-color: #3EBF87;
+  border: 1px rgba(255, 255, 255, 0.514);
+  outline: none;
+  color: #FFFFFF;
+  margin-bottom: 3px;
+  margin-right: 7em;
 }
 
 
@@ -476,6 +482,7 @@ display: flex;
 flex-direction: row;
 align-items: center;
 justify-content: space-between;
+background-color: #fff;
 }
 .flexNavtwo{
 width: 100%;
@@ -486,11 +493,11 @@ justify-content: space-between;
 
 }
 
-.flexRightNav{
+/*.flexRightNav{
 display: flex;
 flex-direction: row;
 justify-content: space-between;
-}
+}*/
 .text-line {
 margin-left: 10px;
 padding-left: 10px;
@@ -502,7 +509,7 @@ padding-left: 10px;
 display: flex;
 flex-direction: row;
 justify-content: space-between;
-width: 1000px;
+width: 1500px;
 }
 .navPages a{
   color: black;
@@ -510,14 +517,98 @@ width: 1000px;
   font-weight: 700;
   font-size: 18px;
 }
+/*.text-linelogout{
+  margin-top: -1px;
+}*/
 .logindiv{
   background-color: #61DAA2;
+  height: 45px;
+  width: 100px;
   padding: 10px;
   border-radius: 15px;
 }
 .logindiv a{
   color: white;
+  font-size: 20px;
+  margin-left: 10px;
 }
+.languageInnav{
+  background-color: #3EBF87;
+}
+
+.rightAlign {
+  display: flex;
+  justify-content: flex-end;
+}
+.flexlogindiv{
+  display: flex;
+  flex-direction: row;
+}
+
+
+
+/* Add these styles to your CSS or use a CSS-in-JS solution */
+.user-profile-dropdown {
+  display: flex;
+  align-items: center;
+}
+
+.user-profile {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin-left: 8px; /* Adjust the margin as needed */
+}
+
+.user-profile-image {
+  width: 40px; /* Adjust the width as needed */
+  height: 40px; /* Adjust the height as needed */
+  border-radius: 50%; /* Makes the image round */
+  margin-right: 8px; /* Adjust the margin as needed */
+}
+
+
+
+.header-container {
+  position: relative;
+}
+
+.user-profile-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: block;
+  position: absolute;
+  background-color: #fff; /* Set your preferred background color */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+  top: 100%; /* Position the dropdown below the image */
+  right: 0; /* Position the dropdown to the right of the image */
+  height: 500px;
+}
+
+.dropdown-content div {
+  padding: 10px;
+  border-bottom: 1px solid #ccc; 
+}
+
+.user-profile-image {
+  cursor: pointer;
+}
+
+
+.text-line {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+
 
 @media(max-width: 870px){
   .searchicon {

@@ -7,7 +7,10 @@
     padding: 10px;
     display: none;
     width: 200px;
+    margin-top: 35px;
+
   }
+  
   
   .sidebaruser.open {
     display: block;
@@ -16,6 +19,7 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border: 1px solid #ccc;
     border-radius: 15px;
+   
     position: fixed;
       top: 65px; 
       right: -50px;

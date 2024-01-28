@@ -379,7 +379,7 @@ function Home() {
           {!loading && (
             <div className="card-container">
               {filteredProducts.map((product) => (
-                <div style={{ borderRadius: '15%'  }} className="card" key={product.id}>
+                <div style={{ borderRadius: '15%' , backgroundColor : '#fff' ,marginBottom : '10px', boxShadow : '5px 5px 5px #8080809e'  }} className="card" key={product.id}>
                   <div className="card-body">
                     <div className="card-icons">
                      {/*<FaHeart

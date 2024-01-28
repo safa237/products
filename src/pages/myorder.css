@@ -1,8 +1,10 @@
 .myOrders{
     margin-top: 10px;
-    width: 100%;
-    background-color: white;
+    width: 99%;
+    margin-right: 10px;
+    background-color: #fff;
     border-radius: 35px;
+    box-shadow: 10px 5px 10px #8080809e;
 }
 .myprdersParagraph{
     margin-bottom: 25px;
@@ -188,15 +190,18 @@ line-height: normal;
     transition: opacity 0.3s ease-in-out;
 }
 .headerdetails{
-    background-color: white;
+    background-color: #fff;
+    margin-right: 15px;
     margin-top: 15px;
     padding-left: 7em;
     padding-right: 7em;
+    box-shadow: 10px 5px 10px #8080809e;
 }
 .headerdetailsflex{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+   
 }
 .headerdetailsflex p{
     color: #3EBF87;
