@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/products/static/css/main.85057558.css",
-    "main.js": "/products/static/js/main.657c456c.js",
+    "main.css": "/products/static/css/main.1c8a011a.css",
+    "main.js": "/products/static/js/main.f05e4cd2.js",
     "static/js/787.15e37750.chunk.js": "/products/static/js/787.15e37750.chunk.js",
     "static/media/slider1.png": "/products/static/media/slider1.006f0102d809607b3bc0.png",
     "static/media/slider2.png": "/products/static/media/slider2.ef3f8ab3f548ad59b7de.png",
@@ -13,12 +13,12 @@
     "static/media/Vita Logo2.png": "/products/static/media/Vita Logo2.04658a8b7b775128f751.png",
     "static/media/product.png": "/products/static/media/product.2e4bc1dbdd42b81d6956.png",
     "index.html": "/products/index.html",
-    "main.85057558.css.map": "/products/static/css/main.85057558.css.map",
-    "main.657c456c.js.map": "/products/static/js/main.657c456c.js.map",
+    "main.1c8a011a.css.map": "/products/static/css/main.1c8a011a.css.map",
+    "main.f05e4cd2.js.map": "/products/static/js/main.f05e4cd2.js.map",
     "787.15e37750.chunk.js.map": "/products/static/js/787.15e37750.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.85057558.css",
-    "static/js/main.657c456c.js"
+    "static/css/main.1c8a011a.css",
+    "static/js/main.f05e4cd2.js"
   ]
 }
