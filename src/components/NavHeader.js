@@ -185,8 +185,8 @@ function NavHeader({ userId , handleProductClick }) {
         </select>
         </div>
       </div>
-    <Navbar  collapseOnSelect expand="lg" className=" bg-body-tertiary">
-  <Container >
+    <Navbar collapseOnSelect expand="lg" >
+  <Container className='navPagesContainer no-margin'>
     <div  className='flexNav'>
       <div  className='flexNavone'>
 

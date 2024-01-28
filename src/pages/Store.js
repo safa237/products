@@ -434,7 +434,7 @@ function Store  ()  {
         </select>
         </div>
       </div>
-    <Navbar  collapseOnSelect expand="lg" className=" bg-body-tertiary">
+    <Navbar  collapseOnSelect expand="lg" >
   <Container >
     <div  className='flexNav'>
       <div  className='flexNavone'>

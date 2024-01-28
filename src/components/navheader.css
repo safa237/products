@@ -1,5 +1,13 @@
-.bg-body-tertiary{
-  background-color: #FCFCFC;
+.navbar-custom-bg {
+  background-color: blue !important; /* Change 'blue' to your desired color */
+}
+.bg-body-tertiary {
+  --bs-bg-opacity: 1;
+  background-color: red;
+}
+.no-margin {
+  margin-left: 0;
+  margin-right: 0;
 }
 .navPagesContainer{
   background-color: #FCFCFC; 
