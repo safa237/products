@@ -92,3 +92,19 @@
   margin-left: 25px;
 }
 
+
+
+
+
+
+@media only screen and (max-width: 767px) {
+  .sidebaruser.open {
+    top: 180px;
+  }
+}
+@media only screen and (max-width: 1199px) and (min-width: 768px) {
+  .sidebaruser.open {
+    top: 110px;
+    right: -100px;
+  }
+}

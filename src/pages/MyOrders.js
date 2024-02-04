@@ -21,9 +21,7 @@ function MyOrders() {
       setSearchTerm(term.toLowerCase());
     };
   
-    const filteredProducts = allProducts.filter((product) =>
-      product.title.toLowerCase().includes(searchTerm)
-    );
+   
     const handleProductClick = (productId) => {
       navigate(`/home/product/${productId}`);
     };
@@ -74,7 +72,7 @@ function MyOrders() {
       <NavHeader
         searchTerm={searchTerm}
         handleSearchChange={handleSearchChange}
-        filteredProducts={filteredProducts}
+       
         handleProductClick={handleProductClick}
       />
 

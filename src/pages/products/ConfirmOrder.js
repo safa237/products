@@ -58,11 +58,7 @@ function ConfirmOrder() {
     setSearchTerm(term.toLowerCase());
   };
 
-  // Filter the products based on the search term entered in the Cart page
-  const filteredProducts = allProducts.filter((product) =>
-    product.title.toLowerCase().includes(searchTerm)
-  );
-
+ 
   const handleProductClick = (productId) => {
     navigate(`/home/product/${productId}`);
   };
@@ -114,7 +110,7 @@ function ConfirmOrder() {
        <NavHeader
         searchTerm={searchTerm}
         handleSearchChange={handleSearchChange}
-        filteredProducts={filteredProducts}
+       
         handleProductClick={handleProductClick}
       />
 

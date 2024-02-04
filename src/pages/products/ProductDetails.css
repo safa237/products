@@ -34,7 +34,7 @@
 }
 .productFooter{
   height: 70px;
-  background-color: white;
+  background-color: #3EBF87;
   border-top-left-radius: 150px;
   border-top-right-radius: 150px;
   overflow-y: hidden;
@@ -64,11 +64,11 @@
   font-weight: bold;
 }
 .review button{
-  background: linear-gradient(to right, #3EBF87, #52B443CC); 
+  background: white; 
   height: 50px;
   width: 100px;
   border-radius: 15px;
-  color: white;
+  color: black;
   margin-left: 5px;
 }
 .cart{
@@ -83,11 +83,11 @@
 }
 .detailsflexabout h1{
   font-size: large;
-  color: white;
+  color: black;
 }
 .detailsflexabout p{
   text-align: start;
-  color: white;
+  color: black;
 }
 .detailsflex .detailsfleximg{
   height: 90%;
@@ -102,11 +102,11 @@
 
 .detailsINFO h1{
   font-size: large;
-  color: white;
+  color: black;
 }
 .detailsINFO span{
   font-size: medium;
-  color: white;
+  color: black;
 }
 
 

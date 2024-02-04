@@ -34,9 +34,7 @@ function About() {
     setSearchTerm(term.toLowerCase());
   };
 
-  const filteredProducts = allProducts.filter((product) =>
-    product.title.toLowerCase().includes(searchTerm)
-  );
+  
 
   const handleProductClick = (productId) => {
     navigate(`/home/product/${productId}`);
@@ -60,7 +58,7 @@ function About() {
       <NavHeader
         searchTerm={searchTerm}
         handleSearchChange={handleSearchChange}
-        filteredProducts={filteredProducts}
+        
         handleProductClick={handleProductClick}
       />
 

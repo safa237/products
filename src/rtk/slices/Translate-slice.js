@@ -3,9 +3,9 @@ import { createSlice } from '@reduxjs/toolkit';
 const translationSlice = createSlice({
   name: 'translation',
   initialState: {
-    language: 'english', 
+    language: 'en', 
     translations: {
-      "english": {
+      "en": {
         "home" : "Home",
         "store" : "Store",
         "about" : "About Us",
@@ -60,7 +60,7 @@ const translationSlice = createSlice({
         "learnmore" : "Learn more through our product categories",
 
       },
-      "french": {
+      "fr": {
         "home" : "Maison",
         "store" : "Magasin",
         "about" : "A propos de nous",
@@ -115,7 +115,7 @@ const translationSlice = createSlice({
         "learnmore" : "Apprenez-en davantage à travers nos catégories de produits",
 
       },
-      "arabic": {
+      "ar": {
         "home" : "الرئيسيه",
         "store" : "المتجر",
         "about" : "معلومات عنا",

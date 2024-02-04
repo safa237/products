@@ -165,6 +165,18 @@ body{
       margin-top: -5px;
       margin-bottom: 35px;
     }
+   /* .price {
+    
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }*/
+    
+    .old-price {
+      text-decoration: line-through;
+      color: #808080;
+      margin-top: 4px;
+    }
    .card-info h2{
       color: #3A7E89;
     }

@@ -1,172 +1,3 @@
-/*import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { FaSearch } from "react-icons/fa";
-import { FaPlus , FaMinus } from "react-icons/fa";
-import logo from '../../images/Vita Logo2.png' ;
-import { Link } from "react-router-dom";
-import StarRating from "../rate/StarRating";
-import ReviewDialog from "./ReviewDialog";
-import { addToCart } from "../../rtk/slices/Cart-slice";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import NavHeader from "../../components/NavHeader";
-import { useNavigate } from "react-router-dom";
-import './ProductDetails.css';
-
-function ProductDetails({rating}) {
-  const navigate = useNavigate();
-  const api_url = "https://mostafaben.bsite.net/api/Products";
-  const [product, setProduct] = useState({});
-  const params = useParams();
-  console.log(params);
-  const handleProductClick = (productId) => {
-    navigate(`/home/product/${productId}`);
-  };
-  useEffect(() => {
-    fetch(`${api_url}/${params.productId}`)
-      .then((res) => res.json())
-      .then((product) => setProduct(product));
-  }, [handleProductClick]);
- 
-
-  const [totalPrice, setTotalPrice] = useState(0);
-
-  const [quantity, setQuantity] = useState(0);
-  const allProducts = useSelector((state) => state.products);
-
-  const [searchTerm, setSearchTerm] = useState('');
-  const handleSearchChange = (e) => {
-    const term = e.target.value;
-    setSearchTerm(term.toLowerCase());
-  };
-
-  // Filter the products based on the search term entered in the Cart page
-  const filteredProducts = allProducts.filter((product) =>
-    product.title.toLowerCase().includes(searchTerm)
-  );
-
-  const handleIncrement = () => {
-    setQuantity(quantity + 1);
-  };
-
-  const handleDecrement = () => {
-    if (quantity > 0) {
-      setQuantity(quantity - 1);
-    }
-  };
-  const dispatch = useDispatch();
-
-const handleAddToCart = () => {
-  const cartItem = {
-    productId: product.id,
-    poster : product.poster ,
-    title: product.title,
-    quantity: quantity,
-    price: product.price,
-  };
-
-  dispatch(addToCart(cartItem));
-  setQuantity(0);
-    setTotalPrice(0);
-};
-
-
-  const handleDetailsClick = (selectedProduct) => {
-        
-    setDetailsOpen(true);
-  };
-
-  const handleCancelDetails = () => {
-    setDetailsOpen(false);
-  };
-const [detailsOpen, setDetailsOpen] = useState(false);
-
-
-
-
-  return (
-    <div className="detailsPage">
-      <NavHeader
-        searchTerm={searchTerm}
-        handleSearchChange={handleSearchChange}
-        filteredProducts={filteredProducts}
-        handleProductClick={handleProductClick}
-      />
-
-        <div className="green-containerr">
-          
-          <div className="header-container flexContent">
-            <div className="detailsflex">
-            <div className="detailsflexabout">
-              <h1>about this product : </h1>
-              <p></p>
-            </div>
-            <div className="detailsfleximg">
-            <div className="detailsIMG">
-            {product.poster && (
-             <img className="productImg"
-               src={`data:image/png;base64,${product.poster}`}
-               alt="Product poster"/>)}
-
-            </div>
-            <div className="detailsINFO">
-              <h1>Product Details: </h1>
-              <h1 style={{color: 'white'}}>Title : <span>{product.title}</span></h1>
-              <h1 style={{color: 'white'}}>descreption : <span>{product.descreption}</span></h1>
-              <h1 style={{color: 'white'}}>Brand:</h1>
-              <h1 style={{color: 'white'}}>Item Form:</h1>
-              <h1 style={{color: 'white'}}>Item Volume:</h1>
-              <h1 style={{color: 'white'}}>Special Ingredients:</h1>
-              <h1 style={{color: 'white'}}>Age Range:</h1>
-              <h1 style={{color: 'white'}}>Container Type:</h1>
-              <h1 style={{color: 'white'}}>Number Of Items:</h1>
-            </div>
-            </div>
-            </div>
-          </div>
-          <div className="productFooter">
-            <div className="header-container flexFooter">
-              <div className="review">
-                <button onClick={() => handleDetailsClick()}>Review</button>
-              </div>
-              <div className="middlefooter">
-                <StarRating rating={rating} />
-                <div style={{ marginLeft: "20px" }}>
-                  <h1>{product.price * quantity} $</h1>
-                </div>
-                <div className="counter">
-                  <button onClick={handleDecrement}>
-                    <FaMinus />
-                  </button>
-                  <span>{quantity}</span>
-                  <button onClick={handleIncrement}>
-                    <FaPlus />
-                  </button>
-                </div>
-              </div>
-              <div className="review cart">
-                <button onClick={handleAddToCart}>Add to Cart</button>
-              </div>
-            </div>
-          </div>
-          
-        </div>
-    
-        <ReviewDialog
-      isOpen={detailsOpen}
-      onCancel={handleCancelDetails}
-      productId={params.productId} 
-    />
-    </div>
-  );
-}
-
-export default ProductDetails;*/
-
-
-
-
-
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
@@ -180,22 +11,36 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import NavHeader from "../../components/NavHeader";
 import { useNavigate } from "react-router-dom";
+import { selectToken } from "../../rtk/slices/Auth-slice";
+import axios from "axios";
 import './ProductDetails.css';
 
 function ProductDetails({rating}) {
   const navigate = useNavigate();
-  const api_url = "https://mostafaben.bsite.net/api/Products";
-  const [product, setProduct] = useState({});
-  const params = useParams();
-  console.log(params);
+  const bearerToken = useSelector(selectToken);
+  const products = useSelector((state) => state.products.products);
+
   const handleProductClick = (productId) => {
     navigate(`/home/product/${productId}`);
   };
+
+  const { productId } = useParams();
+  const [productDetails, setProductDetails] = useState(null);
+
   useEffect(() => {
-    fetch(`${api_url}/${params.productId}`)
-      .then((res) => res.json())
-      .then((product) => setProduct(product));
-  }, [handleProductClick]);
+    const fetchProductDetails = async () => {
+      try {
+        const response = await fetch(`https://ecommerce-1-q7jb.onrender.com/api/v1/public/product/en/${productId}`);
+        const data = await response.json();
+        setProductDetails(data.data.product);
+        console.log('data is' ,data);
+      } catch (error) {
+        console.error('Error fetching product details:', error);
+      }
+    };
+
+    fetchProductDetails();
+  }, [productId]);
  
 
   const [totalPrice, setTotalPrice] = useState(0);
@@ -208,11 +53,7 @@ function ProductDetails({rating}) {
     const term = e.target.value;
     setSearchTerm(term.toLowerCase());
   };
-
-  // Filter the products based on the search term entered in the Cart page
-  const filteredProducts = allProducts.filter((product) =>
-    product.title.toLowerCase().includes(searchTerm)
-  );
+ 
 
   const handleIncrement = () => {
     setQuantity(quantity + 1);
@@ -225,19 +66,34 @@ function ProductDetails({rating}) {
   };
   const dispatch = useDispatch();
 
-const handleAddToCart = () => {
-  const cartItem = {
-    productId: product.id,
-    poster : product.poster ,
-    title: product.title,
-    quantity: quantity,
-    price: product.price,
+  const handleAddToCart = async (productId, product) => {
+    
+  
+    const cartItem = {
+      productId: productId,
+      quantity: quantity, 
+    };
+  
+    try {
+      const response = await axios.put(
+        'https://ecommerce-1-q7jb.onrender.com/api/v1/user/cart/update',
+        cartItem,
+        {
+          headers: {
+            'Authorization': `Bearer ${bearerToken}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+  
+      console.log('Product added to cart:', response.data);
+      setQuantity(0);
+      setTotalPrice(0);
+      
+    } catch (error) {
+      console.error('Error adding product to cart:', error.message);
+    }
   };
-
-  dispatch(addToCart(cartItem));
-  setQuantity(0);
-    setTotalPrice(0);
-};
 
 
   const handleDetailsClick = (selectedProduct) => {
@@ -258,7 +114,7 @@ const [detailsOpen, setDetailsOpen] = useState(false);
       <NavHeader
         searchTerm={searchTerm}
         handleSearchChange={handleSearchChange}
-        filteredProducts={filteredProducts}
+       
         handleProductClick={handleProductClick}
       />
 
@@ -272,23 +128,28 @@ const [detailsOpen, setDetailsOpen] = useState(false);
             </div>
             <div className="detailsfleximg">
             <div className="detailsIMG">
-            {product.poster && (
-             <img className="productImg"
-               src={`data:image/png;base64,${product.poster}`}
-               alt="Product poster"/>)}
+            
+            {productDetails ? (
+        <div>
+          <img src={productDetails.pictureUrl} alt="Product details" />
+        </div>
+      ) : (
+        <p>Loading...</p>
+      )}
+            
 
             </div>
             <div className="detailsINFO">
               <h1>Product Details: </h1>
-              <h1 style={{color: 'white'}}> <span></span></h1>
-              <h1 style={{color: 'white'}}> <span></span></h1>
-              <h1 style={{color: 'white'}}></h1>
-              <h1 style={{color: 'white'}}></h1>
-              <h1 style={{color: 'white'}}></h1>
-              <h1 style={{color: 'white'}}></h1>
-              <h1 style={{color: 'white'}}></h1>
-              <h1 style={{color: 'white'}}></h1>
-              <h1 style={{color: 'white'}}></h1>
+              <h1 style={{color: 'black'}}> <span></span></h1>
+              <h1 style={{color: 'black'}}> <span></span></h1>
+              <h1 style={{color: 'black'}}></h1>
+              <h1 style={{color: 'black'}}></h1>
+              <h1 style={{color: 'black'}}></h1>
+              <h1 style={{color: 'black'}}></h1>
+              <h1 style={{color: 'black'}}></h1>
+              <h1 style={{color: 'black'}}></h1>
+              <h1 style={{color: 'black'}}></h1>
             </div>
             </div>
             </div>
@@ -301,20 +162,26 @@ const [detailsOpen, setDetailsOpen] = useState(false);
               <div className="middlefooter">
                 <StarRating rating={rating} />
                 <div style={{ marginLeft: "20px" }}>
-                  <h1>{product.price * quantity} $</h1>
+                  
+                  {productDetails ? ( 
+             <h1>   {productDetails.price * quantity} $ </h1>
+      ) : (
+        <p>Loading...</p>
+      )}
+                  
                 </div>
                 <div className="counter">
-                  <button onClick={handleDecrement}>
+                  <button style={{backgroundColor:'transparent' , color : 'white'}} onClick={handleDecrement}>
                     <FaMinus />
                   </button>
                   <span>{quantity}</span>
-                  <button onClick={handleIncrement}>
+                  <button style={{backgroundColor:'transparent' , color : 'white'}} onClick={handleIncrement}>
                     <FaPlus />
                   </button>
                 </div>
               </div>
               <div className="review cart">
-                <button onClick={handleAddToCart}>Add to Cart</button>
+                <button onClick={() => handleAddToCart(productDetails.productId, productDetails)}>Add to Cart</button>
               </div>
             </div>
           </div>
@@ -324,10 +191,56 @@ const [detailsOpen, setDetailsOpen] = useState(false);
         <ReviewDialog
       isOpen={detailsOpen}
       onCancel={handleCancelDetails}
-      productId={params.productId} 
-    />
+      productId={productId} 
+      />
     </div>
   );
 }
 
 export default ProductDetails;
+
+/*import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import NavHeader from '../../components/NavHeader';
+import { useNavigate } from 'react-router-dom';
+import './ProductDetails.css';
+
+
+const ProductDetails = () => {
+  const navigate = useNavigate();
+  const { productId } = useParams();
+  const [productDetails, setProductDetails] = useState(null);
+
+  useEffect(() => {
+    const fetchProductDetails = async () => {
+      try {
+        const response = await fetch(`https://ecommerce-1-q7jb.onrender.com/api/v1/public/product/en/${productId}`);
+        const data = await response.json();
+        setProductDetails(data.data.product);
+        console.log('data is', data);
+      } catch (error) {
+        console.error('Error fetching product details:', error);
+      }
+    };
+
+    fetchProductDetails();
+  }, [productId]);
+
+  return (
+    <div className="detailsPage">
+      {productDetails ? (
+        <div>
+          <h2>{productDetails.name}</h2>
+          <img src={productDetails.pictureUrl} alt="Product details" />
+        </div>
+      ) : (
+        <p>Loading...</p>
+      )}
+    </div>
+  );
+};
+
+export default ProductDetails;*/
+
+
+

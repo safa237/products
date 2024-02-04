@@ -35,6 +35,7 @@ import { selectUserId } from '../rtk/slices/User-slice';
 import { addToWishlist , removeFromWishlist } from '../rtk/slices/Wishlist-slice';
 import { clearWishlist } from '../rtk/slices/Wishlist-slice';
 import HorizontalScroll from '../components/Carousel';
+import { selectToken } from '../rtk/slices/Auth-slice';
 
 function Home() {
   const dispatch = useDispatch();
@@ -52,11 +53,147 @@ function Home() {
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [isInCart, setIsInCart] = useState(false);
   const userId = useSelector((state) => state.auth.id);
-  const products = useSelector(selectProducts);
+  const bearerToken = useSelector(selectToken);
+  
+ // const products = useSelector(selectProducts);
+
+ 
+  /*const [products, setProducts] = useState([]);
+
+   useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const response = await axios.get('https://ecommerce-1-q7jb.onrender.com/api/v1/public/product/en/all');
+      
+      // Check if the response data has the expected format
+      if (response.data && response.data.success && Array.isArray(response.data.data.products)) {
+        setProducts(response.data.data.products);
+      
+        response.data.data.products.forEach(product => {
+          console.log("Product Name:", product.name);
+        });
+      } else {
+        console.error('Invalid data format:', response.data);
+      }
+
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setLoading(false);
+    }
+  };
+
+  fetchData();
+}, []);*/
+
+const products = useSelector((state) => state.products.products);
+const error = useSelector((state) => state.products.error);
+
+useEffect(() => {
+  dispatch(fetchProducts());
+}, [dispatch , language]);
+
+
+const [wishlist, setWishlist] = useState([]);
+useEffect(() => {
+  fetchUserFavourite();
+}, []);
+
+const isProductInWishlist = (productId) => {
+  return wishlist.some(item => item.productId === productId);
+};
+
+  
+const handleAddToFavorites = async (productId) => {
+  try {
+    if (isProductInWishlist(productId)) {
+      // If product is already in wishlist, remove it
+      await handleDeleteFromWishlist(productId);
+    } else {
+      // If product is not in wishlist, add it
+      await axios.put(
+        `https://ecommerce-1-q7jb.onrender.com/api/v1/user/wishlist/add/${productId}`,
+        {},
+        {
+          headers: {
+            'Authorization': `Bearer ${bearerToken}`,
+          },
+        }
+      );
+      await fetchUserFavourite();
+    }
+  } catch (error) {
+    console.error('Error updating product in wishlist: ', error.message);
+  }
+};
+
+const handleDeleteFromWishlist = async (productId) => {
+  try {
+    await axios.delete(`https://ecommerce-1-q7jb.onrender.com/api/v1/user/wishlist/remove/${productId}`, {
+      headers: {
+        Authorization: `Bearer ${bearerToken}`,
+      },
+    });
+    await fetchUserFavourite();
+  } catch (error) {
+    console.error('Error deleting product from wishlist:', error);
+  }
+};
+
+const fetchUserFavourite = async () => {
+  try {
+    const language = 'en';
+    const response = await axios.get(`https://ecommerce-1-q7jb.onrender.com/api/v1/user/wishlist/${language}`, {
+      headers: {
+        Authorization: `Bearer ${bearerToken}`,
+      },
+    });
+
+    const favouriteData = response.data.data;
+
+    if (favouriteData && favouriteData.wishlist) {
+      setWishlist(favouriteData.wishlist.wishlistItems || []);
+      console.log('Success fetch wishlist', favouriteData.wishlist.wishlistItems);
+    } else {
+      console.error('Error fetching user favourite: Unexpected response structure');
+    }
+  } catch (error) {
+    console.error('Error fetching user cart:', error);
+  }
+};
   
 
-  const token = useSelector((state) => state.auth.token);
+  const handleAddToCart = async (productId, product) => {
+    if (!isLoggedIn) {
+      alert('Please sign in to add to cart.');
+      return;
+    }
+  
+    const cartItem = {
+      productId: productId,
+      quantity: 1, 
+    };
+  
+    try {
+      const response = await axios.put(
+        'https://ecommerce-1-q7jb.onrender.com/api/v1/user/cart/update',
+        cartItem,
+        {
+          headers: {
+            'Authorization': `Bearer ${bearerToken}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+  
+      console.log('Product added to cart:', response.data);
+  
+    } catch (error) {
+      console.error('Error adding product to cart:', error.message);
+    }
+  };
 
+  
   const handleSearchChange = (e) => {
     const term = e.target.value;
     dispatch(setSearchTerm(term));
@@ -65,7 +202,7 @@ function Home() {
   const [favoriteStatus, setFavoriteStatus] = useState(JSON.parse(localStorage.getItem(`favorites_${userId}`)) || {});
 
 
-  const handleAddToFavorites = (productId) => {
+  /*const handleAddToFavorites = (productId) => {
     const url = `https://mostafaben.bsite.net/api/Wishlist?userId=${userId}&productId=${productId}`;
   
     axios.post(url)
@@ -77,7 +214,7 @@ function Home() {
       .catch(error => {
         console.error(`Failed to add product ${productId} to favorites`, error);
       });
-  };
+  };*/
   
   const handleRemoveFromFavorites = (productId) => {
     const url = `https://mostafaben.bsite.net/api/Wishlist/${productId}`;
@@ -203,10 +340,7 @@ function Home() {
   
 
   const handleDetailsClick = (selectedProduct) => {
-    if (!isLoggedIn) {
-      alert('Please sign in to view product.');
-      return;
-    }
+    
     setSelectedProduct(selectedProduct);
     setDetailsOpen(true);
   };
@@ -287,7 +421,7 @@ function Home() {
 
   const [quantity, setQuantity] = useState(0);
 
-  const handleAddToCart = (productId, product) => {
+  /*const handleAddToCart = (productId, product) => {
     if (!isLoggedIn) {
       alert('Please sign in to add to cart.');
       return;
@@ -308,7 +442,7 @@ function Home() {
     } else {
       dispatch(addToCart(cartItem));
     }
-  };
+  };*/
 
   /*const handleAddToFavorites = (productId) => {
     if (!isLoggedIn) {
@@ -349,10 +483,10 @@ function Home() {
     setIsDropdownOpen(false);
   };*/
 
-  const filteredProducts = products.filter(
+ /* const filteredProducts = products.filter(
     (product) =>
       product.title && product.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  );*/
 
   const handleProductClick = (productId) => {
     navigate(`/home/product/${productId}`);
@@ -364,7 +498,7 @@ function Home() {
         userId={userId}
         searchTermm={searchTerm}
         handleSearchChange={handleSearchChange}
-        filteredProductss={filteredProducts}
+        //filteredProductss={filteredProducts}
         handleProductClick={handleProductClick}
       />
 
@@ -378,51 +512,70 @@ function Home() {
           {loading && <div className="loading-spinner" style={{ width: '50px', height: '50px', marginTop: '10px' }}></div>}
           {!loading && (
             <div className="card-container">
-              {filteredProducts.map((product) => (
-                <div style={{ borderRadius: '15%' , backgroundColor : '#fff' ,marginBottom : '10px', boxShadow : '5px 5px 5px #8080809e'  }} className="card" key={product.id}>
-                  <div className="card-body">
-                    <div className="card-icons">
-                     {/*<FaHeart
-                      className={`favorite-icon ${wishlist.includes(product.id) ? 'favorite-icon-active' : ''}`}
-                      onClick={() => handleAddToFavorites(product.id )}
-              /> */}
-              <FaHeart
-  onClick={() => handleClick(product.id , product)}
-  style={{ color: favoriteStatus[product.id] ? 'red' : '#61DAA2' }}
-/>
-                    
-                      {isLoggedIn && (
-                        <FaEye
-                          className="cart-iconPro"
-                          onClick={() => handleDetailsClick(product)}
-                        />
-                      )}
-                    </div>
-                    <div className="card-img">
-                    <Link to={isLoggedIn ? `/home/product/${product.id}` : null}>
-    <img src={`data:image/png;base64,${product.poster}`} alt="Product poster" />
-  </Link>
-                    </div>
-                    <div className="card-info">
-                      <h2>{product.title}</h2>
-                      <div className="rate">
-                        <StarRating
-                           initialRating={product.rate}
-                          isClickable={false}
-                        />
-                      </div>
-                      <div className="price">{`$${product.price}`}</div>
-                    </div>
-                    <button
-  className="proBtn"
-  onClick={() => handleAddToCart(product.id, product)}
->
-  add to cart
-</button>
+              
+              {products.map((product) => (
+  <div
+    style={{
+      borderRadius: '15%',
+      backgroundColor: '#fff',
+      marginBottom: '10px',
+      boxShadow: '5px 5px 5px #8080809e',
+    }}
+    className="card"
+    key={product.id}
+  >
+    <div className="card-body">
+      <div className="card-icons">
+      <FaHeart
+      onClick={() => handleAddToFavorites(product.productId)}
+      style={{ color: isProductInWishlist(product.productId) ? 'red' : '#3EBF87' }}
+    />
+        {/*<FaHeart
+            onClick={() => {
+              if (favorites.includes(product.productId)) {
+                handleDeleteFromWishlist(product.productId);
+              } else {
+                handleAddToFavorites(product.productId);
+              }
+            }}
+            style={{transition : ' 0.3s ease', cursor: 'pointer', color: favorites.includes(product.productId) ? 'red' : '#3EBF87' }}
+          />*/}
+        {isLoggedIn && (
+          <FaEye
+            className="cart-iconPro"
+            onClick={() => handleDetailsClick(product)}
+          />
+        )}
+      </div>
+      <div className="card-img">
+        <Link to={`/home/product/${product.productId}`}>
+          <img src={product.pictureUrl} alt="Product poster" />
+        </Link>
+      </div>
+      <div className="card-info">
+        <h2>{product.name}</h2>
+        <div className="rate">
+          <StarRating initialRating={product.rating} isClickable={false} />
+        </div>
+        <div className="price">
+          {product.discount && (
+            <div className="discounted-price">{`$${product.afterDiscount}`}</div>
+          )}
+          {product.discount && <div className="old-price">{`$${product.price}`}</div>}
+          {!product.discount && <div className="price">{`$${product.price}`}</div>}
+        </div>
+      </div>
+      <button
+        className="proBtn"
+        onClick={() => handleAddToCart(product.productId, product)}
+      >
+        Add to Cart
+      </button>
+    </div>
+  </div>
+))}
 
-                  </div>
-                </div>
-              ))}
+
             </div>
           )}
 

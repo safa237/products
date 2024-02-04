@@ -7,7 +7,7 @@
     flex-direction: column;
 }
 .productcart{
-    height: 120px;
+    height: 150px;
     background-color: #fff;
     width: 40%;
     margin-top: 1em;
@@ -21,8 +21,8 @@
 .flexOnecart{
     display: flex;
     flex-direction: row;
-   
     padding-top: 5px;
+   
 }
 .imgcart{
     width: 30%;
@@ -52,7 +52,7 @@ h4 , h6{
     display: flex;
     justify-content: space-between;
     flex-direction: column;
-    margin-bottom: 15px;
+    margin-bottom: 150px;
 }
 .flexContainerCart{
     display: flex;

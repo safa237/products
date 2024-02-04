@@ -29,8 +29,8 @@ function NavHeader({ userId , handleProductClick }) {
   const language = useSelector(selectLanguage);
   const translations = useSelector(selectTranslations);
   const allProducts = useSelector((state) => state.products);
-  const products = useSelector((state) => state.products);
-
+ // const products = useSelector((state) => state.products);
+  const products = useSelector((state) => state.products.products);
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [categories, setCategories] = useState([]);
@@ -67,8 +67,8 @@ function NavHeader({ userId , handleProductClick }) {
 
     const fetchCategories = async () => {
       try {
-        const response = await axios.get('https://mostafaben.bsite.net/api/Categories');
-        setCategories(response.data);
+        const response = await axios.get('https://ecommerce-1-q7jb.onrender.com/api/v1/public/category/en/all');
+        setCategories(response.data.data.categories);
       } catch (error) {
         console.error('Error fetching categories:', error);
       }
@@ -91,6 +91,12 @@ function NavHeader({ userId , handleProductClick }) {
   const [selectedCategoryColor, setSelectedCategoryColor] = useState('');
 
  
+  /*const handleSearchChangeInternal = (e) => {
+    const term = e.target.value.toLowerCase();
+    setSearchTerm(term);
+  };*/
+
+
   const handleSearchChangeInternal = (e) => {
     const term = e.target.value.toLowerCase();
     setSearchTerm(term);
@@ -100,13 +106,25 @@ function NavHeader({ userId , handleProductClick }) {
  
   
 
+  /*const filteredProducts = products.filter((product) => {
+    const matchesSearch = (product.title?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+      (product.descreption?.toLowerCase() || '').includes(searchTerm.toLowerCase());
+  
+    const matchesCategory = selectedCategoryId ? product.categoryId === selectedCategoryId : true;
+  
+    return matchesSearch && matchesCategory;
+  });*/
+
+
+
   const filteredProducts = products.filter((product) => {
-    const matchesSearch = product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-         product.descreption.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+         product.description.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesCategory = selectedCategoryId ? product.categoryId === selectedCategoryId : true;
 
     return matchesSearch && matchesCategory;
   }); 
+  
 
   const [productExistsInCategory, setProductExistsInCategory] = useState(true);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
@@ -118,6 +136,38 @@ function NavHeader({ userId , handleProductClick }) {
 
  
 
+ /* const handleSearchSubmit = () => {
+    const productsInSelectedCategory = filteredProducts.filter(product => product.categoryId === selectedCategoryId);
+  
+    const searchTermLowerCase = searchTerm ? searchTerm.toLowerCase() : '';
+    const productsMatchingSearch = productsInSelectedCategory.filter(product => {
+      const productNameLowerCase = product.title ? product.title.toLowerCase() : '';
+      return productNameLowerCase.includes(searchTermLowerCase);
+    });
+  
+    if (selectedCategoryId !== null) {
+      if (productsMatchingSearch.length === 0) {
+        setShowErrorMessage(true);
+        setProductExistsInCategory(false);
+        setTimeout(() => {
+          setShowErrorMessage(false);
+          setProductExistsInCategory(true);
+        }, 3000);
+      } else {
+        setShowErrorMessage(false);
+        setProductExistsInCategory(true);
+        navigate(`/store?search=${searchTerm}&category=${selectedCategoryId}`);
+      }
+    } else {
+      // Handle the case where no category is selected
+      setShowErrorMessage(false);
+      setProductExistsInCategory(true);
+      navigate(`/store?search=${searchTerm}`);
+    }
+  };*/
+  
+
+
   const handleSearchSubmit = () => {
     
     const productsInSelectedCategory = filteredProducts.filter(product => product.categoryId === selectedCategoryId);
@@ -125,7 +175,7 @@ function NavHeader({ userId , handleProductClick }) {
     
     const searchTermLowerCase = searchTerm ? searchTerm.toLowerCase() : '';
     const productsMatchingSearch = productsInSelectedCategory.filter(product => {
-      const productNameLowerCase = product.title ? product.title.toLowerCase() : '';
+      const productNameLowerCase = product.name ? product.name.toLowerCase() : '';
       return productNameLowerCase.includes(searchTermLowerCase);
     });
   
@@ -137,6 +187,8 @@ function NavHeader({ userId , handleProductClick }) {
       navigate(`/store?search=${searchTerm}${selectedCategoryId !== null ? `&category=${selectedCategoryId}` : ''}`);
     }
   };
+  
+  
   
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -154,6 +206,8 @@ function NavHeader({ userId , handleProductClick }) {
     setSelectedCategoryId(categoryId);
     handleCategoryFilter(categoryId);
   };
+
+  
 
   
   const handleSelectTwo  = (categoryId) => {
@@ -179,9 +233,9 @@ function NavHeader({ userId , handleProductClick }) {
     <div className='flexLanguage '>
         <div className='languageInnav rightAlign'>
       <select className='selectLang ' value={language} onChange={handleLanguageChange}>
-          <option value="english">English</option>
-          <option value="french">Française</option>
-          <option value="arabic">لغه عربيه</option>
+          <option value="en">English</option>
+          <option value="fr">Française</option>
+          <option value="ar">لغه عربيه</option>
         </select>
         </div>
       </div>
@@ -199,11 +253,11 @@ function NavHeader({ userId , handleProductClick }) {
     >
       <option  value={null}>All</option>
       {categories.map((category) => (
-        <option key={category.id} value={category.id}>
+        <option key={category.categoryId} value={category.categoryId}>
           {category.name}
         </option>
       ))}
-    </select>
+      </select>
     <div className="input-with-icon">
       <input
         type="text"
@@ -269,7 +323,7 @@ function NavHeader({ userId , handleProductClick }) {
           <Link to="/blog">{translations[language]?.blog}</Link>
 
 
-<select
+{/*<select
   value={selectedCategoryIdTwo}
   onChange={(e) => handleSelectTwo(parseInt(e.target.value))}
   className="dropdown-selectTwo"
@@ -280,7 +334,7 @@ function NavHeader({ userId , handleProductClick }) {
       {category.name}
     </option>
   ))}
-</select>
+  </select>*/}
 
 
           <Link to="/about">{translations[language]?.about}</Link>

@@ -1,116 +1,3 @@
-/*import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { selectProducts, addToWishlist, removeFromWishlist } from '../rtk/slices/Product-slice';
-import { Button, Container, Table } from 'react-bootstrap';
-import { FaHeart } from 'react-icons/fa';
-import NavHeader from '../components/NavHeader';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-
-function Wishlist() {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const products = useSelector(selectProducts);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [wishlistProducts, setWishlistProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  const fetchWishlistProducts = async () => {
-    try {
-      const response = await axios.get('https://mostafaben.bsite.net/api/Wishlist/25');
-      setWishlistProducts(response.data); // Assuming the API response is an array of products
-      setLoading(false);
-      console.log("success fetch products", response.data);
-      console.log("productid", response.data.wishlistItem.productId);
-    } catch (error) {
-      console.error('Error fetching wishlist products:', error);
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchWishlistProducts();
-  }, []); 
-
-  const handleSearchChange = (e) => {
-    const term = e.target.value;
-    setSearchTerm(term.toLowerCase());
-  };
-
-  return (
-    <div className="wishlistContainer">
-      <NavHeader
-        searchTerm={searchTerm}
-        handleSearchChange={handleSearchChange}
-      />
-      <Container style={{ marginTop: '50px' }}>
-        <Table striped bordered hover size="sm">
-          <thead>
-            <tr>
-              <th>Title</th>
-             
-            </tr>
-          </thead>
-          <tbody>
-            {loading ? (
-              <tr>
-                <td colSpan="2">Loading...</td>
-              </tr>
-            ) : wishlistProducts.length === 0 ? (
-              <tr>
-                <td colSpan="2">No products found in wishlist.</td>
-              </tr>
-            ) : (
-              wishlistProducts.map((product) => (
-                <tr key={product.id}>
-                  <td>{product.productId}</td>
-                  
-                </tr>
-              ))
-            )}
-          </tbody>
-        </Table>
-      </Container>
-    </div>
-  );
-}
-
-export default Wishlist;*/
-
-
-// WishlistPage.js
-/*import React from 'react';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
-
-const Wishlist = () => {
-  const dispatch = useDispatch();
-  const wishlist = useSelector((state) => state.wishlist);
-  console.log('Wishlist State:', wishlist);
-  return (
-    <div>
-      <h1>Wishlist</h1>
-      {wishlist.map((product) => (
-        <div key={product.id}>
-          
-          {product && (
-            <>
-              <h1>{product.id}</h1>
-              <p>{product.price}</p> 
-            </>
-          )}
-        </div>
-      ))}
-    </div>
-  );
-};
-
-
-
-export default Wishlist;*/
-
-// Wishlist.js
-
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectProducts, addToWishlist, removeFromWishlist } from '../rtk/slices/Product-slice';
@@ -118,6 +5,7 @@ import { Button, Container, Table } from 'react-bootstrap';
 import { FaHeart } from 'react-icons/fa';
 import NavHeader from '../components/NavHeader';
 import { useNavigate } from 'react-router-dom';
+import { selectToken } from '../rtk/slices/Auth-slice';
 import axios from 'axios';
 
 function Wishlist() {
@@ -127,28 +15,61 @@ function Wishlist() {
   const [searchTerm, setSearchTerm] = useState('');
   const [wishlistProducts, setWishlistProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const userId = useSelector((state) => state.auth.id);
 
-  const fetchWishlistProducts = async () => {
-    try {
-      const response = await axios.get(`https://mostafaben.bsite.net/api/Wishlist/${userId}`);
-      setWishlistProducts(response.data); // Assuming the API response is an array of products
-      setLoading(false);
-      console.log("success fetch products", response.data);
-    } catch (error) {
-      console.error('Error fetching wishlist products:', error);
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchWishlistProducts();
-  }, []); 
-
+ 
   const handleSearchChange = (e) => {
     const term = e.target.value;
     setSearchTerm(term.toLowerCase());
   };
+
+  const [wishlist, setWishlist] = useState([]);
+
+  const bearerToken = useSelector(selectToken);
+  
+
+  const fetchUserFavourite = async () => {
+    try {
+      const language = 'en'; 
+  
+      const response = await axios.get(`https://ecommerce-1-q7jb.onrender.com/api/v1/user/wishlist/${language}`, {
+        headers: {
+          Authorization: `Bearer ${bearerToken}`,
+        },
+      });
+  
+      const favouriteData = response.data.data; 
+      
+      if (favouriteData && favouriteData.wishlist) {
+        setWishlist(favouriteData.wishlist.wishlistItems || []); 
+        console.log('Success fetch wishlist', favouriteData.wishlist.wishlistItems);
+      } else {
+        console.error('Error fetching user favourite: Unexpected response structure');
+      }
+      console.log('success fetch wishlost' , response.data.data.wishlist.wishlistItems);
+    
+    } catch (error) {
+      console.error('Error fetching user cart:', error);
+    }
+  };
+
+  const handleDeleteFromWishlist = async (productId) => {
+    try {
+      await axios.delete(`https://ecommerce-1-q7jb.onrender.com/api/v1/user/wishlist/remove/${productId}`, {
+        headers: {
+          Authorization: `Bearer ${bearerToken}`,
+        },
+      });
+      await fetchUserFavourite();
+      console.log('success delete from wishlist ' , productId);
+    } catch (error) {
+      console.error('Error deleting product from wishlist:', error);
+    }
+  };
+
+  useEffect(() => {
+   
+    fetchUserFavourite();
+  }, []);
 
   return (
     <div className="wishlistContainer">
@@ -157,33 +78,36 @@ function Wishlist() {
         handleSearchChange={handleSearchChange}
       />
       <Container style={{ marginTop: '50px' }}>
-        <Table striped bordered hover size="sm">
-          <thead>
-            <tr>
-              <th>Product ID</th>
+      <Table striped bordered hover size="sm">
+        <thead>
+          <tr>
+            <th>Product ID</th>
+            <th>Product Name</th>
+            <th>Product Price</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+          {wishlist.map((product, index) => (
+            <tr key={index}>
+              <td>{product.productId}</td>
+              <td>{product.productName}</td>
+              <td>{product.productPrice}</td>
+              {/*<td>
+                <button
+                onClick={() => handleDeleteFromWishlist(product.productId)}>
+                delete</button>
+          </td>*/}
             </tr>
-          </thead>
-          <tbody>
-            {loading ? (
-              <tr>
-                <td colSpan="1">Loading...</td>
-              </tr>
-            ) : wishlistProducts.length === 0 ? (
-              <tr>
-                <td colSpan="1">No products found in wishlist.</td>
-              </tr>
-            ) : (
-              wishlistProducts.map((wishlistItem) => (
-                <tr key={wishlistItem.wishlistItem.id}>
-                  <td>{wishlistItem.wishlistItem.productId}</td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </Table>
+          ))}
+        </tbody>
+      </Table>
+
       </Container>
     </div>
   );
 }
 
 export default Wishlist;
+
+

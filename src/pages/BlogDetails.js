@@ -11,16 +11,19 @@ import email from '../images/Email icon.png';
 import address from '../images/Location icon.png';
 import phone from '../images/phone icon.png';
 import { Link } from "react-router-dom";
+import lotion2 from '../images/lotion2.png';
+import { AiOutlineLike } from "react-icons/ai";
+
 
 function BlogDetails() {
 
   const navigate = useNavigate();
   const params = useParams();
   const [blog, setBlog] = useState([]);
-  const handleFileChange = (e) => {
+  /*const handleFileChange = (e) => {
     const file = e.target.files[0];
     setBlog({ ...blog, Poster: file });
-  };
+  };*/
   const [isCopied, setIsCopied] = useState(false);
   const pageLinkRef = useRef(null);
   const [loading, setLoading] = useState(true);
@@ -29,21 +32,23 @@ function BlogDetails() {
   const translations = useSelector(selectTranslations);
   const [searchTerm, setSearchTerm] = useState('');
 
-  useEffect(() => {
-    getBlog();
-  }, []);
+  const { blogId } = useParams();
+  const [blogDetails, setblogDetails] = useState(null);
 
-  const getBlog = () => {
-    axios
-      .get(`https://mostafaben.bsite.net/api/Blogs/${params.blogId}`)
-      .then((res) => {
-        setBlog(res.data);
-        console.log(res.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching products:', error);
-      });
-  };
+  useEffect(() => {
+    const fetchBlogDetails = async () => {
+      try {
+        const response = await fetch(`https://ecommerce-1-q7jb.onrender.com/api/v1/public/content/${blogId}/en`);
+        const data = await response.json();
+        setblogDetails(data.data.post);
+        console.log('data is' ,data);
+      } catch (error) {
+        console.error('Error fetching blog details:', error);
+      }
+    };
+
+    fetchBlogDetails();
+  }, [blogId]);
 
   const handleCopyLink = () => {
     pageLinkRef.current.select();
@@ -56,9 +61,7 @@ function BlogDetails() {
     }, 1000);
   };
 
-  const filteredProducts = allProducts.filter((product) =>
-    product.title.toLowerCase().includes(searchTerm)
-  );
+  
   const handleProductClick = (productId) => {
     navigate(`/home/product/${productId}`);
   };
@@ -76,7 +79,7 @@ function BlogDetails() {
       <NavHeader
        searchTerm={searchTerm}
        handleSearchChange={handleSearchChange}
-       filteredProducts={filteredProducts}
+       
        handleProductClick={handleProductClick}
      />
 
@@ -88,32 +91,59 @@ function BlogDetails() {
              <div className='blogContent'>
              <div className='blog-flex'>
                <div className='blogimg'>
-               {blog.poster && (
+               
   <img
-    src={`data:image/png;base64,${blog.poster}`}
-    alt="Product poster"
-   
-    onError={(e) => console.error('Error loading image:', e)}
-  />)}
+    src={lotion2}
+    alt="Product poster" />
                </div>
                <div className='infoblog'>
-                 <h5>{blog.title}</h5>
-                 <div className='share'>
-                   <input
-                     ref={pageLinkRef}
-                     type="text"
-                     readOnly
-                     value={window.location.href}
-                     style={{ position: 'absolute', left: '-9999px' }}
-                   />
-                   <IoMdShare
-                     style={{ fontSize: '40px', cursor: 'pointer' }}
-                     className='icon'
-                     onClick={handleCopyLink}
-                   />
-                   {isCopied && <span style={{ marginLeft: '5px', color: '#3A7E89' }}>Link copied!</span>}
+
+                 
+               <div className='flexiconwithinput'>
+                  <div className='flexblogicons'>
+                <div className='likeblog'>
+                  <AiOutlineLike
+                      style={{ fontSize: '35px', cursor: 'pointer' ,  color: 'white' }}
+                      className='icon'
+                      onClick={handleCopyLink}
+                    />
+                  </div>
+               
+                  <div className='share'>
+                    <IoMdShare
+                      style={{ fontSize: '35px', cursor: 'pointer' , color: 'white' }}
+                      className='icon'
+                      onClick={handleCopyLink}
+                    />
+                    
+                  </div>
                  </div>
-                 <h6>{blog.descreption}</h6>
+                 <div>
+                 {isCopied && <span style={{ marginLeft: '5px', color: '#3A7E89' }}>Link copied!</span>}
+                  <input
+                      ref={pageLinkRef}
+                      type="text"
+                      readOnly
+                      value={window.location.href}
+                      style={{ position: 'absolute', left: '-9999px' }}
+                    />
+                  </div>
+              </div>
+
+              {blogDetails ? (
+        <div>
+          <h5>{blogDetails.title}</h5>
+        </div>
+      ) : (
+        <p>Loading...</p>
+      )}
+                 {blogDetails ? (
+        <div>
+          <h5>{blogDetails.content}</h5>
+        </div>
+      ) : (
+        <p>Loading...</p>
+      )}
                </div>
              </div>
              </div>

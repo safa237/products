@@ -5,7 +5,7 @@ import { FaHeart, FaShoppingCart , FaBars } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { MdOutlineWifiPassword } from "react-icons/md";
 import { IoIosLogOut } from "react-icons/io";
-
+import { useEffect } from 'react';
 import ChangePassword from '../pages/ChangePassword';
 import './sidebaruser.css';
 
@@ -15,6 +15,16 @@ function SidebarUser({ isOpen, onClose , handleLogout  }) {
     handleLogout();
     onClose();
 };
+
+const handleIconClick = (event) => {
+  event.stopPropagation();
+  if (!isOpen) {
+    onClose();
+  }
+};
+
+
+
 
     return (
         <div className={`sidebaruser ${isOpen ? 'open' : ''}`}>

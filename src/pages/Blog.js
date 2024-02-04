@@ -3,7 +3,9 @@ import './stylehome.css';
 import './blog.css';
 import { Link } from 'react-router-dom';
 import { FaHeart } from 'react-icons/fa';
-import { AiOutlineDislike, AiOutlineLike } from 'react-icons/ai';
+import { AiOutlineLike } from "react-icons/ai";
+import { CiShare2 } from "react-icons/ci";
+
 import { IoMdShare } from 'react-icons/io';
 import logo from '../images/Vita Logo2.png';
 import lotion2 from '../images/lotion2.png';
@@ -18,6 +20,7 @@ import email from '../images/Email icon.png';
 import address from '../images/Location icon.png';
 import phone from '../images/phone icon.png';
 import { FaSearch } from 'react-icons/fa';
+import { selectToken } from '../rtk/slices/Auth-slice';
 
 
 function Blog() {
@@ -31,6 +34,7 @@ function Blog() {
   const [isCopied, setIsCopied] = useState(false);
   const pageLinkRef = useRef(null);
   const [loading, setLoading] = useState(true);
+  const bearerToken = useSelector(selectToken);
 
   const language = useSelector(selectLanguage);
   const translations = useSelector(selectTranslations);
@@ -63,8 +67,8 @@ function Blog() {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await axios.get('https://mostafaben.bsite.net/api/Blogs');
-        setBlogs(response.data);
+        const response = await axios.get('https://ecommerce-1-q7jb.onrender.com/api/v1/public/content/all/en');
+        setBlogs(response.data.data.posts);
       } catch (error) {
         console.error('Error fetching blogs:', error);
       } finally {
@@ -76,20 +80,19 @@ function Blog() {
   }, []);
 
   
-  const handleBlogClick = async (clickedBlog) => {
-    try {
-      const response = await axios.get(`https://mostafaben.bsite.net/api/Blogs/${clickedBlog.id}`);
+  const handleBlogClick = async (clickedBlog) => { 
+    try {                              
+      const response = await axios.get(`https://ecommerce-1-q7jb.onrender.com/api/v1/public/content/${clickedBlog.blogPostId}/en`)
       setDetailsOpen(true);
-      setDialogBlogContent(response.data);
-      
-      // Use navigate to move to the BlogDetails page with the blog ID
-      navigate(`/blog/${clickedBlog.id}`);
+      setDialogBlogContent(response.data.data.posts);
+      navigate(`/blog/${clickedBlog.blogPostId}`);
     } catch (error) {
       console.error('Error fetching blog details:', error);
     } finally {
       setLoading(false);
     }
   };
+
 
   const allProducts = useSelector((state) => state.products);
 
@@ -99,9 +102,7 @@ function Blog() {
     setSearchTerm(term.toLowerCase());
   };
 
-  const filteredProducts = allProducts.filter((product) =>
-    product.title.toLowerCase().includes(searchTerm)
-  );
+  
   const handleProductClick = (productId) => {
     navigate(`/home/product/${productId}`);
   };
@@ -125,11 +126,11 @@ function Blog() {
     const foundBlog = blogs.find(
       (blog) =>
         blog.title.toLowerCase().includes(searchTermBlog) ||
-        blog.descreption.toLowerCase().includes(searchTermBlog)
+        blog.content.toLowerCase().includes(searchTermBlog)
     );
 
     if (foundBlog) {
-      navigate(`/blog/${foundBlog.id}`);
+      navigate(`/blog/${foundBlog.blogPostId}`);
     } else {
       setProductExistsInCategory(false);
       setShowErrorMessage(true);
@@ -142,14 +143,72 @@ function Blog() {
 
  
 
+ /* const handleAddToLike = async (blogId) => {
+    try {
+    
+        await axios.put( 
+          `https://ecommerce-1-q7jb.onrender.com/api/v1/user/like/${blogId}`,
+          {},
+          {
+            headers: {
+              'Authorization': `Bearer ${bearerToken}`,
+            },
+          }
+        );
+        console.log('blog added to like');
+    } catch (error) {
+      console.error('Error updating blog in like: ', error.message);
+    }
+  };*/
 
+ /* const handleAddToLike = async (blogPostId) => {
+    try {
+      if (isProductInLikes(blogPostId)) {
+        // If product is already in wishlist, remove it
+        await handleDeleteFromLikes(blogPostId);
+      } else {
+        // If product is not in wishlist, add it
+        await axios.put(
+          `https://ecommerce-1-q7jb.onrender.com/api/v1/user/like/${blogPostId}`,
+          {},
+          {
+            headers: {
+              'Authorization': `Bearer ${bearerToken}`,
+            },
+          }
+        );
+        
+      }
+      console.log('blog added to like');
+    } catch (error) {
+      console.error('Error updating product in wishlist: ', error.message);
+    }
+  };
+  
+  const handleDeleteFromLikes = async (blogPostId) => {
+    try {
+      await axios.delete(`https://ecommerce-1-q7jb.onrender.com/api/v1/user/unlike/${blogPostId}`, {
+        headers: {
+          Authorization: `Bearer ${bearerToken}`,
+        },
+      });
+      console.log('blog delete from like');
+    } catch (error) {
+      console.error('Error deleting product from wishlist:', error);
+    }
+  };
+  const [blog, setBlog] = useState([]);
+
+  const isProductInLikes = (blogPostId) => {
+    return blog.some(item => item.blogPostId === blogPostId);
+  };*/
   return (
    
      <div className="page-container">
        <NavHeader
         searchTerm={searchTerm}
         handleSearchChange={handleSearchChange}
-        filteredProducts={filteredProducts}
+       
         handleProductClick={handleProductClick}
       />
 
@@ -185,32 +244,51 @@ function Blog() {
               <div className='blogContent'>
               <div className='blog-flex'>
                 <div className='blogimg'>
-                  <img
+                  {/*<img
                     src={`data:image/png;base64,${selectedBlog ? selectedBlog.poster : blogs[0].poster}`}
                     alt="Blog poster"
-                  />
+          />*/}
+          <img 
+                       src={lotion2} 
+                      alt="Blog poster"
+                    />
                 </div>
                 <div className='infoblog'>
-                  <h5>{selectedBlog ? selectedBlog.title : blogs[0].title}</h5>
-                  
+                  <div className='flexiconwithinput'>
+                  <div className='flexblogicons'>
+                <div className='likeblog'>
+                  <AiOutlineLike
+                  style={{fontSize: '35px', cursor: 'pointer' , color: 'white' }}
+        
+                      className='icon'
+                      
+                    />
+                  </div>
+               
                   <div className='share'>
-                    <input
+                    <IoMdShare
+                      style={{ fontSize: '35px', cursor: 'pointer' , color: 'white' }}
+                      className='icon'
+                      onClick={handleCopyLink}
+                    />
+                    
+                  </div>
+                 </div>
+                 <div>
+                 {isCopied && <span style={{ marginLeft: '5px', color: '#3A7E89' }}>Link copied!</span>}
+                  <input
                       ref={pageLinkRef}
                       type="text"
                       readOnly
                       value={window.location.href}
                       style={{ position: 'absolute', left: '-9999px' }}
                     />
-                    <IoMdShare
-                      style={{ fontSize: '35px', cursor: 'pointer' }}
-                      className='icon'
-                      onClick={handleCopyLink}
-                    />
-                    {isCopied && <span style={{ marginLeft: '5px', color: '#3A7E89' }}>Link copied!</span>}
                   </div>
-                 
-                  
-                  <h6>{selectedBlog ? selectedBlog.descreption : blogs[0].descreption.substring(0, 525)}...</h6>
+              </div>
+                  <div >
+                  {/*<h5>{selectedBlog ? selectedBlog.title : blogs[0].title}</h5>*/}
+                  </div>
+                  <h6>{selectedBlog ? selectedBlog.content : blogs[0].content.substring(0, 525)}...</h6>
                   <div className='readArticle'>
                      <button onClick={() => handleBlogClick(blogs[0])} className="read">
                          read article
@@ -222,12 +300,12 @@ function Blog() {
               <div className='card-blog header-container'>
                 
                 {blogs.slice(1).map((blog) => (
-                  <div className='card1 card1blog' key={blog.id}>
+                  <div className='card1 card1blog' key={blog.blogPostId}>
                     <img 
-                      src={`data:image/png;base64,${blog.poster}`}
+                       src={lotion2} 
                       alt="Blog poster"
                     />
-                    <p>{blog.descreption.substring(0, 125)}...</p>
+                    <p>{blog.content.substring(0, 125)}...</p>
                     
                     <div className='buttons'>
                       

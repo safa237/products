@@ -12,6 +12,7 @@ import { FaUser } from "react-icons/fa";
 import axios from 'axios';
 import { useState } from 'react';
 import StarRating from '../rate/StarRating';
+import { selectToken } from '../../rtk/slices/Auth-slice';
 import './review.css';
 
 
@@ -22,10 +23,8 @@ const ReviewDialog = ({ isOpen, onCancel , productId  }) => {
     const userId = useSelector((state) => state.auth.id);
     const email = useSelector((state) => state.auth.email);
     const [rating, setRating] = useState(0);
+    const bearerToken = useSelector(selectToken);
 
-    useEffect(() => {
-      console.log('id is' , userId);
-      }, [language]);
    
       const handleOverlayClick = (e) => {
         if (e.target.classList.contains('popup')) {
@@ -41,63 +40,72 @@ const ReviewDialog = ({ isOpen, onCancel , productId  }) => {
       const fetchReviews = async () => {
         try {
           const response = await axios.get(
-            'https://mostafaben.bsite.net/api/Reviwes/pendingReviews'
+            `https://ecommerce-1-q7jb.onrender.com/api/v1/public/review/product/${productId}`
           );
     
-          setReviews(response.data);
+          setReviews(response.data.data.reviews);
+          console.log('sucssefuttly fetch reviews ' , response.data.data.reviews);
+          console.log('productId is ' , productId);
         } catch (error) {
           console.error('Error fetching reviews:', error);
-          // Handle error appropriately
         }
       };
     
       useEffect(() => {
-        if (isOpen) {
+        console.log('review page open');
+        if (isOpen && productId) {
           fetchReviews();
         }
-      }, [isOpen]);
+      }, [isOpen, productId]);
 
 
 
       const [formData, setFormData] = useState({
-        commentText: '',
+        comment: '',
       });
-    
+
       const handleChange = (e) => {
-        const { name, value } = e.target;
         setFormData({
           ...formData,
-          [name]: value,
+          [e.target.name]: e.target.value,
         });
       };
-      
+    
       const handleSubmit = async (e) => {
         e.preventDefault();
-        const postData = {
-          value: rating,
-          commentText: formData.commentText,
+      
+        const apiUrl = 'https://ecommerce-1-q7jb.onrender.com/api/v1/user/review/new';
+      
+        const requestBody = {
+          productId: productId,
+          comment: formData.comment,
+          rating: rating,
         };
       
-        const url = `https://mostafaben.bsite.net/api/Reviwes/addReview?userId=${userId}&productId=${productId}`;
-      
         try {
-          const response = await axios.post(url, postData, {
+          const response = await fetch(apiUrl, {
+            method: 'POST',
             headers: {
               'Content-Type': 'application/json',
+              Authorization: `Bearer ${bearerToken}`,
             },
+            body: JSON.stringify(requestBody),
           });
       
-          console.log('Review submitted successfully:', response.data);
+          const responseData = await response.json();
+      
+          if (response.ok) {
+            console.log('Review submitted successfully');
+          } else {
+            console.error('Failed to submit review:', responseData);
+          }
           fetchReviews();
-          setFormData({
-            commentText: '',
-          });
-          setRating(0);
         } catch (error) {
-          console.error('Error submitting review:', error);
+          console.error('Error while submitting review:', error.message);
         }
       };
       
+    
       
       
       
@@ -110,7 +118,7 @@ const ReviewDialog = ({ isOpen, onCancel , productId  }) => {
             <div  className="grey-container">
           <div className='header-container  '>
             <div >
-              <button style={{marginTop: '3em'}} onClick={handleViewProductClick}>View Product</button>
+              <button style={{backgroundColor: '#3EBF87' , color: 'white' , marginTop:  '3em'}} onClick={handleViewProductClick}>View Product</button>
             </div>
 
             <div >
@@ -120,17 +128,17 @@ const ReviewDialog = ({ isOpen, onCancel , productId  }) => {
                       <div style={{marginRight: '15px'}}><FaUser style={{ fontSize: '50px' }} /></div>
                       <div className='infoComment' style={{ marginLeft: '5px' }}>
                         <div> 
-                        <h5>{email} </h5> <p>2 days ago </p>
+                        <h5>safa mahmoud</h5> {/*<p>2 days ago </p>*/}
                         </div>
                         <div className='stars'>
                             <StarRating
-                              initialRating={review.value} 
+                              initialRating={review.rating} 
                               isClickable={false} 
                             />
                           </div>
                       </div>
                       </div>
-                      <p>{review.commentText}</p>
+                      <p className='reviewcomment'>{review.comment}</p>
                     </div>
                   ))}
                 </div>
@@ -143,8 +151,8 @@ const ReviewDialog = ({ isOpen, onCancel , productId  }) => {
                   
                     <textarea
                       placeholder='Write Your Review'
-                      name="commentText"
-                      value={formData.commentText}
+                      name="comment"
+                      value={formData.comment}
                       onChange={handleChange}
                     />
                   </label>
@@ -157,7 +165,7 @@ const ReviewDialog = ({ isOpen, onCancel , productId  }) => {
                     />
                   </div>
                   </div>
-                  <button type="submit">Submit</button>
+                  <button style={{backgroundColor: '#3EBF87' , color: 'white'}} type="submit">Submit</button>
                 </form>
               </div>
              

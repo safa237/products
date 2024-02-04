@@ -667,13 +667,13 @@ width: 1500px;
 @media only screen and (max-width: 1199px) and (min-width: 768px) {
 .navPages{
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-between;
   width: 1000px;
 }
 .flexNavone{
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
 }
 .vitaSignin{
   display: flex;
@@ -684,6 +684,10 @@ width: 1500px;
 }
 }
 @media only screen and (max-width: 767px) {
+  .text-line{
+    display: flex;
+    flex-direction: row;
+  }
 .navPages{
   display: flex;
   flex-direction: column;
@@ -704,3 +708,6 @@ width: 1500px;
 }
 
 }
+
+
+

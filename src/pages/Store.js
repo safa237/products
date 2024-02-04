@@ -33,6 +33,7 @@ import { clearWishlist } from '../rtk/slices/Wishlist-slice';
 import loginimg from '../images/loginIcon.png';
 import logoutimg from '../images/logouticon.png';
 import cartimg from '../images/Cart.png';
+import { selectToken } from '../rtk/slices/Auth-slice';
 import './store.css';
 
 function Store  ()  {
@@ -55,85 +56,111 @@ function Store  ()  {
   const [priceRange, setPriceRange] = useState({ min: 0, max: 2000 });
 
   const userId = useSelector((state) => state.auth.id);
-  const products = useSelector(selectProducts);
+  const bearerToken = useSelector(selectToken);
+
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+ const fetchData = async () => {
+   try {
+     const response = await axios.get('https://ecommerce-1-q7jb.onrender.com/api/v1/public/product/en/all');
+     
+     // Check if the response data has the expected format
+     if (response.data && response.data.success && Array.isArray(response.data.data.products)) {
+       setProducts(response.data.data.products);
+     
+       response.data.data.products.forEach(product => {
+         console.log("Product Name:", product.name);
+       });
+     } else {
+       console.error('Invalid data format:', response.data);
+     }
+
+     setLoading(false);
+   } catch (error) {
+     console.error('Error fetching data:', error);
+     setLoading(false);
+   }
+ };
+
+ fetchData();
+}, []);
 
   const handlePriceRangeChange = (event) => {
     const { value } = event.target;
     setPriceRange((prevRange) => ({ ...prevRange, max: value }));
   };
   
-  const [favoriteStatus, setFavoriteStatus] = useState({});
-
-  const handleAddToFavorites = (productId, product) => {
-    console.log('Product Object:', product);
-    if (!productId || !product) {
-      console.error('Product ID or product is undefined');
-      return;
-    }
-  
-    const isFavorite = favoriteStatus[productId] || false;
-  
-    if (!isFavorite) {
-      const url = `https://mostafaben.bsite.net/api/Wishlist?userId=${userId}&productId=${productId}`;
-  
-      axios
-        .post(url)
-        .then((response) => {
-          console.log(`Product ${productId} added to favorites successfully`, response.data);
-          setFavoriteStatus((prevState) => ({ ...prevState, [productId]: true }));
-          saveFavoritesToLocalStorage(userId, { ...favoriteStatus, [productId]: true });
-          dispatch(addToWishlist(product)); // Dispatch action to add to wishlist
-    
-        })
-        .catch((error) => {
-          console.error(`Failed to add product ${productId} to favorites`, error);
-        });
-    } else {
-      // Handle case when the product is already in favorites
-    }
-  };
-  
-  const handleRemoveFromFavorites = (productId, product) => {
-    const url = `https://mostafaben.bsite.net/api/Wishlist/${productId}`;
-  
-    axios
-      .delete(url)
-      .then((response) => {
-        console.log(`Product ${productId} removed from favorites successfully`, response.data);
-        setFavoriteStatus((prevState) => ({ ...prevState, [productId]: false }));
-        saveFavoritesToLocalStorage(userId, { ...favoriteStatus, [productId]: false });
-        dispatch(removeFromWishlist(productId));
-      })
-      .catch((error) => {
-        console.error(`Failed to remove product ${productId} from favorites`, error);
-      });
-  };
-  
-  const saveFavoritesToLocalStorage = (userId, favorites) => {
-    const userFavorites = JSON.parse(localStorage.getItem(`favorites_${userId}`)) || {};
-    localStorage.setItem(`favorites_${userId}`, JSON.stringify({ ...userFavorites, ...favorites }));
-  };
-  
-  const handleClick = (productId, product) => {
-    if (!productId) {
-      console.error('Product ID is undefined');
-      return;
-    }
-  
-    const isFavorite = favoriteStatus[productId] || false;
-  
-    if (isFavorite) {
-      handleRemoveFromFavorites(productId, product);
-    } else {
-      handleAddToFavorites(productId, product);
-    }
-  };
-  
+  const [wishlist, setWishlist] = useState([]);
   useEffect(() => {
-    const savedFavorites = JSON.parse(localStorage.getItem(`favorites_${userId}`)) || {};
-    setFavoriteStatus(savedFavorites);
-    checkLoggedInStatus();
-  }, [userId]);
+    // Fetch user's wishlist on component mount
+    fetchUserFavourite();
+  }, []);
+  
+  const isProductInWishlist = (productId) => {
+    return wishlist.some(item => item.productId === productId);
+  };
+  
+    
+  const handleAddToFavorites = async (productId) => {
+    try {
+      if (isProductInWishlist(productId)) {
+        // If product is already in wishlist, remove it
+        await handleDeleteFromWishlist(productId);
+      } else {
+        // If product is not in wishlist, add it
+        await axios.put(
+          `https://ecommerce-1-q7jb.onrender.com/api/v1/user/wishlist/add/${productId}`,
+          {},
+          {
+            headers: {
+              'Authorization': `Bearer ${bearerToken}`,
+            },
+          }
+        );
+        await fetchUserFavourite();
+      }
+    } catch (error) {
+      console.error('Error updating product in wishlist: ', error.message);
+    }
+  };
+  
+  const handleDeleteFromWishlist = async (productId) => {
+    try {
+      await axios.delete(`https://ecommerce-1-q7jb.onrender.com/api/v1/user/wishlist/remove/${productId}`, {
+        headers: {
+          Authorization: `Bearer ${bearerToken}`,
+        },
+      });
+      await fetchUserFavourite();
+    } catch (error) {
+      console.error('Error deleting product from wishlist:', error);
+    }
+  };
+  
+  const fetchUserFavourite = async () => {
+    try {
+      const language = 'en';
+      const response = await axios.get(`https://ecommerce-1-q7jb.onrender.com/api/v1/user/wishlist/${language}`, {
+        headers: {
+          Authorization: `Bearer ${bearerToken}`,
+        },
+      });
+  
+      const favouriteData = response.data.data;
+  
+      if (favouriteData && favouriteData.wishlist) {
+        setWishlist(favouriteData.wishlist.wishlistItems || []);
+        console.log('Success fetch wishlist', favouriteData.wishlist.wishlistItems);
+      } else {
+        console.error('Error fetching user favourite: Unexpected response structure');
+      }
+    } catch (error) {
+      console.error('Error fetching user cart:', error);
+    }
+  };
+  
+  
   
 
   const handleDetailsClick = (selectedProduct) => {
@@ -215,13 +242,36 @@ function Store  ()  {
     }
   };
 
-  const handleAddToCart = (productId, product) => {
+ 
+
+  const handleAddToCart = async (productId, product) => {
     if (!isLoggedIn) {
-      // Display a message indicating that the user needs to sign in
       alert('Please sign in to add to cart.');
       return;
     }
-    dispatch(addToCart(product));
+  
+    const cartItem = {
+      productId: productId,
+      quantity: 1, 
+    };
+  
+    try {
+      const response = await axios.put(
+        'https://ecommerce-1-q7jb.onrender.com/api/v1/user/cart/update',
+        cartItem,
+        {
+          headers: {
+            'Authorization': `Bearer ${bearerToken}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+  
+      console.log('Product added to cart:', response.data);
+  
+    } catch (error) {
+      console.error('Error adding product to cart:', error.message);
+    }
   };
  
 
@@ -256,18 +306,58 @@ function Store  ()  {
   };
   
   
-  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+  
+ 
 
   /*const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };*/
 
-  const handleCategoryFilter = (categoryId) => {
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+ /* const handleCategoryFilter = (categoryId) => {
     setSelectedCategoryId(categoryId);
      
     navigate(`/store?category=${categoryId}`); 
     dispatch(fetchProducts(categoryId));
+  };*/
+
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  
+
+  const handleCategoryFilter = async (categoryId) => {
+    try {
+      // Check if categoryId is defined before making the request
+      if (categoryId === undefined) {
+        console.error('Invalid categoryId:', categoryId);
+        return;
+      }
+  
+      let url;
+      if (categoryId === null) {
+        url = 'https://ecommerce-1-q7jb.onrender.com/api/v1/public/product/en/all';
+      } else {
+        url = `https://ecommerce-1-q7jb.onrender.com/api/v1/public/category/${categoryId}/en`;
+      }
+  
+      const response = await axios.get(url);
+  
+      if (response.data && response.data.success) {
+        // Check if the response contains products
+        if (Array.isArray(response.data.data.products)) {
+          setProducts(response.data.data.products);
+          setSelectedCategory(categoryId);
+        } else {
+          console.error('No products found for the selected category:', categoryId);
+        }
+      } else {
+        console.error('Invalid data format for category filter:', response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching products by category:', error);
+    }
   };
+  
+  
 
   
 
@@ -278,8 +368,18 @@ function Store  ()  {
     return matchesSearch && matchesCategory;
   });*/
 
+  /*const filteredProducts = products.filter((product) => {
+    const matchesSearch = (product.title?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+  (product.descreption?.toLowerCase() || '').includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategoryId ? product.categoryId === selectedCategoryId : true;
+    const matchesPriceRange =
+      product.price >= priceRange.min && product.price <= priceRange.max;
+
+    return matchesSearch && matchesCategory && matchesPriceRange;
+  });*/
+
   const filteredProducts = products.filter((product) => {
-    const matchesSearch = product.title.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategoryId ? product.categoryId === selectedCategoryId : true;
     const matchesPriceRange =
       product.price >= priceRange.min && product.price <= priceRange.max;
@@ -297,8 +397,8 @@ function Store  ()  {
     const fetchCategories = async () => {
       try {
         // Adjust the API endpoint and data structure based on your actual API
-        const response = await axios.get('https://mostafaben.bsite.net/api/Categories');
-        setCategories(response.data);
+        const response = await axios.get('https://ecommerce-1-q7jb.onrender.com/api/v1/public/category/en/all');
+        setCategories(response.data.data.categories);
       } catch (error) {
         console.error('Error fetching categories:', error);
       }
@@ -358,10 +458,10 @@ function Store  ()  {
   };
 
   
-  const handleSelectTwo  = (categoryId) => {
+ /* const handleSelectTwo  = (categoryId) => {
     setSelectedCategoryIdTwo(categoryId);
     navigate(`/store?category=${categoryId}`);
-  };
+  };*/
   
   const handleSearchChangeInternal = (e) => {
     const term = e.target.value.toLowerCase();
@@ -374,7 +474,7 @@ function Store  ()  {
     
     const searchTermLowerCase = searchTerm ? searchTerm.toLowerCase() : '';
     const productsMatchingSearch = productsInSelectedCategory.filter(product => {
-      const productNameLowerCase = product.title ? product.title.toLowerCase() : '';
+      const productNameLowerCase = product.name ? product.name.toLowerCase() : '';
       return productNameLowerCase.includes(searchTermLowerCase);
     });
   
@@ -448,11 +548,11 @@ function Store  ()  {
     >
       <option  value={null}>All</option>
       {categories.map((category) => (
-        <option key={category.id} value={category.id}>
+        <option key={category.categoryId} value={category.categoryId}>
           {category.name}
         </option>
       ))}
-    </select>
+      </select>
     <div className="input-with-icon">
       <input
         type="text"
@@ -460,7 +560,7 @@ function Store  ()  {
         value={searchTerm}
         onChange={handleSearchChangeInternal}
       />
-      <FaSearch className='searchicon' onClick={handleSearchSubmit} />
+    <FaSearch className='searchicon' onClick={handleSearchSubmit} />
     </div>
     <div className="autocom-box">
       {productExistsInCategory === false && (
@@ -516,7 +616,7 @@ function Store  ()  {
           <Link to="/blog">{translations[language]?.blog}</Link>
 
 
-<select
+{/*<select
   value={selectedCategoryIdTwo}
   onChange={(e) => handleSelectTwo(parseInt(e.target.value))}
   className="dropdown-selectTwo"
@@ -527,7 +627,7 @@ function Store  ()  {
       {category.name}
     </option>
   ))}
-</select>
+  </select>*/}
 
 
           <Link to="/about">{translations[language]?.about}</Link>
@@ -566,14 +666,14 @@ function Store  ()  {
     {!loading && (
           <div className="card-store">
         {filteredProducts.map((product) => (
-          <div className="cards " key={product.id}>
+          <div className="cards " key={product.productId}>
             <div className="card-body">
             <div className="card-icons">
            
             <FaHeart
-  onClick={() => handleClick(product.id, product)}
-  style={{ color: favoriteStatus[product.id] ? 'red' : 'black' }}
-/>
+      onClick={() => handleAddToFavorites(product.productId)}
+      style={{ color: isProductInWishlist(product.productId) ? 'red' : '#3EBF87' }}
+    />
           
 
            {isLoggedIn && <FaEye className="cart-iconPro"
@@ -584,18 +684,18 @@ function Store  ()  {
               </div>
               <div className="card-imgstore" >
               
-                    <Link to={isLoggedIn ? `/home/product/${product.id}` : null}>
-    <img src={`data:image/png;base64,${product.poster}`} alt="Product poster" />
-  </Link>
+              <Link to={`/home/product/${product.productId}`}>
+          <img src={product.pictureUrl} alt="Product poster" />
+        </Link>
                   
               </div>
               <div className='card-info card-infoStore'>
-                <h2>{product.title}</h2>
+                <h2>{product.name}</h2>
                 
                 <div className='rate'>
                 
                 {isLoggedIn && <StarRating
-                           initialRating={product.rate}
+                           initialRating={product.rating}
                           isClickable={false}
                         /> }
   
@@ -604,7 +704,7 @@ function Store  ()  {
               </div>
               <button
   className="proBtn"
-  onClick={() => handleAddToCart(product.id, product)}
+  onClick={() => handleAddToCart(product.productId, product)}
 >
   add to cart
 </button>
@@ -631,11 +731,11 @@ function Store  ()  {
                   </button>
   {categories.map(category => (
     <button
-      key={category.id}
-      color="primary"
-      onClick={() => handleCategoryFilter(category.id)}
-      className='filterbycat'
-    >
+    key={category.categoryId}
+    color="primary"
+    onClick={() => handleCategoryFilter(category.categoryId)}
+    className={`filterbycat ${selectedCategory === category.categoryId ? 'active' : ''}`}
+  >
       {category.name}
     </button>
   ))}

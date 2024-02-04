@@ -244,3 +244,80 @@ padding-top: 15px;
         font-size: 16px;
     }
 }
+
+
+
+/* ... existing styles ... */
+
+/* Add this to your existing CSS */
+
+/* Responsive styles for small screens */
+@media only screen and (max-width: 600px) {
+    .myprdersParagraph h1 {
+      font-size: 30px;
+    }
+  
+    .myprdersParagraph span {
+      font-size: 16px;
+    }
+  
+    .orderInfo {
+      flex-direction: column;
+      height: auto;
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+  
+    .orderInfo button {
+      margin-top: 10px;
+    }
+  
+    .orderInfo div {
+      font-size: 14px;
+    }
+  
+    .step-wizard-item {
+      min-width: unset; 
+    }
+  
+    .progress-count:after {
+      height: 20px;
+      width: 20px;
+    }
+  
+    .progress-count:before {
+      height: 5px;
+      width: 10px;
+    }
+  
+    .check-bg {
+      height: 20px;
+      width: 20px;
+    }
+  
+    .check-mark {
+      font-size: 16px;
+    }
+  
+    .headerdetails {
+      padding-left: 1em;
+      padding-right: 1em;
+    }
+  
+    .headerdetailsflex p {
+      font-size: 16px;
+      padding-top: 10px;
+    }
+    .myOrders{
+        padding-left: 25px;
+    }
+  }
+  
+  /* Responsive styles for medium screens */
+  @media only screen and (max-width: 960px) {
+    .step-wizard-list {
+      height: 100px; 
+    }
+  }
+  
+  

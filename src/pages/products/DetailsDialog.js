@@ -5,11 +5,15 @@ import { useState } from 'react';
 import { addToCart } from "../../rtk/slices/Cart-slice";
 import { useDispatch } from 'react-redux';
 import { useParams } from "react-router-dom";
+import { selectToken } from '../../rtk/slices/Auth-slice';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
 import './detailsDialog.css';
 
 const DetailsDialog = ({ isOpen, onCancel, product , rating}) => {
   const dispatch = useDispatch();
   
+  const bearerToken = useSelector(selectToken);
 
   const handleOverlayClick = (e) => {
     if (e.target.classList.contains('popup')) {
@@ -31,19 +35,36 @@ const DetailsDialog = ({ isOpen, onCancel, product , rating}) => {
     }
   };
 
-const handleAddToCart = () => {
-  const cartItem = {
-    productId: product.id,
-    poster : product.poster ,
-    title: product.title,
-    quantity: quantity,
-    price: product.price,
-  };
+  const [addToCartResult, setAddToCartResult] = useState(null);
 
-  dispatch(addToCart(cartItem));
-  setQuantity(0);
-    setTotalPrice(0);
-};
+  const handleAddToCart = async (productId, product) => {
+    
+  
+    const cartItem = {
+      productId: productId,
+      quantity: quantity, 
+    };
+  
+    try {
+      const response = await axios.put(
+        'https://ecommerce-1-q7jb.onrender.com/api/v1/user/cart/update',
+        cartItem,
+        {
+          headers: {
+            'Authorization': `Bearer ${bearerToken}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+  
+      console.log('Product added to cart:', response.data);
+      setQuantity(0);
+      setTotalPrice(0);
+      
+    } catch (error) {
+      console.error('Error adding product to cart:', error.message);
+    }
+  };
 
 
    
@@ -53,20 +74,20 @@ const handleAddToCart = () => {
           <div className="popup" onClick={handleOverlayClick}>
             <div className="popup-contentDetails">
            <div className='details'>
-            <div className='imgdetails'>
-            {product.poster && (
+            <div  className='imgdetails'>
+          
                   <img
-                    className="productImg"
-                    src={`data:image/png;base64,${product.poster}`}
+                   
+                    src={product.pictureUrl}
                     alt="Product poster"
                   />
-                )}
+              
             </div>
             <div className='infodetails'>
-            <h1 >{product.title}</h1>
+            <h1 >{product.name}</h1>
                     <hr />
                     <p className="lead">
-                    {product.descreption}
+                    {product.description}
 
                     </p>
 
@@ -91,7 +112,7 @@ const handleAddToCart = () => {
                   </button>
                 </div>
                 <div className="review">
-                <button onClick={handleAddToCart}>Add to Cart</button>
+                <button onClick={() => handleAddToCart(product.productId, product)}>Add to Cart</button>
               </div>
                 </div>
             </div>
