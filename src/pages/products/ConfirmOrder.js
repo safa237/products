@@ -13,6 +13,8 @@ import { useEffect } from "react";
 import product from '../../images/product.png';
 import NavHeader from "../../components/NavHeader";
 import axios from "axios";
+import { selectToken } from "../../rtk/slices/Auth-slice";
+import { Modal } from 'react-bootstrap';
 import './confirmOrder.css';
 
 function ConfirmOrder() {
@@ -22,7 +24,7 @@ function ConfirmOrder() {
   const translations = useSelector(selectTranslations);
   const products = useSelector((state) => state.products);
   const cart = useSelector(state => state.cart);
-
+  const bearerToken = useSelector(selectToken);
 
   useEffect(() => {
   }, [language]);
@@ -39,9 +41,7 @@ function ConfirmOrder() {
     return acc;
   }, 0);
 
-  useEffect(() => {
-    console.log("Cart:", cart);
-  }, [cart]);
+ 
 
   
 
@@ -84,218 +84,127 @@ function ConfirmOrder() {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+ 
 
+  const [address, setAdress] = useState([]);
+
+  const fetchUserAdresses = async () => {
     try {
-      const response = await axios.post('https://mostafaben.bsite.net/api/Orders/addOrderDetail', {
-        ...formData,
-        // Include other necessary data from your state or props
-      });
+      const response = await axios.get(
+        'https://ecommerce-1-q7jb.onrender.com/api/v1/user/address/all',
+        {
+          headers: {
+            'Authorization': `Bearer ${bearerToken}`,
+          },
+        }
+      );
+      console.log("addreses", response.data);
+      setAdress(response.data.data.addresses);
+    }
+    catch (error) {
+      console.error("Error fetching user cart:", error);
+    }
+  };
+
+
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+
+  const handleCloseModal = () => setShowModal(false);
+
+  const createOrder = async (addressId) => {
+    try {
+      const response = await axios.post(
+        `https://ecommerce-1-q7jb.onrender.com/api/v1/user/order/cart/on/${addressId}`,
+        {},
+        {
+          headers: {
+            'Authorization': `Bearer ${bearerToken}`,
+          },
+        }
+      );
 
       if (response.status === 200) {
-        // Handle success, maybe show a success message or redirect
-        console.log('Order submitted successfully');
+        setModalMessage('Order submitted successfully');
+        setShowModal(true);
       } else {
-        // Handle error, maybe show an error message
         console.error('Error submitting order:', response.data);
+
+        if (response.data && response.data.message) {
+          setModalMessage(` ${response.data.message}`);
+          setShowModal(true);
+        } else {
+          console.error('Unknown error:', response.data);
+        }
       }
     } catch (error) {
       console.error('Error submitting form:', error);
     }
   };
 
+  const handleSubmit = async (addressId) => {
+    createOrder(addressId);
+    console.log(addressId);
+  };
+
+  useEffect(() => {
+    fetchUserAdresses();
+  }, []);
+
   return(
     <div className="confirmPage">
        <NavHeader
         searchTerm={searchTerm}
         handleSearchChange={handleSearchChange}
-       
+        
         handleProductClick={handleProductClick}
       />
 
-      <div className="green-containerr  ">
-        <div className="header-container ">
-          <div className="flexContainerCart">
-          <div className="flexcart">
-            <div className="formOrder">
+<Container style={{ marginTop: '50px' }}>
+      <Table striped bordered hover size="sm">
+        <thead>
+          <tr>
+          <th className="p-4">country</th>
+          <th className="p-4">city</th>
+          <th className="p-4">region</th>
+          <th className="p-4">street</th>
+          <th className="p-4">zipCode</th>
+          <th>action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {address.map((item) => (
+            <tr >
+              <td>{item.country}</td>
+              <td>{item.city}</td>
+              <td>{item.region}</td>
+              <td>{item.street}</td>
+              <td>{item.zipCode}</td>
+            <td>
+                <button 
+                onClick={() => handleSubmit(item.addressId)}
+                className="useaddress">confirm order in this address</button>
+          </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
 
-            <form className="form" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
-        <div className="flexInput" >
-          <input className="name"
-            type="text"
-            name="firstName"
-            placeholder="First Name"
-            value={formData.firstName}
-          onChange={handleInputChange}
-         
-          />
-          <input className="name"
-            type="text"
-            name="lastName"
-            placeholder="Last Name"
-            value={formData.lastName}
-          onChange={handleInputChange}
-          
-          />
-        </div>
-        <select 
- style={{width : '100%' ,marginBottom : '15px', marginRight: '10px' , borderRadius: '5px' , border: '1px solid #ccc'}}
-  name="country"
-  value={formData.country}
-  onChange={handleInputChange}
->
-  <option value="">Select a Country</option>
-  <option value="albania">Albania</option>
-  <option value="algeria">Algeria</option>
-  <option value="andorra">Andorra</option>
-  <option value="angola">Angola</option>
-  <option value="argentina">Argentina</option>
-  <option value="australia">Australia</option>
-  <option value="austria">Austria</option>
-  <option value="bahrain">Bahrain</option>
-  <option value="bangladesh">Bangladesh</option>
-  <option value="belgium">Belgium</option>
-  <option value="brazil">Brazil</option>
-  <option value="canada">Canada</option>
-  <option value="china">China</option>
-  <option value="denmark">Denmark</option>
-  <option value="egypt">Egypt</option>
-  <option value="finland">Finland</option>
-  <option value="france">France</option>
-  <option value="germany">Germany</option>
-  <option value="greece">Greece</option>
-  <option value="india">India</option>
-  <option value="indonesia">Indonesia</option>
-  <option value="ireland">Ireland</option>
-  <option value="italy">Italy</option>
-  <option value="japan">Japan</option>
-  <option value="mexico">Mexico</option>
-  <option value="netherlands">Netherlands</option>
-  <option value="new-zealand">New Zealand</option>
-  <option value="norway">Norway</option>
-  <option value="pakistan">Pakistan</option>
-  <option value="paris">Paris</option>
-  <option value="poland">Poland</option>
-  <option value="portugal">Portugal</option>
-  <option value="russia">Russia</option>
-  <option value="south-africa">South Africa</option>
-  <option value="south-korea">South Korea</option>
-  <option value="spain">Spain</option>
-  <option value="sweden">Sweden</option>
-  <option value="switzerland">Switzerland</option>
-  <option value="thailand">Thailand</option>
-  <option value="turkey">Turkey</option>
-  <option value="united-states">United States</option>
-  <option value="vietnam">Vietnam</option>
-  <option value="maghreb">Morocco</option>
+      </Container>
 
-</select>
-          <input className=""
-            type="text"
-            placeholder="Street"
-            name="street"
-            style={{ marginRight: '10px', padding: '5px', borderRadius: '5px', border: '1px solid #ccc' }}
-            value={formData.street}
-          onChange={handleInputChange}
-         
-          />
-          <input
-            type="text"
-            placeholder="City"
-            name="city"
-            style={{  marginRight: '10px', padding: '5px', borderRadius: '5px', border: '1px solid #ccc' }}
-            value={formData.city}
-          onChange={handleInputChange}
-          />
-          <input
-            type="text"
-            placeholder="Region"
-            name="region"
-            style={{ marginRight: '10px', padding: '5px', borderRadius: '5px', border: '1px solid #ccc' }}
-            value={formData.region}
-          onChange={handleInputChange}
-          />
-          <input
-            type="text"
-            placeholder="Postal Code / Zip"
-            name="postalCode"
-            style={{ marginRight: '10px', padding: '5px', borderRadius: '5px', border: '1px solid #ccc' }}
-            value={formData.postalCode}
-          onChange={handleInputChange}
-          />
-          <input
-            type="text"
-            placeholder="phone"
-            name="phone"
-            style={{ marginRight: '10px', padding: '5px', borderRadius: '5px', border: '1px solid #ccc' }}
-            value={formData.phone}
-          onChange={handleInputChange}
-          />
-          <input
-            type="text"
-            placeholder="email"
-            name="email"
-            style={{ marginRight: '10px', padding: '5px', borderRadius: '5px', border: '1px solid #ccc' }}
-            value={formData.email}
-          onChange={handleInputChange}
-          />
-          <input className="note"
-            type="text"
-            placeholder="Additional Information (Optional)"
-            name="notes"
-            style={{ marginRight: '10px', padding: '5px', borderRadius: '5px', border: '1px solid #ccc' }}
-            value={formData.notes}
-          onChange={handleInputChange}
-         />
-      </form>
-            </div>
-           
-          </div>
-          <div className="total confirmtotal">
- 
-    <h4>Total Price : {totalprice.toFixed(2)}</h4>
-    <h6>Paiement when recieving</h6>
-    <h6>Your Personal data will be used to process your order , support your experience throughout this website , and for other purposes described in our 
-         
-       <Link to="/privacy-policy" style={{ textDecoration: 'none', color: 'inherit' }}>
-       <strong> privacy policy </strong> .
-         </Link>
-          </h6>
-    <p>
-      <input type="checkbox" id="myCheckbox" /> i agree to conditions and privacy policy
-    </p>
-    <button onClick={handleSubmit} className="confirmbtn">
-      Confirm
-    </button>
-  
-</div>
-        </div>
-
-
-        </div>
-        <div className='footerr'>
-          <div className=' header-container flex-footer'>
-            <div className='footer-info'>
-              <p>{translations[language]?.links}</p>
-              <p>{translations[language]?.shipping} </p>
-            </div>
-            <div className='footer-info'>
-              <p>{translations[language]?.private} </p>
-              <p>{translations[language]?.cookies} </p>
-  
-            </div>
-            <div className='footer-info'>
-              <p>{translations[language]?.info}</p>
-              <p>{translations[language]?.contactP}</p>
-            </div>
-            <div className='footer-info'>
-              <p>{translations[language]?.subscribe}</p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Order Status</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{modalMessage}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={handleCloseModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
 export default ConfirmOrder;
+

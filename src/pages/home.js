@@ -383,7 +383,6 @@ const fetchUserFavourite = async () => {
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
     dispatch(clearCart());
-   
     setIsLoggedIn(false);
     setIsLoggedInState(false);
     setIsDropdownOpen(false);
@@ -421,46 +420,6 @@ const fetchUserFavourite = async () => {
 
   const [quantity, setQuantity] = useState(0);
 
-  /*const handleAddToCart = (productId, product) => {
-    if (!isLoggedIn) {
-      alert('Please sign in to add to cart.');
-      return;
-    }
-
-    const cartItem = {
-      productId: product.id,
-      poster: product.poster,
-      title: product.title,
-      quantity: quantity,
-      price: product.price,
-    };
-
-    const isInCart = cart.some((item) => item.productId === cartItem.productId);
-
-    if (isInCart) {
-      dispatch(deleteFromCart(cartItem));
-    } else {
-      dispatch(addToCart(cartItem));
-    }
-  };*/
-
-  /*const handleAddToFavorites = (productId) => {
-    if (!isLoggedIn) {
-      alert('Please sign in to add to favorites.');
-      return;
-    }
-
-    // Check if the product is already in the wishlist
-    const isProductInWishlist = wishlist.includes(productId);
-
-    if (isProductInWishlist) {
-      // Remove the product from the wishlist
-      dispatch(removeFromWishlist(productId));
-    } else {
-      // Add the product to the wishlist
-      dispatch(addToWishlist(productId));
-    }
-  };*/
 
   const detailsBtn = () => {
     if (!isLoggedIn) {
@@ -473,24 +432,13 @@ const fetchUserFavourite = async () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
- /* const handleDropdownOptionClick = (option) => {
-    if (option === 'profile') {
-      navigate('/profile');
-    } else if (option === 'logout') {
-      handleLogout();
-    }
 
-    setIsDropdownOpen(false);
-  };*/
-
- /* const filteredProducts = products.filter(
-    (product) =>
-      product.title && product.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );*/
 
   const handleProductClick = (productId) => {
     navigate(`/home/product/${productId}`);
   };
+
+  
 
   return (
     <div className="page-container">
@@ -526,7 +474,7 @@ const fetchUserFavourite = async () => {
   >
     <div className="card-body">
       <div className="card-icons">
-      <FaHeart
+       <FaHeart
       onClick={() => handleAddToFavorites(product.productId)}
       style={{ color: isProductInWishlist(product.productId) ? 'red' : '#3EBF87' }}
     />

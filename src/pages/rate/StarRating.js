@@ -8,12 +8,25 @@ const StarRating = ({ initialRating, onRatingChange, isClickable }) => {
   const [rating, setRating] = useState(initialRating || 0);
   const maxStars = 5;
 
-  const handleStarClick = (clickedRating) => {
+  /*const handleStarClick = (clickedRating) => {
     if (isClickable) {
       setRating(clickedRating);
 
       if (onRatingChange) {
         onRatingChange(clickedRating);
+      }
+    }
+  };*/
+
+  const handleStarClick = (clickedRating) => {
+    if (isClickable) {
+      // Clear the rating if the clicked star is already selected
+      const newRating = clickedRating === rating ? 0 : clickedRating;
+      
+      setRating(newRating);
+
+      if (onRatingChange) {
+        onRatingChange(newRating);
       }
     }
   };

@@ -13,6 +13,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import StarRating from '../rate/StarRating';
 import { selectToken } from '../../rtk/slices/Auth-slice';
+import { selectEmail } from '../../rtk/slices/Auth-slice';
 import './review.css';
 
 
@@ -24,6 +25,7 @@ const ReviewDialog = ({ isOpen, onCancel , productId  }) => {
     const email = useSelector((state) => state.auth.email);
     const [rating, setRating] = useState(0);
     const bearerToken = useSelector(selectToken);
+    const bearerEmail = useSelector(selectEmail);
 
    
       const handleOverlayClick = (e) => {
@@ -53,6 +55,7 @@ const ReviewDialog = ({ isOpen, onCancel , productId  }) => {
     
       useEffect(() => {
         console.log('review page open');
+        console.log('email is ' , bearerEmail);
         if (isOpen && productId) {
           fetchReviews();
         }
@@ -128,7 +131,7 @@ const ReviewDialog = ({ isOpen, onCancel , productId  }) => {
                       <div style={{marginRight: '15px'}}><FaUser style={{ fontSize: '50px' }} /></div>
                       <div className='infoComment' style={{ marginLeft: '5px' }}>
                         <div> 
-                        <h5>safa mahmoud</h5> {/*<p>2 days ago </p>*/}
+                        <h5>username</h5> {/*<p>2 days ago </p>*/}
                         </div>
                         <div className='stars'>
                             <StarRating
