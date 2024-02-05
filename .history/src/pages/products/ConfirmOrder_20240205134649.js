@@ -30,7 +30,6 @@ function ConfirmOrder() {
   const cart = useSelector((state) => state.cart);
   const bearerToken = useSelector(selectToken);
   const [address, setAdress] = useState([]);
-  const [outOfStuckProduct,setOutofstuckproduct]=useState([])
 
   useEffect(() => {
     fetchUserAdresses();
@@ -120,8 +119,6 @@ function ConfirmOrder() {
         console.log("Order submitted successfully");
       } else {
         console.log("The order is out of stuck:", response.data.data);
-        setOutofstuckproduct(response.data.data)
-        alert(`this order is out of stock`)
       }
     } catch (error) {
       console.log("Error submitting form:", error.message);
@@ -199,12 +196,6 @@ function ConfirmOrder() {
                 Confirm
               </button>
             </div> */}
-
-          
-             <div className="text-red">
-                {outOfStuckProduct?.map((item)=>item?.id)}
-              </div>
-        
           </div>
         </div>
         <div className="footerr">

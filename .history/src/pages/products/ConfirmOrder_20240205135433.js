@@ -201,8 +201,8 @@ function ConfirmOrder() {
             </div> */}
 
           
-             <div className="text-red">
-                {outOfStuckProduct?.map((item)=>item?.id)}
+             <div>
+                {outOfStuckProduct؟.map((item)=>item?.id)}
               </div>
         
           </div>
