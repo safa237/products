@@ -13,7 +13,8 @@ import phone from '../images/phone icon.png';
 import { Link } from "react-router-dom";
 import lotion2 from '../images/lotion2.png';
 import { AiOutlineLike } from "react-icons/ai";
-
+import { selectToken } from "../rtk/slices/Auth-slice";
+import { AiOutlineDislike } from "react-icons/ai";
 
 function BlogDetails() {
 
@@ -31,7 +32,7 @@ function BlogDetails() {
   const language = useSelector(selectLanguage);
   const translations = useSelector(selectTranslations);
   const [searchTerm, setSearchTerm] = useState('');
-
+  const bearerToken = useSelector(selectToken);
   const { blogId } = useParams();
   const [blogDetails, setblogDetails] = useState(null);
 
@@ -72,6 +73,81 @@ function BlogDetails() {
   };
   
 
+  
+
+  const [like, setLike] = useState([]);
+
+ 
+  const isProductInWishlist = (blogPostId) => {
+    return blogDetails && like.some(item => item.blogPostId === blogPostId);
+  };
+  
+  
+  
+    
+  const handleAddToLikes = async (blogPostId) => {
+    try {
+      let updatedLike;
+      
+      if (isProductInWishlist(blogPostId)) {
+       
+        await handleDeleteFromLike(blogPostId);
+        updatedLike = like.filter(item => item.blogPostId !== blogPostId);
+      } else {
+       
+        await axios.put(
+          `https://ecommerce-1-q7jb.onrender.com/api/v1/user/like/${blogPostId}`,
+          {},
+          {
+            headers: {
+              'Authorization': `Bearer ${bearerToken}`,
+            },
+          }
+        );
+        updatedLike = [...like, { blogPostId }];
+        console.log('added like successfully');
+      }
+      setLike(updatedLike);
+    } catch (error) {
+      console.error('Error updating product in wishlist: ', error.message);
+    }
+  };
+  
+  
+  const handleDeleteFromLike = async (blogPostId) => {
+    try {
+      await axios.delete(`https://ecommerce-1-q7jb.onrender.com/api/v1/user/unlike/${blogPostId}`, {
+        headers: {
+          Authorization: `Bearer ${bearerToken}`,
+        },
+      });
+      console.log('deleted succefully');
+    } catch (error) {
+      console.error('Error deleting product from wishlist:', error);
+    }
+  };
+  
+
+  const [isDisliked, setIsDisliked] = useState(false);
+
+  const handleDislike = async (postId) => {
+    try {
+      await axios.put(
+        `https://ecommerce-1-q7jb.onrender.com/api/v1/user/dislike/${postId}`,
+        {},
+        {
+          headers: {
+            'Authorization': `Bearer ${bearerToken}`,
+          },
+        }
+      );
+      console.log('Post disliked successfully');
+      setIsDisliked(!isDisliked);
+    } catch (error) {
+      console.error('Error disliking post:', error.message);
+    }
+  };
+    
 
   return (
    
@@ -101,12 +177,30 @@ function BlogDetails() {
                  
                <div className='flexiconwithinput'>
                   <div className='flexblogicons'>
-                <div className='likeblog'>
-                  <AiOutlineLike
-                      style={{ fontSize: '35px', cursor: 'pointer' ,  color: 'white' }}
-                      className='icon'
-                      onClick={handleCopyLink}
-                    />
+                <div  className='likeblog'>
+                <AiOutlineLike
+  style={{
+    fontSize: '35px',
+    cursor: 'pointer',
+    color: isProductInWishlist(blogDetails?.blogPostId) ? 'blue' : 'white',
+  }}
+  className='icon'
+  onClick={() => handleAddToLikes(blogDetails?.blogPostId)}
+/>
+
+                  </div>
+
+
+                  <div  className='likeblog'> 
+                <AiOutlineDislike
+  style={{
+    fontSize: '35px',
+    cursor: 'pointer',
+    color: isDisliked ? 'blue' : 'white',
+  }}
+  className='icon'
+  onClick={() => handleDislike(blogDetails?.blogPostId)}
+/>
                   </div>
                
                   <div className='share'>

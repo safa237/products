@@ -59,6 +59,7 @@ function Store  ()  {
   const bearerToken = useSelector(selectToken);
 
   const [products, setProducts] = useState([]);
+  const [ratingFilter, setRatingFilter] = useState(0);
 
   useEffect(() => {
  const fetchData = async () => {
@@ -225,24 +226,13 @@ function Store  ()  {
 
   const rating = product.rate;
 
-  const handleRatingChange = async (productId, newRating) => {
-    if (!isLoggedIn) {
-      // Display a message indicating that the user needs to sign in
-      alert('Please sign in first.');
-      return;
-    }
-
-    try {
-      await axios.post('https://mostafaben.bsite.net/api/Products', {
-        id: productId,
-        newRating: newRating,
-      });
-    } catch (error) {
-      console.error('Error updating rating:', error);
-    }
+  
+  const handleRatingChange = (newRating) => {
+    setRatingFilter((prevRating) => (prevRating === newRating ? 0 : newRating));
   };
-
- 
+  
+  
+  
 
   const handleAddToCart = async (productId, product) => {
     if (!isLoggedIn) {
@@ -274,24 +264,6 @@ function Store  ()  {
     }
   };
  
-
- /* const handleAddToFavorites = (productId) => {
-    if (!isLoggedIn) {
-      alert('Please sign in to add to favorites.');
-      return;
-    }
-
-    // Check if the product is already in the wishlist
-    const isProductInWishlist = wishlist.includes(productId);
-
-    if (isProductInWishlist) {
-      // Remove the product from the wishlist
-      dispatch(removeFromWishlist(productId));
-    } else {
-      // Add the product to the wishlist
-      dispatch(addToWishlist(productId));
-    }
-  };*/
 
   const detailsBtn = () => {
     if (!isLoggedIn) {
@@ -336,7 +308,7 @@ function Store  ()  {
       if (categoryId === null) {
         url = 'https://ecommerce-1-q7jb.onrender.com/api/v1/public/product/en/all';
       } else {
-        url = `https://ecommerce-1-q7jb.onrender.com/api/v1/public/category/${categoryId}/en`;
+        url = `https://ecommerce-1-q7jb.onrender.com/api/v1/public/category/en/${categoryId}`;
       }
   
       const response = await axios.get(url);
@@ -361,30 +333,16 @@ function Store  ()  {
 
   
 
- /* const filteredProducts = products.filter((product) => {
-    const matchesSearch = product.title.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategoryId ? product.categoryId === selectedCategoryId : true;
-
-    return matchesSearch && matchesCategory;
-  });*/
-
-  /*const filteredProducts = products.filter((product) => {
-    const matchesSearch = (product.title?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
-  (product.descreption?.toLowerCase() || '').includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategoryId ? product.categoryId === selectedCategoryId : true;
-    const matchesPriceRange =
-      product.price >= priceRange.min && product.price <= priceRange.max;
-
-    return matchesSearch && matchesCategory && matchesPriceRange;
-  });*/
-
   const filteredProducts = products.filter((product) => {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategoryId ? product.categoryId === selectedCategoryId : true;
     const matchesPriceRange =
       product.price >= priceRange.min && product.price <= priceRange.max;
-
-    return matchesSearch && matchesCategory && matchesPriceRange;
+    
+    const matchesRating = ratingFilter
+      ? product.rating >= ratingFilter && product.rating < ratingFilter + 1
+      : true;
+    return matchesSearch && matchesCategory && matchesPriceRange && matchesRating ;
   });
 
   const handleProductClick = (productId) => {
@@ -396,7 +354,6 @@ function Store  ()  {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        // Adjust the API endpoint and data structure based on your actual API
         const response = await axios.get('https://ecommerce-1-q7jb.onrender.com/api/v1/public/category/en/all');
         setCategories(response.data.data.categories);
       } catch (error) {
@@ -719,7 +676,28 @@ function Store  ()  {
           <div className='storeside'>
             <p></p>
           <div >
-          <h5 style={{color : 'black'}}>filter by category</h5>
+            <div style={{marginBottom: '30px' }}>
+          <h5 style={{ color : 'black'}}>rating</h5>
+          <StarRating
+              initialRating={ratingFilter}
+              onRatingChange={handleRatingChange}
+              isClickable={true} 
+            />
+           </div>
+          <div style={{marginBottom: '30px' }}>
+           <h5 style={{ color : 'black'}}>Price : {priceRange.max}</h5>
+   <div  className="range-slider">
+      <input
+        type="range"
+        min="0"
+        max="2000"
+        value={priceRange.max}
+        onChange={handlePriceRangeChange}
+      />
+     
+    </div>
+    </div>
+          <h5 style={{color : 'black'}}>Category</h5>
           <div className='filterCatdiv'>
           <div className='rateFilter'>
           <button
@@ -750,19 +728,6 @@ function Store  ()  {
             <div><CiStar /> one Only</div>
   </div>*/}
 
-  <h5 style={{marginTop: '50px' , color : 'black'}}>filter by price : {priceRange.max}</h5>
-   <div  className="range-slider">
-      <input
-        type="range"
-        min="0"
-        max="2000"
-        value={priceRange.max}
-        onChange={handlePriceRangeChange}
-      />
-     
-    </div>
-   
-          
           
           </div>
           </div>

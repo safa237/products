@@ -170,6 +170,7 @@ import { setLanguage, selectLanguage, selectTranslations } from '../../rtk/slice
 import { setAuthData } from '../../rtk/slices/Auth-slice';
 import { selectToken } from '../../rtk/slices/Auth-slice';
 import { setToken } from '../../rtk/slices/Auth-slice';
+import { setEmail } from '../../rtk/slices/Auth-slice';
 import { useEffect } from 'react';
 
 import './sign.css';
@@ -226,13 +227,13 @@ const SignInForm = () => {
 
       // Dispatch the setToken action to update the Redux store
       dispatch(setToken(result.data.data.token));
-
+      dispatch(setEmail(result.data.data.email));
       // Update localStorage
       localStorage.setItem('token', result.data.data.token);
-
+      localStorage.setItem('email', result.data.data.email);
       // Use the token directly from the response
       console.log("token is : ", result.data.data.token);
-
+      console.log("email is : ", result.data.data.email);
       // Navigate after dispatching the action
       navigate('/home');
     })

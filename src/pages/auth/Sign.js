@@ -52,9 +52,9 @@ const Sign = () => {
         <div className="panel left-panel">
           <div className="content">
             <h3>{translations[language]?.newhere}</h3>
-            <p>
+            <h3>
             {translations[language]?.welcome}
-            </p>
+            </h3>
             <button className="signbtn transparent" id="sign-up-btn" onClick={toggleMode}>
             {translations[language]?.register}
             </button>
@@ -64,9 +64,9 @@ const Sign = () => {
         <div className="panel right-panel">
           <div className="content">
             <h3>{translations[language]?.oneofus}</h3>
-            <p>
+            <h3>
             {translations[language]?.welcome}
-            </p>
+            </h3>
             <button className="signbtn transparent" id="sign-in-btn" onClick={toggleMode}>
             {translations[language]?.register}
             </button>

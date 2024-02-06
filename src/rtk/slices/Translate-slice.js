@@ -25,7 +25,7 @@ const translationSlice = createSlice({
         "login" : "Sign In",
         "register" : "Sign Up",
         "newhere" : "New Here ?",
-        "welcome" : "Welcome, we are glad you visited our website",
+        "welcome" : "we are glad you visited our website",
         "oneofus" : "One Of Us",
         "interested" : "You may also be interested in ",
         "track" : "Track Order" ,

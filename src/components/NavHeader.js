@@ -22,14 +22,16 @@ import Nav from 'react-bootstrap/Nav';
 import './navheader.css';
 import SidebarUser from './SidebarUser';
 import { clearWishlist } from '../rtk/slices/Wishlist-slice';
-
+import { IoIosNotificationsOutline } from "react-icons/io";
+import { selectToken } from '../rtk/slices/Auth-slice';
 
 function NavHeader({ userId , handleProductClick }) {
   const dispatch = useDispatch();
   const language = useSelector(selectLanguage);
   const translations = useSelector(selectTranslations);
   const allProducts = useSelector((state) => state.products);
- // const products = useSelector((state) => state.products);
+  const bearerToken = useSelector(selectToken);
+
   const products = useSelector((state) => state.products.products);
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -227,7 +229,38 @@ function NavHeader({ userId , handleProductClick }) {
     setShowSidebar(!showSidebar);
   };
 
-  
+  const [notifications, setNotifications] = useState([]);
+  const [showNotifications, setShowNotifications] = useState(false);
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const token = 'your_token_here';
+
+        const response = await axios.get(
+          'https://ecommerce-1-q7jb.onrender.com/api/v1/user/notifications',
+          {
+            headers: {
+              'Authorization': `Bearer ${bearerToken}`,
+            },
+          }
+        );
+        setNotifications(response.data.data.notifications);
+        console.error('success fetch notification',response.data.data.notifications );
+      } catch (error) {
+        console.error('Error fetching notifications:', error);
+      }
+    };
+
+    if (isLoggedIn) {
+      fetchNotifications();
+    }
+  }, [isLoggedIn]);
+
+  const handleNotificationsClick = () => {
+    setShowNotifications(!showNotifications);
+  };
+
   return (
     <>
     <div className='flexLanguage '>
@@ -297,6 +330,14 @@ function NavHeader({ userId , handleProductClick }) {
           
           {isLoggedIn && (
            <>
+           <IoIosNotificationsOutline className='noteicon' onClick={handleNotificationsClick} />
+          {showNotifications && (
+            <div className="notification-dropdown">
+            {notifications.map((notification) => (
+              <div key={notification.id}>{notification.message}</div>
+            ))}
+          </div>
+          )}
              <Link to="/cart" className="cart-link">
              <img style={{marginRight : '10px' , width: '30px' , height: '30px'}} src={cartimg} alt='cart'/>
            </Link>

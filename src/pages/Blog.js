@@ -255,25 +255,7 @@ function Blog() {
                 </div>
                 <div className='infoblog'>
                   <div className='flexiconwithinput'>
-                  <div className='flexblogicons'>
-                <div className='likeblog'>
-                  <AiOutlineLike
-                  style={{fontSize: '35px', cursor: 'pointer' , color: 'white' }}
-        
-                      className='icon'
-                      
-                    />
-                  </div>
-               
-                  <div className='share'>
-                    <IoMdShare
-                      style={{ fontSize: '35px', cursor: 'pointer' , color: 'white' }}
-                      className='icon'
-                      onClick={handleCopyLink}
-                    />
-                    
-                  </div>
-                 </div>
+                 
                  <div>
                  {isCopied && <span style={{ marginLeft: '5px', color: '#3A7E89' }}>Link copied!</span>}
                   <input
